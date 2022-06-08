@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+html, body{
+    margin:0px;
+    padding:0px;
+    height: 100%;
+    width: 100%;
+  }
+  *{
+    font-size: 12px;
+    font-family: Roboto;
+    border-radius: 0px !important;
+  }
+  .full{
+    height: 100%;
+    width: 100%;
+  }
+  /* barra de titulo 01*/
+  .title-bar-1{
+    width: 100%;
+    text-align: left;
+    padding: 3px 0px 3px 5px;
+    margin: 0;
+    background-color: #f8f9fa;
+  }
+  
+  /*tabela padrao*/
+  .table {
+    display: table;
+  }
+  .row {
+    display: table-row;
+  }
+  .cell {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0px 3px;
+  }
+  
+  /*lyout entrada*/
+  .wrapper {
+    height: 100%;
+    display: table;
+    width: 100%;
+  }
+  .main {
+    height: 100%;
+    display: table;
+    width: 100%;
+  }
+  .box {
+    display: table-cell;
+    vertical-align: top;
+  }
+  .sidebar {
+    width: 100px;
+    border-right:1px solid #dee2e6;
+  }
