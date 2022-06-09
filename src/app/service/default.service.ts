@@ -18,6 +18,7 @@ export class DefaultService {
 
   get(url:string): Observable<any> {
     let api = this.urlbase+url;
+    console.log(api);
     return this.httpClient.get<any>(api)
       .pipe(
         retry(2),

@@ -9,24 +9,41 @@
         </div>
     </div>
 </div> -->
-<p-table [value]="despesas" responsiveLayout="scroll"
-    styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [paginator]="true" 
-    [rows]="pageNumber" 
-    [rowsPerPageOptions]="[10,25,50]">
-    <ng-template pTemplate="header" let-columns>
+
+<p-table [value]="despesas" 
+    [loading]="loading" 
+    [lazy]="true" 
+    (onLazyLoad)="loadData($event)"
+    [rowsPerPageOptions]="[10,15,20,25,30,40]" 
+    [alwaysShowPaginator]="true" 
+    [paginator]="true"
+    [showCurrentPageReport]="true" 
+    [totalRecords]="totalElements" 
+    [rows]="pageSize" 
+    [sortOrder]="-1"
+    sortField="data"
+    currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" 
+    dataKey="id" #dt
+    selectionMode="single" 
+    styleClass="p-datatable-striped p-datatable-sm"
+    [(contextMenuSelection)]="despesaSelecionada">
+    <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="id">Id
-                <p-sortIcon field="id"></p-sortIcon></th>
+                <p-sortIcon field="id"></p-sortIcon>
+            </th>
             <th pSortableColumn="tipoDespesa.value">Tipo Despesa
-                <p-sortIcon field="tipoDespesa.value"></p-sortIcon></th>
+                <p-sortIcon field="tipoDespesa.value"></p-sortIcon>
+            </th>
             <th pSortableColumn="data">Data
-                <p-sortIcon field="data"></p-sortIcon></th>
+                <p-sortIcon field="data"></p-sortIcon>
+            </th>
             <th pSortableColumn="fornecedor.nome">Fornecedor
-                <p-sortIcon field="fornecedor.nome"></p-sortIcon></th>
+                <p-sortIcon field="fornecedor.nome"></p-sortIcon>
+            </th>
             <th pSortableColumn="formaPagamento.value">Forma pagamento
-                <p-sortIcon field="formaPagamento.value"></p-sortIcon></th>
+                <p-sortIcon field="formaPagamento.value"></p-sortIcon>
+            </th>
             <th>Valor</th>
         </tr>
     </ng-template>
@@ -38,6 +55,12 @@
             <td>{{despesa.fornecedor.nome}}</td>
             <td>{{despesa.formaPagamento.nome}}</td>
             <td style="text-align: right;">{{despesa.valor | currency:'BRL'}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <tr>
+            <td [attr.colspan]="5" style='text-align: right;'>Total:</td>
+            <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
         </tr>
     </ng-template>
 </p-table>
