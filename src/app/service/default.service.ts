@@ -21,7 +21,7 @@ export class DefaultService {
     console.log(api);
     return this.httpClient.get<any>(api)
       .pipe(
-        retry(2),
+        retry(1),
         catchError(this.handleError))
   }
 

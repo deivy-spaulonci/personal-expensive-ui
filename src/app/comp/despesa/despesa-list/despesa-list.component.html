@@ -29,29 +29,79 @@
     [(contextMenuSelection)]="despesaSelecionada">
     <ng-template pTemplate="header">
         <tr>
-            <th pSortableColumn="id">Id
+            <th pSortableColumn="id" class="columnId">Id
                 <p-sortIcon field="id"></p-sortIcon>
             </th>
-            <th pSortableColumn="tipoDespesa.value">Tipo Despesa
-                <p-sortIcon field="tipoDespesa.value"></p-sortIcon>
+            <th pSortableColumn="tipoDespesa">Tipo Despesa
+                <p-sortIcon field="tipoDespesa"></p-sortIcon>
             </th>
-            <th pSortableColumn="data">Data
+            <th pSortableColumn="data"class="columnDate">Data
                 <p-sortIcon field="data"></p-sortIcon>
             </th>
             <th pSortableColumn="fornecedor.nome">Fornecedor
                 <p-sortIcon field="fornecedor.nome"></p-sortIcon>
             </th>
-            <th pSortableColumn="formaPagamento.value">Forma pagamento
-                <p-sortIcon field="formaPagamento.value"></p-sortIcon>
+            <th pSortableColumn="formaPagamento">Forma pagamento
+                <p-sortIcon field="formaPagamento"></p-sortIcon>
             </th>
             <th>Valor</th>
+        </tr>
+        <tr>
+            <th class="columnId">
+                <p-columnFilter field="id"
+                        [showMenu]="false" 
+                        [showClearButton]="false">
+                        <ng-template pTemplate="filter" let-filter="filterCallback">
+                            <p-inputNumber mode="decimal" inputId="withoutgrouping" 
+                            (onInput)="filter($event.value)"
+                            [useGrouping]="false">
+                        </p-inputNumber>
+                        </ng-template>
+                </p-columnFilter>
+            </th>
+            <th>
+                <p-columnFilter field="tipoDespesa"
+                    [showMenu]="false" 
+                    [showClearButton]="false">
+                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                        <p-dropdown [options]="tiposDespesa" placeholder="todos" 
+                            (onChange)="filter($event.value)"
+                            [showClear]="true"
+                            optionLabel="nome" 
+                            optionValue="value">
+                        </p-dropdown>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
+            <th class="columnDate">
+                <p-columnFilter field="periodo"
+                [showMenu]="false" 
+                [showClearButton]="false">
+                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                        <p-calendar selectionMode="range" [readonlyInput]="true" 
+                            [showButtonBar]="true"
+                            rangeSeparator="até"
+                            appendTo="body"
+                            inputId="range"
+                            [panelStyle]="{'width':'788'}"
+                            dateFormat="dd/mm/yy"
+                            dataType="string"
+                            #periodoDatas
+                            (onSelect)="filter(periodoDatas.value)">
+                        </p-calendar>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-despesa>
         <tr>
-            <td>{{despesa.id}}</td>
+            <td class="columnId">{{despesa.id}}</td>
             <td>{{despesa.tipoDespesa.nome}}</td>
-            <td style="text-align: center;">{{despesa.data | date:'dd/MM/yyyy'}}</td>
+            <td class="columnDate">{{despesa.data | date:'dd/MM/yyyy'}}</td>
             <td>{{despesa.fornecedor.nome}}</td>
             <td>{{despesa.formaPagamento.nome}}</td>
             <td style="text-align: right;">{{despesa.valor | currency:'BRL'}}</td>

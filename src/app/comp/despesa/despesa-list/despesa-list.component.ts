@@ -6,6 +6,7 @@ import { Despesa } from 'src/app/model/despesa';
 import { Util } from 'src/app/util/util';
 import { Fornecedor } from 'src/app/model/fornecedor';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
 
 
 @Component({
@@ -50,12 +51,13 @@ export class DespesaListComponent implements OnInit {
       {label: 'Editar', icon: 'pi pi-fw pi-pencil',
         command: () => this.editarDespesa() }
     ];
-
+    */
     this.defaultService.get('tipo-despesa').subscribe(tipos => {
-      this.tiposDespesas = tipos;
-      const tipoDespesa: TipoDespesa = new TipoDespesa();
-      this.tiposDespesas.splice(0, 0, tipoDespesa);
+      this.tiposDespesa = tipos;
+      // const tipoDespesa: TipoDespesa = new TipoDespesa();
+      // this.tiposDespesas.splice(0, 0, tipoDespesa);
     });
+    /*
     this.defaultService.get('fornecedor').subscribe(fornecedores => {
       this.fornecedores = fornecedores;
       const fornecedor: Fornecedor = new Fornecedor();
@@ -101,31 +103,38 @@ export class DespesaListComponent implements OnInit {
   }
   */
 
+  filterColumnData(table: Table, periodoDatas: any){
+    console.log(periodoDatas.value);
+    // if(periodoDatas.value[0])
+    // let valorInteiro:string = valor.replace(/\D/g, '');
+    // if(valorInteiro.trim().length>0)
+    //   table.filter(valor.replace(/\D/g, ''), 'id', 'equals');
+  }
+
   loadData(event: LazyLoadEvent) {
+    this.loading = true;
 
     let urlfiltros: string = '';
 
     if (event.filters) {
       let filtros = event.filters;
-      if (filtros?.['id']) {
+      if (filtros?.['id'] && filtros?.['id'].value!=null) {
         urlfiltros += '&id=' + filtros?.['id'].value;
       }
-      if (filtros?.['tipoDespesa'] && filtros?.['tipoDespesa'].value.id) {
-        urlfiltros += '&tipoDespesa.id=' + filtros?.['tipoDespesa'].value.id;
+      if (filtros?.['tipoDespesa'] && filtros?.['tipoDespesa'].value) {
+        urlfiltros += '&tipoDespesa=' + filtros?.['tipoDespesa'].value;
       }
       if (filtros?.['fornecedor'] && filtros?.['fornecedor'].value.id) {
         urlfiltros += '&fornecedor.id=' + filtros?.['fornecedor'].value.id;
       }
-      if (filtros?.['inicio'] && filtros?.['inicio'].value) {
-        const valorDataInicial = this.util.dataBRtoDataIso(filtros?.['inicio'].value);
-        urlfiltros += '&dataInicial=' + valorDataInicial;
+      if (filtros?.['periodo'] && filtros?.['periodo'].value[0]) {
+        urlfiltros += '&dataInicial=' + filtros?.['periodo'].value[0].toISOString().split('T')[0];
       }
-      if (filtros?.['final'] && filtros?.['final'].value) {
-        const valorDataFinal = this.util.dataBRtoDataIso(filtros?.['final'].value);
-        urlfiltros += '&dataFinal=' + valorDataFinal;
+      if (filtros?.['periodo'] && filtros?.['periodo'].value[1]) {
+        urlfiltros += '&dataFinal=' + filtros?.['periodo'].value[1].toISOString().split('T')[0];
       }
-      if (filtros?.['formaPagamento'] && filtros?.['formaPagamento'].value.id) {
-        urlfiltros += '&formaPagamento.id=' + filtros?.['formaPagamento'].value.id;
+      if (filtros?.['formaPagamento'] && filtros?.['formaPagamento'].value) {
+        urlfiltros += '&formaPagamento=' + filtros?.['formaPagamento'].value;
       }
     }
 
@@ -134,7 +143,6 @@ export class DespesaListComponent implements OnInit {
 
     if (event.first!=undefined)
       this.pageNumber = (event.first + event.rows) / event.rows -1;
-    this.loading = true;
 
     const url: string = 'despesa/page?page=' + this.pageNumber
       + '&size=' + event.rows
