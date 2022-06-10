@@ -54,20 +54,14 @@ export class DespesaListComponent implements OnInit {
     */
     this.defaultService.get('tipo-despesa').subscribe(tipos => {
       this.tiposDespesa = tipos;
-      // const tipoDespesa: TipoDespesa = new TipoDespesa();
-      // this.tiposDespesas.splice(0, 0, tipoDespesa);
     });
-    /*
     this.defaultService.get('fornecedor').subscribe(fornecedores => {
       this.fornecedores = fornecedores;
-      const fornecedor: Fornecedor = new Fornecedor();
-      this.fornecedores.splice(0, 0, fornecedor);
     });
     this.defaultService.get('forma-pagamento').subscribe(formas => {
       this.formasPagamento = formas;
-      const formaPagamento: FormaPagamento = new FormaPagamento();
-      this.formasPagamento.splice(0, 0, formaPagamento);
     });
+    /*
     */
     // console.log(endpoint);
     // this.defaultService.get(endpoint).subscribe(despesas => {
@@ -124,14 +118,16 @@ export class DespesaListComponent implements OnInit {
       if (filtros?.['tipoDespesa'] && filtros?.['tipoDespesa'].value) {
         urlfiltros += '&tipoDespesa=' + filtros?.['tipoDespesa'].value;
       }
-      if (filtros?.['fornecedor'] && filtros?.['fornecedor'].value.id) {
-        urlfiltros += '&fornecedor.id=' + filtros?.['fornecedor'].value.id;
+      if (filtros?.['fornecedor.id'] && filtros?.['fornecedor.id'].value) {
+        urlfiltros += '&fornecedor.id=' + filtros?.['fornecedor.id'].value;
       }
-      if (filtros?.['periodo'] && filtros?.['periodo'].value[0]) {
-        urlfiltros += '&dataInicial=' + filtros?.['periodo'].value[0].toISOString().split('T')[0];
-      }
-      if (filtros?.['periodo'] && filtros?.['periodo'].value[1]) {
-        urlfiltros += '&dataFinal=' + filtros?.['periodo'].value[1].toISOString().split('T')[0];
+      if(filtros?.['periodo']){
+        if (filtros?.['periodo'].value && filtros?.['periodo'].value[0]) {
+          urlfiltros += '&dataInicial=' + filtros?.['periodo'].value[0].toISOString().split('T')[0];
+        }
+        if (filtros?.['periodo'].value && filtros?.['periodo'].value[1]) {
+          urlfiltros += '&dataFinal=' + filtros?.['periodo'].value[1].toISOString().split('T')[0];
+        }
       }
       if (filtros?.['formaPagamento'] && filtros?.['formaPagamento'].value) {
         urlfiltros += '&formaPagamento=' + filtros?.['formaPagamento'].value;

@@ -29,6 +29,7 @@
     [(contextMenuSelection)]="despesaSelecionada">
     <ng-template pTemplate="header">
         <tr>
+            <th></th>
             <th pSortableColumn="id" class="columnId">Id
                 <p-sortIcon field="id"></p-sortIcon>
             </th>
@@ -47,6 +48,7 @@
             <th>Valor</th>
         </tr>
         <tr>
+            <th></th>
             <th class="columnId">
                 <p-columnFilter field="id"
                         [showMenu]="false" 
@@ -92,13 +94,49 @@
                     </ng-template>
                 </p-columnFilter>
             </th>
-            <th></th>
-            <th></th>
+            <th>
+                <p-columnFilter field="fornecedor.id"
+                [showMenu]="false" 
+                [showClearButton]="false">
+                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                        <p-dropdown [options]="fornecedores" placeholder="todos"
+                            [filter]="true" 
+                            filterBy="nome" 
+                            [showClear]="true" 
+                            (onChange)="filter($event.value)"
+                            [showClear]="true"
+                            optionLabel="nome" 
+                            optionValue="id">
+                        </p-dropdown>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
+            <th>
+                <p-columnFilter field="formaPagamento"
+                [showMenu]="false" 
+                [showClearButton]="false">
+                <ng-template pTemplate="filter" let-filter="filterCallback">
+                    <p-dropdown [options]="formasPagamento" placeholder="todos" 
+                        (onChange)="filter($event.value)"
+                        [showClear]="true"
+                        optionLabel="nome" 
+                        optionValue="value">
+                    </p-dropdown>
+                </ng-template>
+            </p-columnFilter>
+            </th>
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-despesa>
+    <ng-template pTemplate="body" let-despesa let-expanded="expanded">
         <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="despesa" 
+                class="p-button-text p-button-rounded p-button-plain p-button-sm" 
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                style="width: 5px; height: 5px;">
+                </button>
+            </td>
             <td class="columnId">{{despesa.id}}</td>
             <td>{{despesa.tipoDespesa.nome}}</td>
             <td class="columnDate">{{despesa.data | date:'dd/MM/yyyy'}}</td>
@@ -107,9 +145,16 @@
             <td style="text-align: right;">{{despesa.valor | currency:'BRL'}}</td>
         </tr>
     </ng-template>
+    <ng-template pTemplate="rowexpansion" let-product>
+        <tr>
+            <td colspan="6">
+                tasdfa ....
+            </td>
+        </tr>
+    </ng-template>
     <ng-template pTemplate="footer">
         <tr>
-            <td [attr.colspan]="5" style='text-align: right;'>Total:</td>
+            <td [attr.colspan]="6" style='text-align: right;'>Total:</td>
             <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
         </tr>
     </ng-template>
