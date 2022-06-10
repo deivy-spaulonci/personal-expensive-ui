@@ -60,11 +60,11 @@
                             [showMenu]="false" 
                             [showClearButton]="false">
                             <ng-template pTemplate="filter" let-filter="filterCallback">
-                                <p-dropdown [options]="tiposDespesa" placeholder="todos" 
+                                <p-dropdown [options]="tiposDespesa" 
+                                    optionLabel="nome"
+                                    placeholder="todos" 
                                     (onChange)="filter($event.value)"
-                                    [showClear]="true"
-                                    optionLabel="nome" 
-                                    optionValue="value">
+                                    [showClear]="true">
                                 </p-dropdown>
                             </ng-template>
                         </p-columnFilter>
@@ -99,8 +99,7 @@
                                     [showClear]="true" 
                                     (onChange)="filter($event.value)"
                                     [showClear]="true"
-                                    optionLabel="nome" 
-                                    optionValue="id">
+                                    optionLabel="nome">
                                 </p-dropdown>
                             </ng-template>
                         </p-columnFilter>
@@ -113,8 +112,7 @@
                             <p-dropdown [options]="formasPagamento" placeholder="todos" 
                                 (onChange)="filter($event.value)"
                                 [showClear]="true"
-                                optionLabel="nome" 
-                                optionValue="value">
+                                optionLabel="nome">
                             </p-dropdown>
                         </ng-template>
                     </p-columnFilter>
@@ -138,8 +136,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="tiposDespesa" optionLabel="nome"
-                                optionValue="value" 
+                                <p-dropdown [options]="tiposDespesa" optionLabel="nome"                            
                                 [(ngModel)] = "despesaCadastro.tipoDespesa"
                                 scrollHeight="350px"
                                 [filter]="true"
@@ -160,6 +157,7 @@
                                     [panelStyle]="{'width':'788'}"
                                     appendTo="body"
                                     dateFormat="dd/mm/yy"
+                                    dataType="string"
                                     [(ngModel)] = "despesa.data">
                                 </p-calendar>
                             </ng-template>
@@ -236,8 +234,7 @@
                             <div class="row">
                                 <div class="cell">Tipo Despesa: </div>
                                 <div class="cell">
-                                    <p-dropdown [options]="tiposDespesa" optionLabel="nome"
-                                    optionValue="value" 
+                                    <p-dropdown [options]="tiposDespesa" optionLabel="nome"                                    
                                     [(ngModel)] = "despesaCadastro.tipoDespesa"
                                     formControlName="comboTipoDespesa"
                                     scrollHeight="350px"
@@ -283,8 +280,7 @@
                             <div class="row">
                                 <div class="cell">Forma Pagamento: </div>
                                 <div class="cell">
-                                    <p-dropdown [options]="formasPagamento" optionLabel="nome"
-                                    optionValue="value" 
+                                    <p-dropdown [options]="formasPagamento" optionLabel="nome"                                    
                                     [style]="{'width':'300px'}"
                                     scrollHeight="350px"
                                     [filter]="true"
@@ -331,8 +327,7 @@
                         <div class="row">
                             <div class="cell">Tipo: </div>
                             <div class="cell">
-                                <p-dropdown [options]="tiposInformacaoExtra" 
-                                optionValue="value" 
+                                <p-dropdown [options]="tiposInformacaoExtra"                                 
                                 optionLabel="nome"
                                 scrollHeight="350px" 
                                 [filter]="true"
@@ -352,7 +347,7 @@
                         </div>
                         <div class="row" *ngFor="let info of despesaCadastro.informacaoExtra">
                             <div class="cell"></div>
-                            <div class="cell">{{searchTipoInformacaoExtra(info.tipoInformacaoExtra)}}</div>
+                            <div class="cell">{{info.tipoInformacaoExtra.nome}}</div>
                             <div class="cell">{{info.numero}}</div>
                         </div>
                     </div>

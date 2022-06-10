@@ -183,31 +183,35 @@ export class DespesaListComponent implements OnInit {
 
   onSubmit(value: string) {
 
+    debugger
     this.loading = true;
-    this.despesaCadastro.data = this.util.dataBRtoDataIso(this.despesaCadastro.data.toString());
+    this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
+    ///this.despesaCadastro.data += "T00:00:00";
     this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
     let idFornecedor:number  = this.despesaCadastro.fornecedor.id;
     this.despesaCadastro.fornecedor = {} as Fornecedor;
     this.despesaCadastro.fornecedor.id = idFornecedor;
 
-    this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{
-    
-      this.loading = false;
-      this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
-
-        this.despesaCadastro.valor = 0;
-        this.despesaCadastro.data = '';
-        this.despesaCadastro.informacaoExtra = [];
-        this.informacaoExtra = {} as InformacaoExtra;
-      
-    });
+    if(this.despesaCadastro.id){
+      this.defaultService.update('despesa', this.despesaCadastro).subscribe(resultado =>{    
+        this.afterSave();
+      });        
+    }else{
+      this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{    
+        this.afterSave();
+      });  
+    }
   }
 
-  searchTipoInformacaoExtra(valor:any){
+  afterSave(){
+    this.loading = false;
+    this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa incluida com sucesso'});
 
-    return this.tiposInformacaoExtra.filter(item=> {item.value==valor; return item.nome;});
+    this.despesaCadastro.valor = 0;
+    this.despesaCadastro.data = '';
+    this.despesaCadastro.informacaoExtra = [];
+    this.informacaoExtra = {} as InformacaoExtra;      
   }
-
 
   onRowEditInit(despesa: Despesa) {
     // this.clonedProducts[product.id] = {...product};

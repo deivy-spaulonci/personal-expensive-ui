@@ -35,6 +35,15 @@ export class DefaultService {
       )
   }
 
+  update(url:string, obj: any): Observable<any> {
+    let api = this.urlbase+url;
+    return this.httpClient.put<any>(api, JSON.stringify(obj), this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      )
+  }
+
   // Manipulação de erros
   handleError(error: HttpErrorResponse) {
     let errorMessage = '';
@@ -48,6 +57,8 @@ export class DefaultService {
     console.log(errorMessage);
     return throwError(errorMessage);
   };
+  
+
 
 //  // Obtem um carro pelo id
 //  getCarById(id: number): Observable<Car> {
@@ -59,14 +70,6 @@ export class DefaultService {
 // }
 
 
-// // utualiza um carro
-// updateCar(car: Car): Observable<Car> {
-//   return this.httpClient.put<Car>(this.url + '/' + car.id, JSON.stringify(car), this.httpOptions)
-//     .pipe(
-//       retry(1),
-//       catchError(this.handleError)
-//     )
-// }
 
 // // deleta um carro
 // deleteCar(car: Car) {
