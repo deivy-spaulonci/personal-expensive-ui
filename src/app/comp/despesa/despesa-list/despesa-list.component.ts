@@ -7,6 +7,9 @@ import { Util } from 'src/app/util/util';
 import { Fornecedor } from 'src/app/model/fornecedor';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { TipoInformacaoExtra } from 'src/app/model/tipo-informacao-extra';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { InformacaoExtra } from 'src/app/model/informacao-extra';
 
 
 @Component({
@@ -18,29 +21,47 @@ import { Table } from 'primeng/table';
 export class DespesaListComponent implements OnInit {
 
   loading!: boolean;
-
+  //********************************************** TABELA */
   pageNumber = 0;
   pageSize = 10;
   totalElements = 0;
   util: Util = new Util();
-
+  
   totalValor!: number;
   despesaSelecionada!: Despesa;
+  //********************************************** CADASTRO */
+  despesaCadastro!: Despesa;
+  despesaForm!: FormGroup;
+  informacaoExtra!: InformacaoExtra;
 
   tiposDespesa: TipoDespesa[] = [];
   formasPagamento: FormaPagamento[] = [];
   fornecedores: Fornecedor[] = [];
   despesas: Despesa[] = [];
+  tiposInformacaoExtra: TipoInformacaoExtra[] = [];
 
 
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService) {
+    private confirmationService: ConfirmationService,
+    private fb: FormBuilder) {
+      this.despesaCadastro = {} as Despesa;
+      this.informacaoExtra = {} as InformacaoExtra;
+      this.informacaoExtra.tipoInformacaoExtra = {} as TipoInformacaoExtra;
 
   }
 
   ngOnInit(): void {
     this.loading = true;
+
+    this.despesaForm = this.fb.group({
+      comboTipoDespesa: '',
+      comboFornecedor : '',
+      comboFormaPagamento: '',
+      inputObservacao: '',
+      inputData: new FormControl('', Validators.required),
+      inputValor: new FormControl('', Validators.required)
+    });
 
     /*
         this.items = [
@@ -61,17 +82,9 @@ export class DespesaListComponent implements OnInit {
     this.defaultService.get('forma-pagamento').subscribe(formas => {
       this.formasPagamento = formas;
     });
-    /*
-    */
-    // console.log(endpoint);
-    // this.defaultService.get(endpoint).subscribe(despesas => {
-    //   this.despesas = despesas.content;
-
-    //   this.defaultService.get('tipo-despesa').subscribe((tipoDespesas: TipoDespesa[]) => {
-    //     this.tiposDespesa = tipoDespesas;
-    //   });
-
-    // });
+    this.defaultService.get('tipo-informacao-extra').subscribe(infos =>{
+      this.tiposInformacaoExtra = infos;
+    })
 
   }
 
@@ -97,12 +110,9 @@ export class DespesaListComponent implements OnInit {
   }
   */
 
-  filterColumnData(table: Table, periodoDatas: any){
-    console.log(periodoDatas.value);
-    // if(periodoDatas.value[0])
-    // let valorInteiro:string = valor.replace(/\D/g, '');
-    // if(valorInteiro.trim().length>0)
-    //   table.filter(valor.replace(/\D/g, ''), 'id', 'equals');
+  maskaraMoeda($event: KeyboardEvent) {
+    const element = ( $event.target as HTMLInputElement);
+    element.value = this.util.formatFloatToReal(element.value);
   }
 
   loadData(event: LazyLoadEvent) {
@@ -156,4 +166,66 @@ export class DespesaListComponent implements OnInit {
     });
   }
 
+  addInformacaoExtra(event: any){
+    
+    if (this.informacaoExtra.numero){
+
+      if (this.despesaCadastro.informacaoExtra == null){
+        this.despesaCadastro.informacaoExtra = [];
+      }
+      this.despesaCadastro.informacaoExtra.push(Object.assign({}, this.informacaoExtra));
+      this.informacaoExtra.numero = '';
+
+    }else{
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Número da Informação Extra Inválido!'});
+    }
+  }
+
+  onSubmit(value: string) {
+
+    this.loading = true;
+    this.despesaCadastro.data = this.util.dataBRtoDataIso(this.despesaCadastro.data.toString());
+    this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
+    let idFornecedor:number  = this.despesaCadastro.fornecedor.id;
+    this.despesaCadastro.fornecedor = {} as Fornecedor;
+    this.despesaCadastro.fornecedor.id = idFornecedor;
+
+    this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{
+    
+      this.loading = false;
+      this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
+
+        this.despesaCadastro.valor = 0;
+        this.despesaCadastro.data = '';
+        this.despesaCadastro.informacaoExtra = [];
+        this.informacaoExtra = {} as InformacaoExtra;
+      
+    });
+  }
+
+  searchTipoInformacaoExtra(valor:any){
+
+    return this.tiposInformacaoExtra.filter(item=> {item.value==valor; return item.nome;});
+  }
+
+
+  onRowEditInit(despesa: Despesa) {
+    // this.clonedProducts[product.id] = {...product};
+    
+    this.despesaCadastro = despesa;
+  }
+
+  onRowEditSave(despesa: Despesa) {
+    this.onSubmit('');
+      //     delete this.clonedProducts[product.id];
+      //     this.messageService.add({severity:'success', summary: 'Success', detail:'Product is updated'});
+      // }
+      // else {
+      //     this.messageService.add({severity:'error', summary: 'Error', detail:'Invalid Price'});
+      // }
+  }
+
+  onRowEditCancel(despesa: Despesa, index: number) {
+      this.despesaCadastro = {} as Despesa;
+  }
 }

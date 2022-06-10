@@ -4,6 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {InputTextModule} from 'primeng/inputtext';
 import {MenubarModule} from 'primeng/menubar';
@@ -35,6 +36,8 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {TreeModule} from 'primeng/tree';
 import {TreeTableModule} from 'primeng/treetable';
 import {DialogModule} from 'primeng/dialog';
+import {TabViewModule} from 'primeng/tabview';
+import {DividerModule} from 'primeng/divider';
 
 import {DespesaListComponent} from './comp/despesa/despesa-list/despesa-list.component';
 import {DespesaFormComponent} from './comp/despesa/despesa-form/despesa-form.component';
@@ -52,6 +55,8 @@ import {HomeComponent} from './comp/home/home.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     InputTextModule,
     MenubarModule,
     MegaMenuModule,
@@ -81,7 +86,9 @@ import {HomeComponent} from './comp/home/home.component';
     AutoCompleteModule,
     TreeModule,
     TreeTableModule,
-    DialogModule
+    DialogModule,
+    TabViewModule,
+    DividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

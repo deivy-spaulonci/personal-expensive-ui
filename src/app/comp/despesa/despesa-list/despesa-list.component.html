@@ -1,161 +1,370 @@
 <p class="title-bar-1">Despesas</p>
-<!-- <div class="table">
-    <div class="row">
-        <div class="cell">Tipo Despesa: </div>
-        <div class="cell">
-            <p-dropdown [options]="tiposDespesa" optionLabel="nome" optionValue="value" 
-            [style]="{'width':'200px'}">
-            </p-dropdown>
-        </div>
-    </div>
-</div> -->
-
-<p-table [value]="despesas" 
-    [loading]="loading" 
-    [lazy]="true" 
-    (onLazyLoad)="loadData($event)"
-    [rowsPerPageOptions]="[10,15,20,25,30,40]" 
-    [alwaysShowPaginator]="true" 
-    [paginator]="true"
-    [showCurrentPageReport]="true" 
-    [totalRecords]="totalElements" 
-    [rows]="pageSize" 
-    [sortOrder]="-1"
-    sortField="data"
-    currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" 
-    dataKey="id" #dt
-    selectionMode="single" 
-    styleClass="p-datatable-striped p-datatable-sm"
-    [(contextMenuSelection)]="despesaSelecionada">
-    <ng-template pTemplate="header">
-        <tr>
-            <th></th>
-            <th pSortableColumn="id" class="columnId">Id
-                <p-sortIcon field="id"></p-sortIcon>
-            </th>
-            <th pSortableColumn="tipoDespesa">Tipo Despesa
-                <p-sortIcon field="tipoDespesa"></p-sortIcon>
-            </th>
-            <th pSortableColumn="data"class="columnDate">Data
-                <p-sortIcon field="data"></p-sortIcon>
-            </th>
-            <th pSortableColumn="fornecedor.nome">Fornecedor
-                <p-sortIcon field="fornecedor.nome"></p-sortIcon>
-            </th>
-            <th pSortableColumn="formaPagamento">Forma pagamento
-                <p-sortIcon field="formaPagamento"></p-sortIcon>
-            </th>
-            <th>Valor</th>
-        </tr>
-        <tr>
-            <th></th>
-            <th class="columnId">
-                <p-columnFilter field="id"
+    <p-tabView>
+        <p-tabPanel header="Consulta">
+            <p-table [value]="despesas" 
+            [loading]="loading" 
+            [lazy]="true" 
+            (onLazyLoad)="loadData($event)"
+            [rowsPerPageOptions]="[10,15,20,25,30,40]" 
+            [alwaysShowPaginator]="true" 
+            [paginator]="true"
+            [showCurrentPageReport]="true" 
+            [totalRecords]="totalElements" 
+            [rows]="pageSize" 
+            [sortOrder]="-1"
+            sortField="data"
+            currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" 
+            dataKey="id" #dt
+            selectionMode="single" 
+            editMode="row"
+            styleClass="p-datatable-striped p-datatable-sm"
+            [(contextMenuSelection)]="despesaSelecionada">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="columnExpand"></th>
+                    <th pSortableColumn="id" class="columnId">Id
+                        <p-sortIcon field="id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="tipoDespesa">Tipo Despesa
+                        <p-sortIcon field="tipoDespesa"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="data"class="columnDate">Data
+                        <p-sortIcon field="data"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="fornecedor.nome">Fornecedor
+                        <p-sortIcon field="fornecedor.nome"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="formaPagamento">Forma pagamento
+                        <p-sortIcon field="formaPagamento"></p-sortIcon>
+                    </th>
+                    <th>Valor</th>
+                    <th class="columnActionBt"></th>
+                    <th class="columnActionBtEdit"></th>
+                </tr>
+                <tr>
+                    <th class="columnExpand"></th>
+                    <th class="columnId">
+                        <p-columnFilter field="id"
+                                [showMenu]="false" 
+                                [showClearButton]="false">
+                                <ng-template pTemplate="filter" let-filter="filterCallback">
+                                    <p-inputNumber mode="decimal" inputId="withoutgrouping" 
+                                    (onInput)="filter($event.value)"
+                                    [useGrouping]="false">
+                                </p-inputNumber>
+                                </ng-template>
+                        </p-columnFilter>
+                    </th>
+                    <th>
+                        <p-columnFilter field="tipoDespesa"
+                            [showMenu]="false" 
+                            [showClearButton]="false">
+                            <ng-template pTemplate="filter" let-filter="filterCallback">
+                                <p-dropdown [options]="tiposDespesa" placeholder="todos" 
+                                    (onChange)="filter($event.value)"
+                                    [showClear]="true"
+                                    optionLabel="nome" 
+                                    optionValue="value">
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </th>
+                    <th class="columnDate">
+                        <p-columnFilter field="periodo"
+                        [showMenu]="false" 
+                        [showClearButton]="false">
+                            <ng-template pTemplate="filter" let-filter="filterCallback">
+                                <p-calendar selectionMode="range" [readonlyInput]="true" 
+                                    [showButtonBar]="true"
+                                    rangeSeparator="até"
+                                    appendTo="body"
+                                    inputId="range"
+                                    [panelStyle]="{'width':'788'}"
+                                    dateFormat="dd/mm/yy"
+                                    dataType="string"
+                                    #periodoDatas
+                                    (onSelect)="filter(periodoDatas.value)">
+                                </p-calendar>
+                            </ng-template>
+                        </p-columnFilter>
+                    </th>
+                    <th>
+                        <p-columnFilter field="fornecedor.id"
+                        [showMenu]="false" 
+                        [showClearButton]="false">
+                            <ng-template pTemplate="filter" let-filter="filterCallback">
+                                <p-dropdown [options]="fornecedores" placeholder="todos"
+                                    [filter]="true" 
+                                    filterBy="nome" 
+                                    [showClear]="true" 
+                                    (onChange)="filter($event.value)"
+                                    [showClear]="true"
+                                    optionLabel="nome" 
+                                    optionValue="id">
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </th>
+                    <th>
+                        <p-columnFilter field="formaPagamento"
                         [showMenu]="false" 
                         [showClearButton]="false">
                         <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-inputNumber mode="decimal" inputId="withoutgrouping" 
-                            (onInput)="filter($event.value)"
-                            [useGrouping]="false">
-                        </p-inputNumber>
+                            <p-dropdown [options]="formasPagamento" placeholder="todos" 
+                                (onChange)="filter($event.value)"
+                                [showClear]="true"
+                                optionLabel="nome" 
+                                optionValue="value">
+                            </p-dropdown>
                         </ng-template>
-                </p-columnFilter>
-            </th>
-            <th>
-                <p-columnFilter field="tipoDespesa"
-                    [showMenu]="false" 
-                    [showClearButton]="false">
-                    <ng-template pTemplate="filter" let-filter="filterCallback">
-                        <p-dropdown [options]="tiposDespesa" placeholder="todos" 
-                            (onChange)="filter($event.value)"
-                            [showClear]="true"
-                            optionLabel="nome" 
-                            optionValue="value">
-                        </p-dropdown>
-                    </ng-template>
-                </p-columnFilter>
-            </th>
-            <th class="columnDate">
-                <p-columnFilter field="periodo"
-                [showMenu]="false" 
-                [showClearButton]="false">
-                    <ng-template pTemplate="filter" let-filter="filterCallback">
-                        <p-calendar selectionMode="range" [readonlyInput]="true" 
-                            [showButtonBar]="true"
-                            rangeSeparator="até"
-                            appendTo="body"
-                            inputId="range"
-                            [panelStyle]="{'width':'788'}"
-                            dateFormat="dd/mm/yy"
-                            dataType="string"
-                            #periodoDatas
-                            (onSelect)="filter(periodoDatas.value)">
-                        </p-calendar>
-                    </ng-template>
-                </p-columnFilter>
-            </th>
-            <th>
-                <p-columnFilter field="fornecedor.id"
-                [showMenu]="false" 
-                [showClearButton]="false">
-                    <ng-template pTemplate="filter" let-filter="filterCallback">
-                        <p-dropdown [options]="fornecedores" placeholder="todos"
-                            [filter]="true" 
-                            filterBy="nome" 
-                            [showClear]="true" 
-                            (onChange)="filter($event.value)"
-                            [showClear]="true"
-                            optionLabel="nome" 
-                            optionValue="id">
-                        </p-dropdown>
-                    </ng-template>
-                </p-columnFilter>
-            </th>
-            <th>
-                <p-columnFilter field="formaPagamento"
-                [showMenu]="false" 
-                [showClearButton]="false">
-                <ng-template pTemplate="filter" let-filter="filterCallback">
-                    <p-dropdown [options]="formasPagamento" placeholder="todos" 
-                        (onChange)="filter($event.value)"
-                        [showClear]="true"
-                        optionLabel="nome" 
-                        optionValue="value">
-                    </p-dropdown>
-                </ng-template>
-            </p-columnFilter>
-            </th>
-            <th></th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-despesa let-expanded="expanded">
-        <tr>
-            <td>
-                <button type="button" pButton pRipple [pRowToggler]="despesa" 
-                class="p-button-text p-button-rounded p-button-plain p-button-sm" 
-                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                style="width: 5px; height: 5px;">
-                </button>
-            </td>
-            <td class="columnId">{{despesa.id}}</td>
-            <td>{{despesa.tipoDespesa.nome}}</td>
-            <td class="columnDate">{{despesa.data | date:'dd/MM/yyyy'}}</td>
-            <td>{{despesa.fornecedor.nome}}</td>
-            <td>{{despesa.formaPagamento.nome}}</td>
-            <td style="text-align: right;">{{despesa.valor | currency:'BRL'}}</td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="rowexpansion" let-product>
-        <tr>
-            <td colspan="6">
-                tasdfa ....
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <tr>
-            <td [attr.colspan]="6" style='text-align: right;'>Total:</td>
-            <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
-        </tr>
-    </ng-template>
-</p-table>
+                    </p-columnFilter>
+                    </th>
+                    <th class="columnValor"></th>
+                    <th class="columnActionBt"></th>
+                    <th class="columnActionBtEdit"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-despesa let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="despesa">
+                    <td class="columnExpand">
+                        <button type="button" pButton pRipple [pRowToggler]="despesa" 
+                        *ngIf="despesa.obs || despesa.informacaoExtra.length>0"
+                        class="p-button-text p-button-rounded p-button-plain p-button-sm smallBt" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td class="columnId">{{despesa.id}}</td>
+                    
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="tiposDespesa" optionLabel="nome"
+                                optionValue="value" 
+                                [(ngModel)] = "despesaCadastro.tipoDespesa"
+                                scrollHeight="350px"
+                                [filter]="true"
+                                [style]="{'width':'200px'}">
+                                </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{despesa.tipoDespesa.nome}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
+                    <td class="columnDate" pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar [readonlyInput]="true" 
+                                    [showButtonBar]="true"
+                                    [panelStyle]="{'width':'788'}"
+                                    appendTo="body"
+                                    dateFormat="dd/mm/yy"
+                                    [(ngModel)] = "despesa.data">
+                                </p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{despesa.data | date:'dd/MM/yyyy'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
+                    <td>{{despesa.fornecedor.nome}}</td>
+                    <td>{{despesa.formaPagamento.nome}}</td>
+                    <td class="columnValor">{{despesa.valor | currency:'BRL'}}</td>
+                    <td class="columnActionBt">
+                        <button pButton pRipple type="button" icon="pi pi-trash"
+                            class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
+                        </button>
+                    </td>
+                    <td class="columnActionBtEdit">
+                        <!-- <button pButton pRipple type="button" icon="pi pi-pencil"
+                            class="p-button-rounded p-button-text p-button-sm p-button-info smallBt">
+                        </button> -->
+
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" 
+                            (click)="onRowEditInit(despesa)" 
+                            class="p-button-rounded p-button-text p-button-sm smallBt">
+                        </button>
+                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" 
+                            (click)="onRowEditSave(despesa)" 
+                            class="p-button-rounded p-button-text p-button-success mr-2 p-button-sm smallBt">
+                        </button>
+                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" 
+                            (click)="onRowEditCancel(despesa, ri)" 
+                            class="p-button-rounded p-button-text p-button-danger p-button-sm smallBt">
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-despesa>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2">
+                        <div class="table">
+                            <div class="row" *ngFor="let info of despesa.informacaoExtra">
+                                <div class="cell">{{info.tipoInformacaoExtra.nome}}: </div>
+                                <div class="cell">{{info.numero}}</div>
+                            </div>
+        
+                        </div>
+                        <div *ngIf="despesa.obs">
+                            Observação: {{despesa.obs}}
+                        </div>
+                    </td>
+                    <td colspan="5"></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td [attr.colspan]="6" style='text-align: right;'>Total:</td>
+                    <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-tabPanel>
+    <p-tabPanel header="Casdastro">
+
+        <div class="table">
+            <div class="row">
+                <div class="cell">
+                    <form [formGroup]="despesaForm" (ngSubmit)="onSubmit(despesaForm.value)">
+                        <div class="table">
+                            <div class="row">
+                                <div class="cell">Tipo Despesa: </div>
+                                <div class="cell">
+                                    <p-dropdown [options]="tiposDespesa" optionLabel="nome"
+                                    optionValue="value" 
+                                    [(ngModel)] = "despesaCadastro.tipoDespesa"
+                                    formControlName="comboTipoDespesa"
+                                    scrollHeight="350px"
+                                    [filter]="true"
+                                    [style]="{'width':'300px'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Data: </div>
+                                <div class="cell">
+                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
+                                        [(ngModel)]="despesaCadastro.data"
+                                        formControlName="inputData">
+                                    </p-inputMask>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="cell">Fornecedor: </div>
+                                <div class="cell">
+                                    <p-dropdown [options]="fornecedores" optionLabel="nome"
+                                    [style]="{'width':'300px'}" 
+                                    [panelStyle]="{'width':'400px'}"
+                                    [resetFilterOnHide]="true"
+                                    [filter]="true" 
+                                    filterBy="nome"
+                                    scrollHeight="350px"
+                                    [(ngModel)]="despesaCadastro.fornecedor"
+                                    formControlName="comboFornecedor">
+                                    <ng-template let-fornecedor pTemplate="item">
+                                    <div class="table">
+                                        <div class="row"><div class="cell">{{fornecedor.nome}}</div></div>
+                                        <div class="row">
+                                            <div class="cell">{{fornecedor.cidade.nome}} -
+                                                <em>{{fornecedor.cidade.estado.nome}}</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </ng-template>
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Forma Pagamento: </div>
+                                <div class="cell">
+                                    <p-dropdown [options]="formasPagamento" optionLabel="nome"
+                                    optionValue="value" 
+                                    [style]="{'width':'300px'}"
+                                    scrollHeight="350px"
+                                    [filter]="true"
+                                    [(ngModel)]="despesaCadastro.formaPagamento"
+                                    formControlName="comboFormaPagamento">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Valor: </div>
+                                <div class="cell">
+                                    <input type="text" (keyup)="maskaraMoeda($event)" 
+                                    (onblur)="maskaraMoeda($event)"
+                                    [(ngModel)]="despesaCadastro.valor"
+                                    formControlName="inputValor"
+                                    pInputText
+                                    formControlName="inputValor"/>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="cell">Obs: </div>
+                                <div class="cell">
+                                    <input type="text"
+                                    style="width: 100%;"
+                                    [(ngModel)]="despesaCadastro.obs"
+                                    formControlName="inputObservacao"
+                                    pInputText/>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="centerText">
+                            <button icon="pi pi-save" pButton type="button" label="Salvar"
+                                class="ui-button-raised ui-button-success"
+                                [disabled]="!despesaForm.valid" type="submit">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="cell">
+                    <p-divider layout="vertical">Informação Extra</p-divider>
+                </div>
+                <div class="cell">
+                    <div class="table">
+                        <div class="row">
+                            <div class="cell">Tipo: </div>
+                            <div class="cell">
+                                <p-dropdown [options]="tiposInformacaoExtra" 
+                                optionValue="value" 
+                                optionLabel="nome"
+                                scrollHeight="350px" 
+                                [filter]="true"
+                                [(ngModel)]="informacaoExtra.tipoInformacaoExtra" 
+                                [style]="{'width':'200px'}">
+                                </p-dropdown> 
+                            </div>
+                            <div class="cell">Numero: </div>
+                            <div class="cell">
+                                <input type="text" pInputText [(ngModel)]="informacaoExtra.numero"/>
+                            </div>
+                            <div class="cell">
+                                <p-button icon="pi pi-plus" [style]="{'margin-left':'.25em'}"
+                                        (onClick)="addInformacaoExtra($event)">
+                                </p-button>
+                            </div>
+                        </div>
+                        <div class="row" *ngFor="let info of despesaCadastro.informacaoExtra">
+                            <div class="cell"></div>
+                            <div class="cell">{{searchTipoInformacaoExtra(info.tipoInformacaoExtra)}}</div>
+                            <div class="cell">{{info.numero}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </p-tabPanel>
+    <p-tabPanel header="Gráficos">
+        Content 3
+    </p-tabPanel>
+</p-tabView>
+<p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+{{despesaCadastro | json}}
+
