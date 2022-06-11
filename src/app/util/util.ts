@@ -14,7 +14,7 @@ export class Util {
 
       transformDates(data:String){
         if(data){
-          if(data.indexOf("-") == -1){//data br
+          if(data.indexOf("-") == -1){//data br            
             const dataarr  = data.toString().split('/');
             return dataarr[2] + '-' + dataarr[1] + '-' + dataarr[0]
           }else{

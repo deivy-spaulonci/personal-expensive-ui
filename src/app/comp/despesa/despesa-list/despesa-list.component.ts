@@ -30,7 +30,7 @@ export class DespesaListComponent implements OnInit {
   totalValor!: number;
   despesaSelecionada!: Despesa;
   //********************************************** CADASTRO */
-  despesaCadastro!: Despesa;
+  despesaCadastro!: any;
   despesaForm!: FormGroup;
   informacaoExtra!: InformacaoExtra;
 
@@ -103,10 +103,6 @@ export class DespesaListComponent implements OnInit {
           });
         }
       });
-  }
-
-  editarDespesa(){
-    this.router.navigate(['/despesa-form', {id: this.despesaSelecionada.id}]);
   }
   */
 
@@ -183,50 +179,38 @@ export class DespesaListComponent implements OnInit {
 
   onSubmit(value: string) {
 
-    debugger
+    
     this.loading = true;
     this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
     ///this.despesaCadastro.data += "T00:00:00";
     this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
-    let idFornecedor:number  = this.despesaCadastro.fornecedor.id;
-    this.despesaCadastro.fornecedor = {} as Fornecedor;
-    this.despesaCadastro.fornecedor.id = idFornecedor;
+    this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{    
+        this.loading = false;
+        this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa incluida com sucesso'});
+        this.despesaCadastro.valor = 0;
+        this.despesaCadastro.data = '';
+        this.despesaCadastro.informacaoExtra = [];
+        this.informacaoExtra = {} as InformacaoExtra;      
 
-    if(this.despesaCadastro.id){
-      this.defaultService.update('despesa', this.despesaCadastro).subscribe(resultado =>{    
-        this.afterSave();
-      });        
-    }else{
-      this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{    
-        this.afterSave();
-      });  
-    }
-  }
+    });  
 
-  afterSave(){
-    this.loading = false;
-    this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa incluida com sucesso'});
 
-    this.despesaCadastro.valor = 0;
-    this.despesaCadastro.data = '';
-    this.despesaCadastro.informacaoExtra = [];
-    this.informacaoExtra = {} as InformacaoExtra;      
   }
 
   onRowEditInit(despesa: Despesa) {
-    // this.clonedProducts[product.id] = {...product};
-    
-    this.despesaCadastro = despesa;
+    despesa.data = new Date(despesa.data);
+    despesa.data.setDate(despesa.data.getDate() + 1);
   }
 
-  onRowEditSave(despesa: Despesa) {
-    this.onSubmit('');
-      //     delete this.clonedProducts[product.id];
-      //     this.messageService.add({severity:'success', summary: 'Success', detail:'Product is updated'});
-      // }
-      // else {
-      //     this.messageService.add({severity:'error', summary: 'Error', detail:'Invalid Price'});
-      // }
+  onRowEditSave(despesa: any, dt:Table) {
+    // dt.reset();
+    // dt.filter(dt.sortOrder(-1);
+    despesa.data = despesa.data.toISOString().split("T")[0];
+    despesa.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(despesa.valor.toString()));
+
+    this.defaultService.update('despesa', despesa).subscribe(resultado =>{    
+      this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});       
+    }); 
   }
 
   onRowEditCancel(despesa: Despesa, index: number) {

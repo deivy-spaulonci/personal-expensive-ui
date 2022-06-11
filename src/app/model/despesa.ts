@@ -7,7 +7,7 @@ export interface Despesa {
     id:number;
     tipoDespesa:TipoDespesa;
     fornecedor:Fornecedor;
-    data:string;
+    data:Date;
     formaPagamento:FormaPagamento;
     valor:number;
     obs:string;
