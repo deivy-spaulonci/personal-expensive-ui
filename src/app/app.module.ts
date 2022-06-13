@@ -1,10 +1,13 @@
-import {NgModule} from '@angular/core';
+import {DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+
+// import ptBr from '@angular/common/locales/pt';
+// import { registerLocaleData } from '@angular/common';
 
 import {InputTextModule} from 'primeng/inputtext';
 import {MenubarModule} from 'primeng/menubar';
@@ -39,16 +42,23 @@ import {DialogModule} from 'primeng/dialog';
 import {TabViewModule} from 'primeng/tabview';
 import {DividerModule} from 'primeng/divider';
 
+
 import {DespesaListComponent} from './comp/despesa/despesa-list/despesa-list.component';
-import {DespesaFormComponent} from './comp/despesa/despesa-form/despesa-form.component';
 import {HomeComponent} from './comp/home/home.component';
+import { ContaComponent } from './comp/conta/conta.component';
+import { FornecedorComponent } from './comp/fornecedor/fornecedor.component';
+import { CnpjPipe } from './pipe/cnpj.pipe';
+import { CepPipe } from './pipe/cep.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     DespesaListComponent,
-    DespesaFormComponent,
-    HomeComponent
+    HomeComponent,
+    ContaComponent,
+    FornecedorComponent,
+    CnpjPipe,
+    CepPipe
   ],
   imports: [
     BrowserModule,
@@ -90,7 +100,10 @@ import {HomeComponent} from './comp/home/home.component';
     TabViewModule,
     DividerModule
   ],
-  providers: [],
+  providers: [
+    // { provide: LOCALE_ID, useValue: 'pt' },
+    // { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

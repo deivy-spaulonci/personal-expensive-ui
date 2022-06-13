@@ -21,6 +21,7 @@ import { InformacaoExtra } from 'src/app/model/informacao-extra';
 export class DespesaListComponent implements OnInit {
 
   loading!: boolean;
+  tabSelected:number = 0;
   //********************************************** TABELA */
   pageNumber = 0;
   pageSize = 10;
@@ -33,6 +34,8 @@ export class DespesaListComponent implements OnInit {
   despesaCadastro!: any;
   despesaForm!: FormGroup;
   informacaoExtra!: InformacaoExtra;
+  isAjudaCusto:boolean = false;
+  dayOfWeekend:string = '';
 
   tiposDespesa: TipoDespesa[] = [];
   formasPagamento: FormaPagamento[] = [];
@@ -177,43 +180,85 @@ export class DespesaListComponent implements OnInit {
     }
   }
 
-  onSubmit(value: string) {
-
-    
+  onSubmit(value: string, table:Table) {
     this.loading = true;
     this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
-    ///this.despesaCadastro.data += "T00:00:00";
     this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
+   
     this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{    
         this.loading = false;
-        this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa incluida com sucesso'});
-        this.despesaCadastro.valor = 0;
-        this.despesaCadastro.data = '';
-        this.despesaCadastro.informacaoExtra = [];
-        this.informacaoExtra = {} as InformacaoExtra;      
-
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
+        if(this.despesaCadastro.id){
+          this.tabSelected = 0;
+          table.filter(null, '', '');
+        }
+        this.newDespesaCadastro();
+        this.dayOfWeekend = '';
+        
+        
     });  
-
-
   }
 
-  onRowEditInit(despesa: Despesa) {
-    despesa.data = new Date(despesa.data);
-    despesa.data.setDate(despesa.data.getDate() + 1);
+  newDespesaCadastro(){
+    this.despesaCadastro.valor = 0;
+    this.despesaCadastro.data = '';
+    this.despesaCadastro.informacaoExtra = [];
+    this.informacaoExtra = {} as InformacaoExtra;     
+    this.isAjudaCusto = false;
+    this.dayOfWeekend = ''; 
   }
 
-  onRowEditSave(despesa: any, dt:Table) {
-    // dt.reset();
-    // dt.filter(dt.sortOrder(-1);
-    despesa.data = despesa.data.toISOString().split("T")[0];
-    despesa.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(despesa.valor.toString()));
-
-    this.defaultService.update('despesa', despesa).subscribe(resultado =>{    
-      this.messageService.add({severity: 'info', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});       
-    }); 
+  changeTab(event: any){
+    if(event.index==0){
+      this.newDespesaCadastro();
+    }
   }
 
-  onRowEditCancel(despesa: Despesa, index: number) {
-      this.despesaCadastro = {} as Despesa;
+  onEditSave(despesa: any) {
+    this.despesaCadastro = Object.assign({}, despesa);
+    this.tabSelected = 1;
+    this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)
+    if(this.despesaCadastro.valor.toString().length==2){
+      this.despesaCadastro.valor = this.util.formatFloatToReal(this.despesaCadastro.valor.toString()+'00');
+    }
+  }
+
+  showDayOfWeekend(){
+    let data:Date = new Date(this.util.transformDates(this.despesaCadastro.data));
+    data.setDate(data.getDate() + 1);
+    switch(data.getDay()){
+      case 0: this.dayOfWeekend = 'Domingo'; break;
+      case 1: this.dayOfWeekend = 'Segunda-Feira'; break;
+      case 2: this.dayOfWeekend = 'Terça-Feira'; break;
+      case 3: this.dayOfWeekend = 'Quarta-Feira'; break;
+      case 4: this.dayOfWeekend = 'Quinta-Feira'; break;
+      case 5: this.dayOfWeekend = 'Sexta-Feira'; break;
+      case 6: this.dayOfWeekend = 'Sabado'; break;
+    }
+  }
+
+  consultaAjudaCusto(){
+    let data:Date = new Date(this.util.transformDates(this.despesaCadastro.data));
+    data.setDate(data.getDate() + 1);
+    if(data.getDay() > 0 && data.getDay() < 4){
+      let valorTipoDespesa = this.despesaCadastro.tipoDespesa.value;
+      let valorFormaPagamento = this.despesaCadastro.formaPagamento.value;
+      if(valorTipoDespesa =="ALIMENTACAO"
+      || valorTipoDespesa =="COMBUSTIVEL"
+      || valorTipoDespesa =="HARDWARE_PC"
+      || valorTipoDespesa =="ESTACIONAMENTO"
+      || valorTipoDespesa =="PEDAGIO"
+      || valorTipoDespesa =="SUPERMERCADO"){
+        if(valorFormaPagamento=="DINHEIRO"
+        || valorFormaPagamento=="CARTAO_DEBITO_SANTANDER"){
+          this.isAjudaCusto = true;
+        }
+      }
+    }else{
+      this.isAjudaCusto = false;
+    }
+    // switch (data.getDay){
+    //   case
+    // }
   }
 }

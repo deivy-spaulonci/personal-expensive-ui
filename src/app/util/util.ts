@@ -19,7 +19,7 @@ export class Util {
             return dataarr[2] + '-' + dataarr[1] + '-' + dataarr[0]
           }else{
             const dataarr  = data.toString().split('-');
-            return dataarr[0] + '-' + dataarr[1] + '-' + dataarr[2]
+            return dataarr[2] + '/' + dataarr[1] + '/' + dataarr[0]
           }
         }
         return '';

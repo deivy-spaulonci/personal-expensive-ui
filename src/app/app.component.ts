@@ -18,8 +18,8 @@ export class AppComponent implements OnInit{
       label: 'Payment',
       items:[
         {label: 'Despesa', icon: 'pi pi-fw pi-home', routerLink: ['/despesa-list']},
-        {label: 'Contas', icon: 'pi pi-fw pi-money-bill'},
-        {label: 'Fornecedor', icon: 'pi pi-fw pi-box'},
+        {label: 'Contas', icon: 'pi pi-fw pi-money-bill', routerLink: ['/conta']},
+        {label: 'Fornecedor', icon: 'pi pi-fw pi-box', routerLink: ['/fornecedor']},
         {label: 'Forma Pagamento', icon: 'pi pi-fw pi-credit-card'}
       ]
     }];
