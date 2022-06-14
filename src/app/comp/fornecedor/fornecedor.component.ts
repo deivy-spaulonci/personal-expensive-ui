@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { Cidade } from 'src/app/model/cidade';
 import { Fornecedor } from 'src/app/model/fornecedor';
 import { DefaultService } from 'src/app/service/default.service';
 import { Util } from 'src/app/util/util';
@@ -27,6 +29,7 @@ export class FornecedorComponent implements OnInit {
   fornecedorForm!:FormGroup;
 
   fornecedores: Fornecedor[] = [];
+  cidades: Cidade[]=[];
 
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
@@ -39,6 +42,64 @@ export class FornecedorComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
+    this.fornecedorForm = this.fb.group({
+      inputNome: new FormControl('', Validators.required),
+      inputRazao : new FormControl('', Validators.required),
+      inputCNPJ: '',
+      inputInscEstadual: '',
+      inputEndereco: '',
+      inputBairro: '',
+      inputComplemento: '',
+      inputCep: '',
+      inputTelefone: '',
+      comboCidade: new FormControl('', Validators.required)
+    });
+
+    this.defaultService.get('cidade').subscribe(resultado => {
+      this.cidades = resultado.content;
+      this.loading = false;
+    });
+  }
+
+  onEditSave(fornecedor: any){
+
+  }
+
+  searchCNPJ(event: any){
+    this.loading = true;
+    const cnpj = this.fornecedorCadastro.cnpj.replace(/[^0-9]+/g, '');
+    this.defaultService.get('fornecedor/consultacnpj/?cnpj=' + cnpj).subscribe(resultado => {
+      if(resultado || resultado.status == 'ERROR'){
+        debugger
+        this.fornecedorCadastro.nome = this.util.capitalize((resultado.fantasia ? resultado.fantasia : resultado.nome));
+        this.fornecedorCadastro.razaoSocial = this.util.capitalize(resultado.nome);
+        //this.fornecedorCadastro.inscricaoEstadual = 
+        this.fornecedorCadastro.endereco = this.util.capitalize(resultado.logradouro) + ' ' + resultado.numero;
+        this.fornecedorCadastro.bairro = this.util.capitalize(resultado.bairro);
+        this.fornecedorCadastro.complemento = this.util.capitalize(resultado.complemento);
+        this.fornecedorCadastro.cep = resultado.cep;
+        this.fornecedorCadastro.telefone = resultado.telefone;
+        this.fornecedorCadastro.cidade = {} as Cidade;
+        this.fornecedorCadastro.cidae.nome.setValue(this.util.capitalize(resultado.municipio));
+        this.defaultService.get('cidade?nome=' + this.util.capitalize(resultado.municipio)).subscribe(retornocidades => {
+          this.cidades = retornocidades;
+          this.loading = false;
+        });
+      }else{
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro : ' + resultado.message});
+      }
+      this.loading = false;
+      
+    });
+  }
+
+  filterCidade(event: any){
+    const filtered: any[] = [];
+    const query = event.query;
+
+    this.defaultService.get('cidade?nome=' + event.query).subscribe(resultado => {
+      this.cidades = resultado;
+    });
 
   }
 
@@ -47,29 +108,21 @@ export class FornecedorComponent implements OnInit {
 
     let urlfiltros: string = '';
 
-    // if (event.filters) {
-    //   let filtros = event.filters;
-    //   if (filtros?.['id'] && filtros?.['id'].value!=null) {
-    //     urlfiltros += '&id=' + filtros?.['id'].value;
-    //   }
-    //   if (filtros?.['tipoDespesa'] && filtros?.['tipoDespesa'].value) {
-    //     urlfiltros += '&tipoDespesa=' + filtros?.['tipoDespesa'].value;
-    //   }
-    //   if (filtros?.['fornecedor.id'] && filtros?.['fornecedor.id'].value) {
-    //     urlfiltros += '&fornecedor.id=' + filtros?.['fornecedor.id'].value;
-    //   }
-    //   if(filtros?.['periodo']){
-    //     if (filtros?.['periodo'].value && filtros?.['periodo'].value[0]) {
-    //       urlfiltros += '&dataInicial=' + filtros?.['periodo'].value[0].toISOString().split('T')[0];
-    //     }
-    //     if (filtros?.['periodo'].value && filtros?.['periodo'].value[1]) {
-    //       urlfiltros += '&dataFinal=' + filtros?.['periodo'].value[1].toISOString().split('T')[0];
-    //     }
-    //   }
-    //   if (filtros?.['formaPagamento'] && filtros?.['formaPagamento'].value) {
-    //     urlfiltros += '&formaPagamento=' + filtros?.['formaPagamento'].value;
-    //   }
-    // }
+    if (event.filters) {
+      let filtros = event.filters;
+      if (filtros?.['id'] && filtros?.['id'].value!=null) {
+        urlfiltros += '&id=' + filtros?.['id'].value;
+      }
+      if (filtros?.['nome'] && filtros?.['nome'].value) {
+        urlfiltros += '&nome=' + filtros?.['nome'].value;
+      }
+      if (filtros?.['cnpj'] && filtros?.['cnpj'].value) {
+        urlfiltros += '&cnpj=' + filtros?.['cnpj'].value;
+      }
+      if (filtros?.['cidade.nome'] && filtros?.['cidade.nome'].value) {
+        urlfiltros += '&cidade.nome=' + filtros?.['cidade.nome'].value;
+      }
+    }
 
     event.rows = (event.rows ? event.rows : this.pageSize);
     event.sortField = (event.sortField ? event.sortField : 'nome');
@@ -89,5 +142,20 @@ export class FornecedorComponent implements OnInit {
       this.loading = false;
       
     });
+  }
+
+  onSubmit(value: string, table:Table) {
+    this.loading = true;
+   
+    this.defaultService.save('fornecedor', this.fornecedorCadastro).subscribe(resultado =>{    
+        this.loading = false;
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
+        // if(this.despesaCadastro.id){
+        //   this.tabSelected = 0;
+        //   table.filter(null, '', '');
+        // }
+        // this.newDespesaCadastro();
+      
+    });  
   }
 }

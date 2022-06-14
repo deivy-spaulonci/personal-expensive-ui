@@ -49,6 +49,7 @@ import { ContaComponent } from './comp/conta/conta.component';
 import { FornecedorComponent } from './comp/fornecedor/fornecedor.component';
 import { CnpjPipe } from './pipe/cnpj.pipe';
 import { CepPipe } from './pipe/cep.pipe';
+import { TelefonePipe } from './pipe/telefone.pipe';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { CepPipe } from './pipe/cep.pipe';
     ContaComponent,
     FornecedorComponent,
     CnpjPipe,
-    CepPipe
+    CepPipe,
+    TelefonePipe
   ],
   imports: [
     BrowserModule,

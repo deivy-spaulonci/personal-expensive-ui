@@ -38,8 +38,8 @@
                         <p-sortIcon field="formaPagamento"></p-sortIcon>
                     </th>
                     <th>Valor</th>
-                    <th class="columnActionBt"></th>
-                    <th class="columnActionBtEdit"></th>
+                    <th class="columnActionBt">Editar</th>
+                    <th class="columnActionBt">Excluir</th>
                 </tr>
                 <tr>
                     <th class="columnExpand"></th>
@@ -122,7 +122,7 @@
                     </th>
                     <th class="columnValor"></th>
                     <th class="columnActionBt"></th>
-                    <th class="columnActionBtEdit"></th>
+                    <th class="columnActionBt"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-despesa let-expanded="expanded" let-ri="rowIndex">
@@ -141,14 +141,14 @@
                     <td>{{despesa.formaPagamento.nome}}</td>
                     <td class="columnValor">{{despesa.valor | currency:'BRL':true:'1.2-2'}}</td>
                     <td class="columnActionBt">
-                        <button pButton pRipple type="button" icon="pi pi-trash"
-                            class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
-                        </button>
-                    </td>
-                    <td class="columnActionBt">
                         <button pButton pRipple type="button" icon="pi pi-pencil" 
                             (click)="onEditSave(despesa)"
                             class="p-button-rounded p-button-text p-button-sm smallBt">
+                        </button>
+                    </td>
+                    <td class="columnActionBt">
+                        <button pButton pRipple type="button" icon="pi pi-trash"
+                            class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
                         </button>
                     </td>
                 </tr>
