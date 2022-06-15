@@ -70,7 +70,8 @@ export class FornecedorComponent implements OnInit {
     this.loading = true;
     const cnpj = this.fornecedorCadastro.cnpj.replace(/[^0-9]+/g, '');
     this.defaultService.get('fornecedor/consultacnpj/?cnpj=' + cnpj).subscribe(resultado => {      
-      if(resultado || resultado.status == 'ERROR'){        
+      this.loading = false;
+      if(resultado || resultado.status != 'ERROR'){        
         this.fornecedorCadastro.nome = this.util.capitalize((resultado.fantasia ? resultado.fantasia : resultado.nome));
         this.fornecedorCadastro.razaoSocial = this.util.capitalize(resultado.nome);
         //this.fornecedorCadastro.inscricaoEstadual = 
@@ -88,10 +89,9 @@ export class FornecedorComponent implements OnInit {
         //   debugger
         //   this.cidades = retornocidades[0];
         // });
-        this.loading = false;
+        
       }else{
         this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro : ' + resultado.message});
-        this.loading = false;
       }      
       
     });
@@ -160,11 +160,11 @@ export class FornecedorComponent implements OnInit {
     this.defaultService.save('fornecedor', this.fornecedorCadastro).subscribe(resultado =>{    
         this.loading = false;
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Fornecedor salva com sucesso'});
-        // if(this.despesaCadastro.id){
-        //   this.tabSelected = 0;
-        //   table.filter(null, '', '');
-        // }
-        // this.newDespesaCadastro();
+        this.fornecedorCadastro = {} as Fornecedor;
+        if(this.fornecedorCadastro.id){
+          this.tabSelected = 0;
+          table.filter(null, '', '');
+        }
       
     });  
   }

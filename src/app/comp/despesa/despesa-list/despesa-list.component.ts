@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵpublishDefaultGlobalUtils } from '@angular/core';
 import { DefaultService } from "../../../service/default.service";
 import { TipoDespesa } from "../../../model/tipo-despesa";
 import { FormaPagamento } from 'src/app/model/forma-pagamento';
@@ -42,6 +42,8 @@ export class DespesaListComponent implements OnInit {
   despesas: Despesa[] = [];
   tiposInformacaoExtra: TipoInformacaoExtra[] = [];
 
+  data: any;
+
 
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
@@ -65,6 +67,20 @@ export class DespesaListComponent implements OnInit {
       inputValor: new FormControl('', Validators.required)
     });
 
+
+    this.data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+            {
+                label: 'First Dataset',
+                data: [65, 59, 80, 81, 56, 55, 40]
+            },
+            {
+                label: 'Second Dataset',
+                data: [28, 48, 40, 19, 86, 27, 90]
+            }
+        ]
+    }
     /*
         this.items = [
       {label: 'Visualizar', icon: 'pi pi-fw pi-search',
@@ -92,19 +108,18 @@ export class DespesaListComponent implements OnInit {
 
 *
   excluirDespesa(){
-    this.confirmationService.confirm({
-      message: 'Deseja realmente excluir essa despesa?',
-      header: 'Confirmar Exclusão',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.defaultService
-          .delete('despesa', this.despesaSelecionada.id)
-          .subscribe(resultado =>{
-            this.despesas = this.despesas.filter(val => val.id !== this.despesaSelecionada.id);
-            this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
-        });
-      }
-    });
+    
+    console.log('est açsdlfa sl');
+    // this.confirmationService.confirm({
+    //   accept: () => {
+    //     this.defaultService
+    //       .delete('despesa', this.despesaSelecionada.id)
+    //       .subscribe(resultado =>{
+    //         this.despesas = this.despesas.filter(val => val.id !== this.despesaSelecionada.id);
+    //         this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
+    //     });
+    //   }
+    // });
   }
 
   maskaraMoeda($event: KeyboardEvent) {
@@ -206,14 +221,15 @@ export class DespesaListComponent implements OnInit {
   }
 
   changeTab(event: any){
+    this.tabSelected = event.index;
     if(event.index==0){
       this.newDespesaCadastro();
     }
   }
 
   onEditSave(despesa: any) {
-    this.despesaCadastro = Object.assign({}, despesa);
     this.tabSelected = 1;
+    this.despesaCadastro = Object.assign({}, despesa);
     this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)
     if(this.despesaCadastro.valor.toString().length==2){
       this.despesaCadastro.valor = this.util.formatFloatToReal(this.despesaCadastro.valor.toString()+'00');

@@ -142,12 +142,13 @@
                     <td class="columnValor">{{despesa.valor | currency:'BRL':true:'1.2-2'}}</td>
                     <td class="columnActionBt">
                         <button pButton pRipple type="button" icon="pi pi-pencil" 
-                            (click)="onEditSave(despesa)"
+                            (onClick)="onEditSave(despesa)"
                             class="p-button-rounded p-button-text p-button-sm smallBt">
                         </button>
                     </td>
                     <td class="columnActionBt">
                         <button pButton pRipple type="button" icon="pi pi-trash"
+                            (onClick)="excluirDespesa()"
                             class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
                         </button>
                     </td>
@@ -325,8 +326,15 @@
     </p-tabPanel>
     <p-tabPanel header="Gráficos">
         Content 3
+
+        <p-chart type="line" [data]="data"></p-chart>
+
     </p-tabPanel>
 </p-tabView>
+<p-confirmDialog header="Confirmar Exclusão" 
+    icon="pi pi-exclamation-triangle"
+    message="Deseja realmente excluir essa despesa?">
+</p-confirmDialog>
 <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
 {{despesaCadastro | json}}
 

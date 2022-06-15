@@ -41,7 +41,8 @@ import {TreeTableModule} from 'primeng/treetable';
 import {DialogModule} from 'primeng/dialog';
 import {TabViewModule} from 'primeng/tabview';
 import {DividerModule} from 'primeng/divider';
-
+import {ConfirmPopupModule} from 'primeng/confirmpopup';
+import {ChartModule} from 'primeng/chart';
 
 import {DespesaListComponent} from './comp/despesa/despesa-list/despesa-list.component';
 import {HomeComponent} from './comp/home/home.component';
@@ -100,7 +101,9 @@ import { TelefonePipe } from './pipe/telefone.pipe';
     TreeTableModule,
     DialogModule,
     TabViewModule,
-    DividerModule
+    DividerModule,
+    ConfirmPopupModule,
+    ChartModule
   ],
   providers: [
     // { provide: LOCALE_ID, useValue: 'pt' },
