@@ -44,6 +44,15 @@ export class DefaultService {
       )
   }
 
+  delete(url:string, id: number) {
+    let api = this.urlbase+url;
+    return this.httpClient.delete<any>(api + '/' +id, this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      )
+  }
+
   // Manipulação de erros
   handleError(error: HttpErrorResponse) {
     let errorMessage = '';
@@ -65,17 +74,6 @@ export class DefaultService {
 //   return this.httpClient.get<Car>(this.url + '/' + id)
 //     .pipe(
 //       retry(2),
-//       catchError(this.handleError)
-//     )
-// }
-
-
-
-// // deleta um carro
-// deleteCar(car: Car) {
-//   return this.httpClient.delete<Car>(this.url + '/' + car.id, this.httpOptions)
-//     .pipe(
-//       retry(1),
 //       catchError(this.handleError)
 //     )
 // }

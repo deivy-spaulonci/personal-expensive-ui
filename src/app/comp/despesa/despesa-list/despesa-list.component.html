@@ -196,6 +196,7 @@
                                     [(ngModel)] = "despesaCadastro.tipoDespesa"
                                     formControlName="comboTipoDespesa"
                                     scrollHeight="350px"
+                                    #inputTipoDespesa
                                     [filter]="true"
                                     [resetFilterOnHide]="true"
                                     [style]="{'width':'300px'}"
@@ -210,10 +211,7 @@
                                         [(ngModel)]="despesaCadastro.data"
                                         formControlName="inputData" (onBlur)="consultaAjudaCusto();showDayOfWeekend();">
                                     </p-inputMask>
-                                    <p-message severity="info" *ngIf="dayOfWeekend" text="{{dayOfWeekend}}" styleClass="mr-2"></p-message>  
-
-                                    <p-message *ngIf="isAjudaCusto" severity="warn" text="Possivel despesa para ajuda de custo" styleClass="mr-2"></p-message>  
-
+                                    <p-message severity="info" *ngIf="dayOfWeekend" text="{{dayOfWeekend}}" styleClass="mr-2"></p-message>                                      
                                 </div> 
                             </div>
                             <div class="row">
@@ -280,7 +278,8 @@
                         <div class="centerText">
                             <button icon="pi pi-save" pButton type="button" label="Salvar"
                                 class="ui-button-raised ui-button-success"
-                                [disabled]="!despesaForm.valid" type="submit">
+                                [disabled]="!despesaForm.valid" type="submit" 
+                                (click)="inputTipoDespesa.focus()">
                             </button>
                         </div>
                     </form>
@@ -294,6 +293,7 @@
                             <div class="cell">Tipo: </div>
                             <div class="cell">
                                 <p-dropdown [options]="tiposInformacaoExtra"                                 
+                                #inputTipoInfo
                                 optionLabel="nome"
                                 scrollHeight="350px" 
                                 [filter]="true"
@@ -308,7 +308,7 @@
                             </div>
                             <div class="cell">
                                 <p-button icon="pi pi-plus" [style]="{'margin-left':'.25em'}"
-                                        (onClick)="addInformacaoExtra($event)">
+                                        (onClick)="addInformacaoExtra($event);inputTipoInfo.focus()">
                                 </p-button>
                             </div>
                         </div>

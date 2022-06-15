@@ -62,15 +62,15 @@ export class FornecedorComponent implements OnInit {
   }
 
   onEditSave(fornecedor: any){
-
+    this.fornecedorCadastro = Object.assign({}, fornecedor);
+    this.tabSelected = 1;    
   }
 
   searchCNPJ(event: any){
     this.loading = true;
     const cnpj = this.fornecedorCadastro.cnpj.replace(/[^0-9]+/g, '');
-    this.defaultService.get('fornecedor/consultacnpj/?cnpj=' + cnpj).subscribe(resultado => {
-      if(resultado || resultado.status == 'ERROR'){
-        debugger
+    this.defaultService.get('fornecedor/consultacnpj/?cnpj=' + cnpj).subscribe(resultado => {      
+      if(resultado || resultado.status == 'ERROR'){        
         this.fornecedorCadastro.nome = this.util.capitalize((resultado.fantasia ? resultado.fantasia : resultado.nome));
         this.fornecedorCadastro.razaoSocial = this.util.capitalize(resultado.nome);
         //this.fornecedorCadastro.inscricaoEstadual = 
@@ -80,17 +80,27 @@ export class FornecedorComponent implements OnInit {
         this.fornecedorCadastro.cep = resultado.cep;
         this.fornecedorCadastro.telefone = resultado.telefone;
         this.fornecedorCadastro.cidade = {} as Cidade;
-        this.fornecedorCadastro.cidae.nome.setValue(this.util.capitalize(resultado.municipio));
-        this.defaultService.get('cidade?nome=' + this.util.capitalize(resultado.municipio)).subscribe(retornocidades => {
-          this.cidades = retornocidades;
-          this.loading = false;
-        });
+        this.fornecedorCadastro.cidade.nome = this.util.capitalize(resultado.municipio);
+        // let cidadeNome:string = resultado.municipio;
+        // let estadoSigla:string = resultado.uf;
+        // let url = 'cidade?nome=' + cidadeNome + '&estado=' + estadoSigla;
+        // this.defaultService.get(url).subscribe(retornocidades => {   
+        //   debugger
+        //   this.cidades = retornocidades[0];
+        // });
+        this.loading = false;
       }else{
         this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro : ' + resultado.message});
-      }
-      this.loading = false;
+        this.loading = false;
+      }      
       
     });
+  }
+
+  changeTab(event: any){
+    // if(event.index==0){
+    //   this.newDespesaCadastro();
+    // }
   }
 
   filterCidade(event: any){
@@ -132,7 +142,7 @@ export class FornecedorComponent implements OnInit {
 
     const url: string = 'fornecedor/page?page=' + this.pageNumber
       + '&size=' + event.rows
-      + '&sort=' + event.sortField + ',' + (event.sortOrder == 1 ? 'asc' : 'asc')
+      + '&sort=' + event.sortField + ',' + (event.sortOrder == 1 ? 'asc' : 'desc')
       + urlfiltros;
 
     this.defaultService.get(url).subscribe(resultado => {
@@ -149,7 +159,7 @@ export class FornecedorComponent implements OnInit {
    
     this.defaultService.save('fornecedor', this.fornecedorCadastro).subscribe(resultado =>{    
         this.loading = false;
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Fornecedor salva com sucesso'});
         // if(this.despesaCadastro.id){
         //   this.tabSelected = 0;
         //   table.filter(null, '', '');

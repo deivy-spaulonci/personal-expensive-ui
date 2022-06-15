@@ -1,6 +1,6 @@
 <p class="title-bar-1">Fornecedor</p>
 <p-toast></p-toast>
-<p-tabView>
+<p-tabView [activeIndex]="tabSelected" (onChange)="changeTab($event)">
     <p-tabPanel header="Consulta">
         <p-table [value]="fornecedores" 
             [loading]="loading" 

@@ -33,8 +33,7 @@ export class DespesaListComponent implements OnInit {
   //********************************************** CADASTRO */
   despesaCadastro!: any;
   despesaForm!: FormGroup;
-  informacaoExtra!: InformacaoExtra;
-  isAjudaCusto:boolean = false;
+  informacaoExtra!: InformacaoExtra;  
   dayOfWeekend:string = '';
 
   tiposDespesa: TipoDespesa[] = [];
@@ -91,23 +90,22 @@ export class DespesaListComponent implements OnInit {
 
   }
 
-  /*
-    excluirDespesa(){
-      this.confirmationService.confirm({
-        message: 'Deseja realmente excluir essa despesa?',
-        header: 'Confirmar Exclusão',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.defaultService
-            .delete(this.despesaSelecionada, 'despesa')
-            .subscribe(resultado =>{
-              this.despesas = this.despesas.filter(val => val.id !== this.despesaSelecionada.id);
-              this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
-          });
-        }
-      });
+*
+  excluirDespesa(){
+    this.confirmationService.confirm({
+      message: 'Deseja realmente excluir essa despesa?',
+      header: 'Confirmar Exclusão',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.defaultService
+          .delete('despesa', this.despesaSelecionada.id)
+          .subscribe(resultado =>{
+            this.despesas = this.despesas.filter(val => val.id !== this.despesaSelecionada.id);
+            this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
+        });
+      }
+    });
   }
-  */
 
   maskaraMoeda($event: KeyboardEvent) {
     const element = ( $event.target as HTMLInputElement);
@@ -203,8 +201,7 @@ export class DespesaListComponent implements OnInit {
     this.despesaCadastro.valor = 0;
     this.despesaCadastro.data = '';
     this.despesaCadastro.informacaoExtra = [];
-    this.informacaoExtra = {} as InformacaoExtra;     
-    this.isAjudaCusto = false;
+    this.informacaoExtra = {} as InformacaoExtra;         
     this.dayOfWeekend = ''; 
   }
 
@@ -251,11 +248,9 @@ export class DespesaListComponent implements OnInit {
       || valorTipoDespesa =="SUPERMERCADO"){
         if(valorFormaPagamento=="DINHEIRO"
         || valorFormaPagamento=="CARTAO_DEBITO_SANTANDER"){
-          this.isAjudaCusto = true;
+          this.messageService.add({severity: 'info', summary: 'Aviso', detail: 'Possível despesa para ajuda de custo'});
         }
       }
-    }else{
-      this.isAjudaCusto = false;
     }
     // switch (data.getDay){
     //   case
