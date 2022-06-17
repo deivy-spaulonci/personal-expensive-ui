@@ -207,8 +207,6 @@ export class DespesaListComponent implements OnInit {
         }
         this.newDespesaCadastro();
         this.dayOfWeekend = '';
-        
-        
     });  
   }
 
