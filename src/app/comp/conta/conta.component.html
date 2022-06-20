@@ -21,6 +21,7 @@
         [(contextMenuSelection)]="contaSelecionada">
         <ng-template pTemplate="header">
             <tr>
+                <th class="columnExpand"></th>
                 <th pSortableColumn="id" class="columnId">Id
                     <p-sortIcon field="id"></p-sortIcon>
                 </th>
@@ -42,6 +43,7 @@
                 <th class="columnActionBt">Excluir</th>
             </tr>
             <tr>
+                <th class="columnExpand"></th>
                 <th class="columnId">
                     <p-columnFilter field="id"
                             [showMenu]="false" 
@@ -113,7 +115,13 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-conta let-expanded="expanded" let-ri="rowIndex">
-            <tr >
+            <tr>
+                <td class="columnExpand">
+                    <button type="button" pButton pRipple [pRowToggler]="conta"                     
+                    class="p-button-text p-button-rounded p-button-plain p-button-sm smallBt" 
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
                 <td class="columnId">{{conta.id}}</td>
                 <td>{{conta.tipoConta.nome}}</td>
                 <td class="columnDate">
@@ -126,12 +134,12 @@
                 <td class="columnValor">{{conta.valor | currency:'BRL':true:'1.2-2'}}</td>
                 <td class="centerText">
                     
-                        <p-message severity="info" text="{{conta.status}}" *ngIf="conta.intStatus==1"></p-message>
-                        <p-message severity="warn" text="{{conta.status}}" *ngIf="conta.intStatus==0"></p-message>
-                        <p-message severity="error" text="{{conta.status}}" *ngIf="conta.intStatus==-1"></p-message>
-                        <p-message severity="success" text="{{conta.status}}" *ngIf="conta.intStatus==2"></p-message>
-                        <p-message severity="custom" text="{{conta.status}}" *ngIf="conta.intStatus==3" icon="pi-file"></p-message>                        
-                    
+                    <p-message severity="info" text="{{conta.status}}" *ngIf="conta.intStatus==1"></p-message>
+                    <p-message severity="warn" text="{{conta.status}}" *ngIf="conta.intStatus==0"></p-message>
+                    <p-message severity="error" text="{{conta.status}}" *ngIf="conta.intStatus==-1"></p-message>
+                    <p-message severity="success" text="{{conta.status}}" *ngIf="conta.intStatus==2"></p-message>
+                    <p-message severity="custom" text="{{conta.status}}" *ngIf="conta.intStatus==3" icon="pi-file"></p-message>                        
+                
                 </td>
                 <td class="columnActionBt">
                     <button pButton pRipple type="button" icon="pi pi-pencil" 
@@ -145,6 +153,44 @@
                         class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
                     </button>
                 </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-conta>
+            <tr>
+                <td [attr.colspan]="5">
+                    <div class="table">
+                        <div class="row">
+                            <div class="cell">Número: </div>
+                            <div class="cell">{{conta.numero}}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Código de Barras:</div>
+                        <div class="cell">{{conta.codigoBarra}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Data do Pgto:</div>
+                        <div class="cell">{{conta.dataPagamento}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Forma Pgto:</div>
+                        <div class="cell">{{conta.formaPagamento.nome}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Valor Pago:</div>
+                        <div class="cell">{{conta.valorPago}}</div>
+                    </div>
+                </td>
+                <td [attr.colspan]="5">
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td [attr.colspan]="6" style='text-align: right;'>Total:</td>
+                <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
+                <td></td>
+                <td></td>
             </tr>
         </ng-template>
     </p-table>
