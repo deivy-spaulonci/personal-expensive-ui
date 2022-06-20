@@ -20,7 +20,7 @@ body {
   width: 100%;
 }
 .centerText{
-  text-align: center;
+  text-align: center !important;
 }
 .columnExpand {
   max-width: 20px;
@@ -38,6 +38,15 @@ body {
   max-width: 25px;
 }
 
+td .p-inline-message{
+  padding: 0px !important;
+  border: none !important;
+  
+}
+td .p-element{
+  border: none !important;
+}
+
 .smallBt{
   width: 5px !important; 
   height: 5px !important;
@@ -49,7 +58,8 @@ body {
   } */
 .columnDate {
   text-align: center !important;
-  max-width: 100px;
+  max-width: 200px;
+  width: 200px;
 }
 
 /* barra de titulo 01*/

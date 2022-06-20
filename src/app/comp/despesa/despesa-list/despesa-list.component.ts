@@ -106,7 +106,6 @@ export class DespesaListComponent implements OnInit {
 
   }
 
-*
   excluirDespesa(){
     
     console.log('est açsdlfa sl');
