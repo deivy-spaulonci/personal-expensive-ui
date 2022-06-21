@@ -25,8 +25,8 @@
                 <th pSortableColumn="id" class="columnId">Id
                     <p-sortIcon field="id"></p-sortIcon>
                 </th>
-                <th pSortableColumn="tipoDespesa">Tipo Despesa
-                    <p-sortIcon field="tipoDespesa"></p-sortIcon>
+                <th pSortableColumn="tipoConta">Tipo Conta
+                    <p-sortIcon field="tipoConta"></p-sortIcon>
                 </th>
                 <th pSortableColumn="emissao" class="columnDate">Emissão
                     <p-sortIcon field="emissao"></p-sortIcon>
@@ -34,11 +34,9 @@
                 <th pSortableColumn="vencimento" class="columnDate">Vencimento
                     <p-sortIcon field="vencimento"></p-sortIcon>
                 </th>
-                <th pSortableColumn="parcela" class="centerText">Parcelas
-                    <p-sortIcon field="parcela"></p-sortIcon>
-                </th>
-                <th>Valor</th>
-                <th class="centerText">Status</th>
+                <th class="centerText">Parcelas</th>
+                <th class="centerText">Valor</th>
+                <th class="columnStatus">Status</th>
                 <th class="columnActionBt">Editar</th>
                 <th class="columnActionBt">Excluir</th>
             </tr>
@@ -132,24 +130,23 @@
                 </td>
                 <td class="centerText">{{conta.parcela}}/{{conta.totalParcela}}</td>
                 <td class="columnValor">{{conta.valor | currency:'BRL':true:'1.2-2'}}</td>
-                <td class="centerText">
-                    
-                    <p-message severity="info" text="{{conta.status}}" *ngIf="conta.intStatus==1"></p-message>
-                    <p-message severity="warn" text="{{conta.status}}" *ngIf="conta.intStatus==0"></p-message>
-                    <p-message severity="error" text="{{conta.status}}" *ngIf="conta.intStatus==-1"></p-message>
-                    <p-message severity="success" text="{{conta.status}}" *ngIf="conta.intStatus==2"></p-message>
-                    <p-message severity="custom" text="{{conta.status}}" *ngIf="conta.intStatus==3" icon="pi-file"></p-message>                        
-                
+                <td class="columnStatus" [ngSwitch]="conta.intStatus"
+                    [ngStyle]="{'background-color': getBackgroundColorStatus(conta.intStatus)}">
+                    <p-message severity="info" text="{{conta.status}}" *ngSwitchCase="1"></p-message>
+                    <p-message severity="warn" text="{{conta.status}}" *ngSwitchCase="0"></p-message>
+                    <p-message severity="error" text="{{conta.status}}" *ngSwitchCase="-1"></p-message>
+                    <p-message severity="success" text="{{conta.status}}" *ngSwitchCase="2"></p-message>
+                    <p-message severity="custom" text="{{conta.status}}" *ngSwitchCase="3" icon="pi-file"></p-message>                        
                 </td>
                 <td class="columnActionBt">
                     <button pButton pRipple type="button" icon="pi pi-pencil" 
-                        (onClick)="onEditSave(conta)"
+                        (click)="onEditSave(conta)"
                         class="p-button-rounded p-button-text p-button-sm smallBt">
                     </button>
                 </td>
                 <td class="columnActionBt">
                     <button pButton pRipple type="button" icon="pi pi-trash"
-                        (onClick)="excluirConta()"
+                        (click)="excluirConta(conta)"
                         class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
                     </button>
                 </td>
@@ -163,25 +160,40 @@
                             <div class="cell">Número: </div>
                             <div class="cell">{{conta.numero}}</div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="cell">Código de Barras:</div>
-                        <div class="cell">{{conta.codigoBarra}}</div>
-                    </div>
-                    <div class="row">
-                        <div class="cell">Data do Pgto:</div>
-                        <div class="cell">{{conta.dataPagamento}}</div>
-                    </div>
-                    <div class="row">
-                        <div class="cell">Forma Pgto:</div>
-                        <div class="cell">{{conta.formaPagamento.nome}}</div>
-                    </div>
-                    <div class="row">
-                        <div class="cell">Valor Pago:</div>
-                        <div class="cell">{{conta.valorPago}}</div>
+                        <div class="row">
+                            <div class="cell">Código de Barras:</div>
+                            <div class="cell">{{conta.codigoBarra}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell">Data do Pgto:</div>
+                            <div class="cell">{{conta.dataPagamento | date: 'dd/MM/yyyy'}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell">Forma Pgto:</div>
+                            <div class="cell">{{conta.formaPagamento.nome}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell">Valor Pago:</div>
+                            <div class="cell">{{conta.valorPago  | number : '1.2-2'}}</div>
+                        </div>
                     </div>
                 </td>
                 <td [attr.colspan]="5">
+                    <div class="table" 
+                    *ngIf="conta.tipoConta.contaCartao && conta.lancamentoContaCartao>0">
+                        <div class="row">
+                            <div class="cell centerText">Data</div>
+                            <div class="cell">Fornecedor</div>
+                            <div class="cell">Valor</div>
+                            <div class="cell centerText">Parcelas</div>
+                        </div>
+                        <div class="row" *ngFor="let lcc of conta.lancamentoContaCartao">
+                            <div class="cell centerText">{{lcc.data  | date: 'dd/MM/yyyy'}}</div>
+                            <div class="cell">{{lcc.fornecedor.nome}}</div>
+                            <div class="cell rightText">{{lcc.valor  | number : '1.2-2'}}</div>
+                            <div class="cell centerText">{{lcc.parcela}}/{{lcc.totalParcela}}</div>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </ng-template>
@@ -195,5 +207,216 @@
         </ng-template>
     </p-table>
     </p-tabPanel>
-    <p-tabPanel header="Cadastro"></p-tabPanel>
+    <p-tabPanel header="Cadastro">
+        <div class="table">
+            <div class="row">
+                <div class="cell">
+                    <form [formGroup]="contaForm" (ngSubmit)="onSubmit(dt)">
+                        <div class="table">
+                            <div class="row">
+                                <div class="cell">Código de Barras: </div>
+                                <div class="cell">
+                                    <p-inputMask mask="99999999999999999999999999999999999999999999999"
+                                    [(ngModel)]="contaCadastro.codigoBarra"
+                                    formControlName="inputCodigoBarra"
+                                    #inputCodigoBarra
+                                    [maxlength]="48" [size]="55" [autoClear]="true" slotChar="*">
+                                    </p-inputMask>
+                                    <p-message severity="error" text="Código de Barras obrigatória"
+                                                *ngIf="!contaForm.controls['inputCodigoBarra'].valid
+                                                && contaForm.controls['inputCodigoBarra'].dirty">
+                                    </p-message>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Número: </div>
+                                <div class="cell">
+                                    <input type="text" pInputText [size]="30" 
+                                    [(ngModel)]="contaCadastro.numero"
+                                    formControlName="inputNumero"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Tipo Conta: </div>
+                                <div class="cell">
+                                    <p-dropdown [options]="tiposConta" optionLabel="nome"                                    
+                                    [(ngModel)] = "contaCadastro.tipoConta"
+                                    formControlName="comboTipoConta"
+                                    scrollHeight="350px"
+                                    #inputTipoConta
+                                    [filter]="true"
+                                    [resetFilterOnHide]="true"
+                                    [style]="{'width':'300px'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Emissão: </div>
+                                <div class="cell">
+                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
+                                        [(ngModel)]="contaCadastro.emissao"
+                                        [size]="8"
+                                        formControlName="inputEmissao">
+                                    </p-inputMask>
+                                Vencimento: 
+                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
+                                        [(ngModel)]="contaCadastro.vencimento"
+                                        [size]="8"
+                                        formControlName="inputVencimento">
+                                    </p-inputMask>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Parcelas: </div>
+                                <div class="cell">
+                                    <p-inputMask mask="99" [autoClear]="false"
+                                                    [style]="{'max-width': '60px'}"
+                                                    [(ngModel)]="contaCadastro.parcela"
+                                                    formControlName="inputParcela"
+                                                    slotChar="">
+                                    </p-inputMask> /
+                                    <p-inputMask mask="99" [autoClear]="false"
+                                                    [style]="{'max-width': '60px'}"
+                                                    [(ngModel)]="contaCadastro.totalParcela"
+                                                    formControlName="inputTotalParcela"
+                                                    slotChar="">
+                                    </p-inputMask>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Valor: </div>
+                                <div class="cell">
+                                    <input-money></input-money>
+                                    <!-- <input type="text" pInputText
+                                    (keyup)="maskaraMoeda($event)"
+                                    [(ngModel)]="contaCadastro.valor"
+                                    formControlName="inputValor"/> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Obs: </div>
+                                <div class="cell">
+                                    <input type="text" pInputText
+                                    [(ngModel)]="contaCadastro.obs"
+                                    formControlName="inputObservacao"
+                                    size="48"/>
+                                </div>
+                            </div>
+                        </div>
+                        <p-divider>Pagamento</p-divider>
+                        <div class="table">
+                            <div class="row">
+                                <div class="cell">Data Pagamento: </div>
+                                <div class="cell">
+                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
+                                        [(ngModel)]="contaCadastro.dataPagamento"
+                                        [size]="8"
+                                        formControlName="inputDataPagamento">
+                                    </p-inputMask>
+                                </div>
+                                <div class="cell">Forma Pagamento: </div>
+                                <div class="cell">
+                                    <p-dropdown [options]="formasPagamento" optionLabel="nome"                                    
+                                        [(ngModel)] = "contaCadastro.formaPagamento"
+                                        formControlName="comboFormaPagamento"
+                                        scrollHeight="350px"
+                                        #inputTipoConta
+                                        [filter]="true"
+                                        [resetFilterOnHide]="true"
+                                        [style]="{'width':'300px'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Valor Pago: </div>
+                                <div class="cell">
+                                    <input type="text" pInputText
+                                    (keyup)="maskaraMoeda($event)"
+                                    (onblur)="maskaraMoeda($event)"
+                                    [(ngModel)]="contaCadastro.valorPago"
+                                    formControlName="inputValorPago"/>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="centerText">
+                            <button icon="pi pi-save" pButton type="button" label="Salvar"
+                                class="ui-button-raised ui-button-success"
+                                [disabled]="!contaForm.valid" type="submit" 
+                                (click)="inputCodigoBarra.focus()">
+                            </button>
+                        </div>
+                    </form> 
+                </div>
+                <div class="cell" *ngIf="contaCadastro.tipoConta.contaCartao">
+                    <p-divider layout="vertical"></p-divider>
+                </div>  
+                <div class="cell" *ngIf="contaCadastro.tipoConta.contaCartao">
+
+                    <div class="table">
+                        <div class="row">
+                            <div class="cell">
+                                <p-divider>Lançamento conta cartão</p-divider>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row">
+                            <div class="cell">
+                                
+                                Data:
+                                <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
+                                    [size]="5"
+                                    [style]="{'width':'70px'}"
+                                    [(ngModel)]="lancamentoContaCartaoCadastro.data">
+                                </p-inputMask>
+                                Valor: 
+                                <input type="text" pInputText
+                                    size="10"
+                                    (keyup)="maskaraMoeda($event)"
+                                    (onblur)="maskaraMoeda($event)"
+                                    [style]="{'width':'100px'}"
+                                    [(ngModel)]="lancamentoContaCartaoCadastro.valor"/>
+                                Parcelas:
+                                <p-inputMask mask="99" [autoClear]="false"
+                                    [style]="{'width':'50px'}"
+                                    [(ngModel)]="lancamentoContaCartaoCadastro.parcela"
+                                    slotChar="">
+                                </p-inputMask>
+                                /
+                                <p-inputMask mask="990" [autoClear]="false"
+                                    [style]="{'width':'50px'}"
+                                    [(ngModel)]="lancamentoContaCartaoCadastro.totalParcela"
+                                    slotChar="">
+                                </p-inputMask>
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell">
+                                Fornecedor:
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell">
+                                
+                                <p-dropdown [options]="fornecedores" optionLabel="nome"                                    
+                                    [(ngModel)] = "lancamentoContaCartaoCadastro.fornecedor"
+                                    scrollHeight="350px"
+                                    [filter]="true"
+                                    [style]="{'width':'330px'}"
+                                    [resetFilterOnHide]="true">
+                                </p-dropdown>
+                                <button type="button" pButton pRipple>
+                                    <i class="pi pi-plus" style="line-height: 1.25;"></i>
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                            
+                </div>
+            </div>
+        </div>          
+    </p-tabPanel>
 </p-tabView>
+{{contaCadastro | json}}

@@ -22,6 +22,9 @@ body {
 .centerText{
   text-align: center !important;
 }
+.rightText{
+  text-align: right !important;
+}
 .columnExpand {
   max-width: 20px;
 }

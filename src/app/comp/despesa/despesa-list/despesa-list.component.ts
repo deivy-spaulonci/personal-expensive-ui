@@ -106,19 +106,17 @@ export class DespesaListComponent implements OnInit {
 
   }
 
-  excluirDespesa(){
-    
-    console.log('est açsdlfa sl');
-    // this.confirmationService.confirm({
-    //   accept: () => {
-    //     this.defaultService
-    //       .delete('despesa', this.despesaSelecionada.id)
-    //       .subscribe(resultado =>{
-    //         this.despesas = this.despesas.filter(val => val.id !== this.despesaSelecionada.id);
-    //         this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
-    //     });
-    //   }
-    // });
+  excluirDespesa(despesa:any){
+    this.confirmationService.confirm({
+      accept: () => {
+        this.defaultService
+          .delete('despesa', despesa.id)
+          .subscribe(resultado =>{
+            this.despesas = this.despesas.filter(val => val.id !== despesa.id);
+            this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
+        });
+      }
+    });
   }
 
   maskaraMoeda($event: KeyboardEvent) {

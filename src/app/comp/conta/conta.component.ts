@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Conta } from 'src/app/model/conta';
+import { FormaPagamento } from 'src/app/model/forma-pagamento';
+import { Fornecedor } from 'src/app/model/fornecedor';
 import { LancamentoContaCartao } from 'src/app/model/lancamento-conta-cartao';
 import { TipoConta } from 'src/app/model/tipo-conta';
 import { DefaultService } from 'src/app/service/default.service';
@@ -28,27 +30,49 @@ export class ContaComponent implements OnInit {
   contaSelecionada!: Conta;
   //********************************************** CADASTRO */
   contaCadastro!:any
+  lancamentoContaCartaoCadastro!:any
   contaForm!:FormGroup;
 
   contas: Conta[]=[];
   tiposConta: TipoConta[]=[];
+  formasPagamento: FormaPagamento[]=[];
   lancamentosContaCartao: LancamentoContaCartao[]=[];
+  fornecedores: Fornecedor[]=[];
   
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder) {
       this.contaCadastro ={} as Conta;
+      this.contaCadastro.tipoCona = {} as TipoConta;
+      this.lancamentoContaCartaoCadastro = {} as LancamentoContaCartao;
      }
 
   ngOnInit(): void {
     this.loading = true;
     this.contaForm = this.fb.group({
-
+      inputNumero: new FormControl('', Validators.required),
+      inputCodigoBarra: '',
+      comboTipoConta: new FormControl('', Validators.required),
+      inputEmissao: new FormControl('', Validators.required),
+      inputVencimento: new FormControl('', Validators.required),
+      inputParcela: '',
+      inputTotalParcela: '',
+      inputValor: new FormControl('', Validators.required),
+      inputObservacao: '',
+      inputDataPagamento: '',
+      comboFormaPagamento: '',
+      inputValorPago: ''
     });
 
     this.defaultService.get('tipo-conta').subscribe(tipos =>{
       this.tiposConta = tipos;
+    });
+    this.defaultService.get('forma-pagamento').subscribe(formas =>{
+      this.formasPagamento = formas;
+    });
+    this.defaultService.get('fornecedor').subscribe(fornecedores =>{
+      this.fornecedores = fornecedores;
     });
   }
 
@@ -73,7 +97,8 @@ export class ContaComponent implements OnInit {
       if (filtros?.['id'] && filtros?.['id'].value!=null) {
         urlfiltros += '&id=' + filtros?.['id'].value;
       }
-      if (filtros?.['tipoConta'] && filtros?.['tipoConta'].value.id) {
+ 
+      if (filtros?.['tipoConta'] && filtros?.['tipoConta'].value) {
         urlfiltros += '&tipoConta.id=' + filtros?.['tipoConta'].value.id;
       }
       if(filtros?.['periodoVencimento']){
@@ -116,45 +141,63 @@ export class ContaComponent implements OnInit {
     });
   }
 
-  onSubmit(value: string, table:Table) {
-    // this.loading = true;
-    // this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
-    // this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
+  onSubmit(table:Table) {
+    this.loading = true;
    
-    // this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{    
-    //     this.loading = false;
-    //     this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
-    //     if(this.despesaCadastro.id){
-    //       this.tabSelected = 0;
-    //       table.filter(null, '', '');
-    //     }
-    //     this.newDespesaCadastro();
-    //     this.dayOfWeekend = '';
-    // });  
+    this.contaCadastro = this.transformConta(this.contaCadastro);
+
+    this.defaultService.save('conta', this.contaCadastro).subscribe(resultado =>{    
+        this.loading = false;
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Conta salva com sucesso'});
+        if(this.contaCadastro.id){
+          this.tabSelected = 0;
+          table.filter(null, '', '');
+        }
+    });  
   }
 
-  excluirConta(){
+  excluirConta(conta:any){
+    this.confirmationService.confirm({
+      accept: () => {
+        this.defaultService
+          .delete('despesa', conta.id)
+          .subscribe(resultado =>{
+            this.contas = this.contas.filter(val => val.id !== conta.id);
+            this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Conta excluída'});
+        });
+      }
+    });
+  }
+
+  transformConta(conta:Conta):Conta{
+    conta.vencimento = this.util.transformDates(conta.vencimento);
+    conta.emissao = this.util.transformDates(conta.emissao);
+    conta.valor = this.util.formatMoedaToFloat(conta.valor.toString());
     
-    console.log('est açsdlfa sl');
-    // this.confirmationService.confirm({
-    //   accept: () => {
-    //     this.defaultService
-    //       .delete('despesa', this.despesaSelecionada.id)
-    //       .subscribe(resultado =>{
-    //         this.despesas = this.despesas.filter(val => val.id !== this.despesaSelecionada.id);
-    //         this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
-    //     });
-    //   }
-    // });
+    if(conta.dataPagamento && conta.valorPago){
+      conta.valorPago = this.util.formatMoedaToFloat(conta.valorPago.toString());
+    }
+    return conta;
   }
 
   onEditSave(conta: any) {
-    // this.tabSelected = 1;
-    // this.despesaCadastro = Object.assign({}, despesa);
-    // this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)
-    // if(this.despesaCadastro.valor.toString().length==2){
-    //   this.despesaCadastro.valor = this.util.formatFloatToReal(this.despesaCadastro.valor.toString()+'00');
-    // }
+    this.tabSelected = 1;
+    this.contaCadastro = Object.assign({}, conta);
+    conta = this.transformConta(conta);
+    if(conta.valor.toString().length==2){
+      conta.valor = this.util.formatFloatToReal(conta.valor.toString()+'00');
+    }
+  }
+
+  getBackgroundColorStatus(status:number):string{
+    switch(status){
+      case -1: return '#FFCDD2';//atrasado
+      case 0: return '#FFECB3';//vencimento hj
+      case 1: return '#B3E5FC';//aberto
+      case 2: return '#C8E6C9';//pago
+      case 3: return '#FFCDD2';//cancelado
+      default: return '#B3E5FC';
+    }
   }
 
 }

@@ -142,13 +142,13 @@
                     <td class="columnValor">{{despesa.valor | currency:'BRL':true:'1.2-2'}}</td>
                     <td class="columnActionBt">
                         <button pButton pRipple type="button" icon="pi pi-pencil" 
-                            (onClick)="onEditSave(despesa)"
+                            (click)="onEditSave(despesa)"
                             class="p-button-rounded p-button-text p-button-sm smallBt">
                         </button>
                     </td>
                     <td class="columnActionBt">
                         <button pButton pRipple type="button" icon="pi pi-trash"
-                            (onClick)="excluirDespesa()"
+                            (click)="excluirDespesa(despesa)"
                             class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
                         </button>
                     </td>

@@ -51,6 +51,7 @@ import { FornecedorComponent } from './comp/fornecedor/fornecedor.component';
 import { CnpjPipe } from './pipe/cnpj.pipe';
 import { CepPipe } from './pipe/cep.pipe';
 import { TelefonePipe } from './pipe/telefone.pipe';
+import { InputMoneyComponent } from './comp/view/input-money/input-money.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { TelefonePipe } from './pipe/telefone.pipe';
     FornecedorComponent,
     CnpjPipe,
     CepPipe,
-    TelefonePipe
+    TelefonePipe,
+    InputMoneyComponent
   ],
   imports: [
     BrowserModule,
