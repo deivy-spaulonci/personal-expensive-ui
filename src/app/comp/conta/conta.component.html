@@ -71,8 +71,8 @@
                 </th>
                 <th>
                     <p-columnFilter field="periodoVencimento"
-                    [showMenu]="false" 
-                    [showClearButton]="false">
+                        [showMenu]="false" 
+                        [showClearButton]="false">
                         <ng-template pTemplate="filter" let-filter="filterCallback">
                             <p-calendar selectionMode="range" [readonlyInput]="true" 
                                 [showButtonBar]="true"
@@ -89,8 +89,8 @@
                 </th>
                 <th>
                     <p-columnFilter field="periodoEmissao"
-                    [showMenu]="false" 
-                    [showClearButton]="false">
+                        [showMenu]="false" 
+                        [showClearButton]="false">
                         <ng-template pTemplate="filter" let-filter="filterCallback">
                             <p-calendar selectionMode="range" [readonlyInput]="true" 
                                 [showButtonBar]="true"
@@ -239,31 +239,30 @@
                             <div class="row">
                                 <div class="cell">Tipo Conta: </div>
                                 <div class="cell">
-                                    <p-dropdown [options]="tiposConta" optionLabel="nome"                                    
-                                    [(ngModel)] = "contaCadastro.tipoConta"
-                                    formControlName="comboTipoConta"
-                                    scrollHeight="350px"
-                                    #inputTipoConta
-                                    [filter]="true"
-                                    [resetFilterOnHide]="true"
-                                    [style]="{'width':'300px'}">
-                                    </p-dropdown>
+                                    <combo-tipo [formGrp]="contaForm"
+                                        [formCtr]="comboTipoConta"
+                                        (inputValueChange)="contaCadastro.tipoConta = $event"
+                                        [modelNg]="contaCadastro.tipoConta"
+                                        [api]="'tipo-conta'"
+                                        [optLabel]="'nome'"
+                                        #inputTipoConta>
+                                    </combo-tipo>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="cell">Emissão: </div>
                                 <div class="cell">
-                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
-                                        [(ngModel)]="contaCadastro.emissao"
-                                        [size]="8"
-                                        formControlName="inputEmissao">
-                                    </p-inputMask>
-                                Vencimento: 
-                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
-                                        [(ngModel)]="contaCadastro.vencimento"
-                                        [size]="8"
-                                        formControlName="inputVencimento">
-                                    </p-inputMask>
+                                    <input-data [formGroup]="contaForm"
+                                        [formCtr]="inputEmissao"
+                                        (inputValueChange)="contaCadastro.emissao = $event"
+                                        [modelNg]="contaCadastro.emissao">
+                                    </input-data>
+                                    Vencimento: 
+                                    <input-data [formGroup]="contaForm"
+                                        [formCtr]="inputVencimento"
+                                        (inputValueChange)="contaCadastro.vencimento = $event"
+                                        [modelNg]="contaCadastro.vencimento">
+                                    </input-data>
                                 </div>
                             </div>
                             <div class="row">
@@ -286,14 +285,11 @@
                             <div class="row">
                                 <div class="cell">Valor: </div>
                                 <div class="cell">
-                                    <input-money 
-                                        [form]
-                                        [ngModel]="contaCadastro.valor">
+                                    <input-money [formGroup]="contaForm"
+                                        [formCtr]="inputValor"
+                                        (inputValueChange)="contaCadastro.valor = $event"
+                                        [modelNg]="contaCadastro.valor">
                                     </input-money>
-                                    <!-- <input type="text" pInputText
-                                    (keyup)="maskaraMoeda($event)"
-                                    [(ngModel)]="contaCadastro.valor"
-                                    formControlName="inputValor"/> -->
                                 </div>
                             </div>
                             <div class="row">
@@ -311,23 +307,22 @@
                             <div class="row">
                                 <div class="cell">Data Pagamento: </div>
                                 <div class="cell">
-                                    <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
-                                        [(ngModel)]="contaCadastro.dataPagamento"
-                                        [size]="8"
-                                        formControlName="inputDataPagamento">
-                                    </p-inputMask>
+                                    <input-data [formGroup]="contaForm"
+                                        [formCtr]="inputDataPagamento"
+                                        (inputValueChange)="contaCadastro.dataPagamento = $event"
+                                        [modelNg]="contaCadastro.dataPagamento">
+                                    </input-data>
                                 </div>
                                 <div class="cell">Forma Pagamento: </div>
                                 <div class="cell">
-                                    <p-dropdown [options]="formasPagamento" optionLabel="nome"                                    
-                                        [(ngModel)] = "contaCadastro.formaPagamento"
-                                        formControlName="comboFormaPagamento"
-                                        scrollHeight="350px"
-                                        #inputTipoConta
-                                        [filter]="true"
-                                        [resetFilterOnHide]="true"
-                                        [style]="{'width':'300px'}">
-                                    </p-dropdown>
+                                    <combo-tipo [formGrp]="contaForm"
+                                        [formCtr]="comboFormaPagamento"
+                                        (inputValueChange)="contaCadastro.formaPagamento = $event"
+                                        [modelNg]="contaCadastro.formaPagamento"
+                                        [api]="'forma-pagamento'"
+                                        [optLabel]="'nome'"
+                                        #inputFormaPagamento>
+                                    </combo-tipo>
                                 </div>
                             </div>
                             <div class="row">
@@ -350,10 +345,12 @@
                         </div>
                     </form> 
                 </div>
-                <div class="cell" *ngIf="contaCadastro.tipoConta.contaCartao">
+                <div class="cell" 
+                    *ngIf="contaCadastro.tipoConta && contaCadastro.tipoConta.contaCartao">
                     <p-divider layout="vertical"></p-divider>
                 </div>  
-                <div class="cell" *ngIf="contaCadastro.tipoConta.contaCartao">
+                <div class="cell" 
+                    *ngIf="contaCadastro.tipoConta && contaCadastro.tipoConta.contaCartao">
 
                     <div class="table">
                         <div class="row">

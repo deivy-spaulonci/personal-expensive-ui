@@ -52,6 +52,8 @@ import { CnpjPipe } from './pipe/cnpj.pipe';
 import { CepPipe } from './pipe/cep.pipe';
 import { TelefonePipe } from './pipe/telefone.pipe';
 import { InputMoneyComponent } from './comp/view/input-money/input-money.component';
+import { ComboTipoComponent } from './comp/view/combo-tipo/combo-tipo.component';
+import { InputDataComponent } from './comp/view/input-data/input-data.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { InputMoneyComponent } from './comp/view/input-money/input-money.compone
     CnpjPipe,
     CepPipe,
     TelefonePipe,
-    InputMoneyComponent
+    InputMoneyComponent,
+    ComboTipoComponent,
+    InputDataComponent
   ],
   imports: [
     BrowserModule,

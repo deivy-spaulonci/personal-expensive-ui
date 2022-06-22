@@ -1,21 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'input-money',
-  template: './input-money.component.html',
+  templateUrl: './input-money.component.html',
   styleUrls: ['./input-money.component.css']
 })
 export class InputMoneyComponent{
 
-  @Input() formControlName!: FormControl;
-  @Input() controlName!: string;
-  @Input() modelNg  : string = '0';
-  //@Output() navigate = new EventEmitter();
+  @Input() modelNg  : Number = 0;
+  @Output() inputValueChange: EventEmitter<Number> = new EventEmitter<Number>();  
+  @Input() formGrp!: FormGroup;
+  @Input() formCtr!: FormControl;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) {
+    this.formGrp = this.fb.group({
+      formCtr: this.formCtr
+    });
+  }
 
-  onKeyUp($event: KeyboardEvent) {
+  formatEvent($event: KeyboardEvent) {
     const element = ( $event.target as HTMLInputElement);
     var v = element.value.replace(/\D/g, '');
     v = (Number(v) / 100).toFixed(2) + '';
@@ -23,6 +27,11 @@ export class InputMoneyComponent{
     v = v.replace(/(\d)(\d{3})(\d{3}),/g, '$1.$2.$3,');
     v = v.replace(/(\d)(\d{3}),/g, '$1.$2,');
     element.value =  v.toString();
+    
+    // const money =  new Intl.NumberFormat('pt-BR',   { style:'currency', currency: 'R$ ' });
+    // element.value = money.format(Number(v)).toString();
+    //this.modelNg = Number(element.value.replace('.', '').replace(',', '.'));;
+    //this.modelNg = new Number(v.toString());
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -38,42 +38,55 @@ export class ContaComponent implements OnInit {
   formasPagamento: FormaPagamento[]=[];
   lancamentosContaCartao: LancamentoContaCartao[]=[];
   fornecedores: Fornecedor[]=[];
-  
+
+  formGroupInput!: FormControl;
+
+  inputValor = new FormControl('');
+  comboTipoConta = new FormControl('');
+  comboFormaPagamento = new FormControl('');
+  inputEmissao = new FormControl('');
+  inputVencimento = new FormControl('');
+  inputDataPagamento = new FormControl('');
+
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private cdref: ChangeDetectorRef,
     private fb: FormBuilder) {
       this.contaCadastro ={} as Conta;
       this.contaCadastro.tipoCona = {} as TipoConta;
       this.lancamentoContaCartaoCadastro = {} as LancamentoContaCartao;
-     }
+  }
+
+  ngAfterContentChecked() {
+      this.cdref.detectChanges();
+  }
 
   ngOnInit(): void {
     this.loading = true;
+
     this.contaForm = this.fb.group({
       inputNumero: new FormControl('', Validators.required),
+      inputValor: new FormControl('', Validators.required),
       inputCodigoBarra: '',
-      comboTipoConta: new FormControl('', Validators.required),
-      inputEmissao: new FormControl('', Validators.required),
-      inputVencimento: new FormControl('', Validators.required),
+      //comboTipoConta: new FormControl('', Validators.required),
+      //inputEmissao: new FormControl('', Validators.required),
+      //inputVencimento: new FormControl('', Validators.required),
       inputParcela: '',
       inputTotalParcela: '',
-      inputValor: new FormControl('', Validators.required),
+      formGroupInput: new FormControl('', Validators.required),
       inputObservacao: '',
-      inputDataPagamento: '',
-      comboFormaPagamento: '',
+      //inputDataPagamento: '',
+      //comboFormaPagamento: '',
       inputValorPago: ''
     });
-
-    this.defaultService.get('tipo-conta').subscribe(tipos =>{
-      this.tiposConta = tipos;
-    });
-    this.defaultService.get('forma-pagamento').subscribe(formas =>{
-      this.formasPagamento = formas;
-    });
+    
     this.defaultService.get('fornecedor').subscribe(fornecedores =>{
       this.fornecedores = fornecedores;
+      this.loading = false;
     });
+
+
   }
 
   changeTab(event: any){

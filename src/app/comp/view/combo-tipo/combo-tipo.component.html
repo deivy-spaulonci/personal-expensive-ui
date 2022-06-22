@@ -1,0 +1,12 @@
+<div [formGroup]="formGrp">
+    <p-dropdown [options]="valores"
+        optionLabel="{{optLabel}}"  
+        [(ngModel)]="modelNg"
+        (ngModelChange)="inputValueChange.emit(modelNg)"
+        scrollHeight="350px"
+        [filter]="true"
+        [formControl]="formCtr"
+        [resetFilterOnHide]="true"
+        [style]="{'width':'300px'}">
+    </p-dropdown>
+</div>

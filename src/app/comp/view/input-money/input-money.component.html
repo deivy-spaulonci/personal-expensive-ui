@@ -1,5 +1,7 @@
-<input type="text" pInputText 
-(keyup)="onKeyUp($event)" 
-
-formControlName="{{controlName}}"
-[(ngModel)]="modelNg"/>
+<div [formGroup]="formGrp">
+    <input type="text" pInputText 
+        (keyup)="formatEvent($event)" 
+        [(ngModel)]="modelNg"
+        (ngModelChange)="inputValueChange.emit(modelNg)"
+        [formControl]="formCtr"/>
+</div>

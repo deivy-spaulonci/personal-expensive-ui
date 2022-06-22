@@ -1,0 +1,10 @@
+
+    <p-inputMask [formGroup]="formGrp"
+        mask="99/99/9999" 
+        characterPattern="[0-9]"
+        [style]="{'text-align':'center'}"
+        [size]="8"
+        [(ngModel)]="modelNg"
+        (ngModelChange)="inputValueChange.emit(modelNg)"
+        [formControl]="formCtr">
+    </p-inputMask>
