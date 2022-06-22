@@ -28,10 +28,10 @@
                 <th pSortableColumn="tipoConta">Tipo Conta
                     <p-sortIcon field="tipoConta"></p-sortIcon>
                 </th>
-                <th pSortableColumn="emissao" class="columnDate">Emissão
+                <th pSortableColumn="emissao" class="columnDate">Vencimento
                     <p-sortIcon field="emissao"></p-sortIcon>
                 </th>
-                <th pSortableColumn="vencimento" class="columnDate">Vencimento
+                <th pSortableColumn="vencimento" class="columnDate">Emissão
                     <p-sortIcon field="vencimento"></p-sortIcon>
                 </th>
                 <th class="centerText">Parcelas</th>
@@ -43,67 +43,21 @@
             <tr>
                 <th class="columnExpand"></th>
                 <th class="columnId">
-                    <p-columnFilter field="id"
-                            [showMenu]="false" 
-                            [showClearButton]="false">
-                        <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-inputNumber mode="decimal" inputId="withoutgrouping" 
-                            (onInput)="filter($event.value)"
-                            [useGrouping]="false">
-                        </p-inputNumber>
-                        </ng-template>
-                    </p-columnFilter>
+                    <column-filter-id></column-filter-id>
                 </th>
                 <th>
-                    <p-columnFilter field="tipoConta"
-                        [showMenu]="false" 
-                        [showClearButton]="false">
-                        <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-dropdown [options]="tiposConta" 
-                                optionLabel="nome"
-                                placeholder="todos" 
-                                (onChange)="$event.value ? filter($event.value) : filter($event.value)"
-                                [showClear]="true"
-                                [resetFilterOnHide]="true">
-                            </p-dropdown>
-                        </ng-template>
-                    </p-columnFilter>
+                    <column-filter-tipo [optLabel]="'nome'" 
+                        [tipoColumn]="'tipoConta'"
+                        [arrValues]="tiposConta">
+                    </column-filter-tipo>
                 </th>
                 <th>
-                    <p-columnFilter field="periodoVencimento"
-                        [showMenu]="false" 
-                        [showClearButton]="false">
-                        <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-calendar selectionMode="range" [readonlyInput]="true" 
-                                [showButtonBar]="true"
-                                rangeSeparator="até"
-                                appendTo="body"
-                                inputId="range"
-                                [panelStyle]="{'width':'788'}"
-                                dateFormat="dd/mm/yy"                                    
-                                #periodoVencimentos
-                                (onSelect)="filter(periodoVencimentos.value)">
-                            </p-calendar>
-                        </ng-template>
-                    </p-columnFilter>
+                    <column-filter-range-dates [fieldColumn]="'periodoVencimento'">
+                    </column-filter-range-dates>
                 </th>
                 <th>
-                    <p-columnFilter field="periodoEmissao"
-                        [showMenu]="false" 
-                        [showClearButton]="false">
-                        <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-calendar selectionMode="range" [readonlyInput]="true" 
-                                [showButtonBar]="true"
-                                rangeSeparator="até"
-                                appendTo="body"
-                                inputId="range"
-                                [panelStyle]="{'width':'788'}"
-                                dateFormat="dd/mm/yy"                                    
-                                #periodoEmissoes
-                                (onSelect)="filter(periodoEmissoes.value)">
-                            </p-calendar>
-                        </ng-template>
-                    </p-columnFilter>
+                    <column-filter-range-dates [fieldColumn]="'periodoEmissao'">
+                    </column-filter-range-dates>
                 </th>
                 <th></th>
                 <th></th>
@@ -243,7 +197,7 @@
                                         [formCtr]="comboTipoConta"
                                         (inputValueChange)="contaCadastro.tipoConta = $event"
                                         [modelNg]="contaCadastro.tipoConta"
-                                        [api]="'tipo-conta'"
+                                        [arrValues]="tiposConta"
                                         [optLabel]="'nome'"
                                         #inputTipoConta>
                                     </combo-tipo>
@@ -319,7 +273,7 @@
                                         [formCtr]="comboFormaPagamento"
                                         (inputValueChange)="contaCadastro.formaPagamento = $event"
                                         [modelNg]="contaCadastro.formaPagamento"
-                                        [api]="'forma-pagamento'"
+                                        [arrValues]="formasPagamento"
                                         [optLabel]="'nome'"
                                         #inputFormaPagamento>
                                     </combo-tipo>
@@ -328,11 +282,11 @@
                             <div class="row">
                                 <div class="cell">Valor Pago: </div>
                                 <div class="cell">
-                                    <input type="text" pInputText
-                                    (keyup)="maskaraMoeda($event)"
-                                    (onblur)="maskaraMoeda($event)"
-                                    [(ngModel)]="contaCadastro.valorPago"
-                                    formControlName="inputValorPago"/>
+                                    <input-money [formGroup]="contaForm"
+                                        [formCtr]="inputValorPago"
+                                        (inputValueChange)="contaCadastro.valorPago = $event"
+                                        [modelNg]="contaCadastro.valorPago">
+                                    </input-money>
                                 </div>
                             </div>
                         </div> 
@@ -357,25 +311,21 @@
                             <div class="cell">
                                 <p-divider>Lançamento conta cartão</p-divider>
                             </div>
-                        </div>
-                        
+                        </div>                        
 
                         <div class="row">
                             <div class="cell">
                                 
                                 Data:
-                                <p-inputMask mask="99/99/9999" characterPattern="[0-9]"
-                                    [size]="5"
-                                    [style]="{'width':'70px'}"
-                                    [(ngModel)]="lancamentoContaCartaoCadastro.data">
-                                </p-inputMask>
+                                <input-data [width]="'70px'"
+                                    (inputValueChange)="lancamentoContaCartaoCadastro.data = $event"
+                                    [modelNg]="lancamentoContaCartaoCadastro.data">
+                                </input-data>
                                 Valor: 
-                                <input type="text" pInputText
-                                    size="10"
-                                    (keyup)="maskaraMoeda($event)"
-                                    (onblur)="maskaraMoeda($event)"
-                                    [style]="{'width':'100px'}"
-                                    [(ngModel)]="lancamentoContaCartaoCadastro.valor"/>
+                                <input-money 
+                                    (inputValueChange)="lancamentoContaCartaoCadastro.valor = $event"
+                                    [modelNg]="lancamentoContaCartaoCadastro.valor">
+                                </input-money>
                                 Parcelas:
                                 <p-inputMask mask="99" [autoClear]="false"
                                     [style]="{'width':'50px'}"
@@ -399,15 +349,16 @@
                         <div class="row">
                             <div class="cell">
                                 
-                                <p-dropdown [options]="fornecedores" optionLabel="nome"                                    
-                                    [(ngModel)] = "lancamentoContaCartaoCadastro.fornecedor"
-                                    scrollHeight="350px"
-                                    [filter]="true"
-                                    [style]="{'width':'330px'}"
-                                    [resetFilterOnHide]="true">
-                                </p-dropdown>
+
+                                <combo-tipo
+                                    (inputValueChange)="lancamentoContaCartaoCadastro.fornecedor = $event"
+                                    [modelNg]="lancamentoContaCartaoCadastro.fornecedor"
+                                    [arrValues]="formasPagamento"
+                                    [optLabel]="'nome'">
+                                </combo-tipo>
+
                                 <button type="button" pButton pRipple>
-                                    <i class="pi pi-plus" style="line-height: 1.25;"></i>
+                                    <i class="pi pi-plus"></i>
                                 </button>
                                 
                             </div>

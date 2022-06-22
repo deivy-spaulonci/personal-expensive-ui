@@ -47,6 +47,7 @@ export class ContaComponent implements OnInit {
   inputEmissao = new FormControl('');
   inputVencimento = new FormControl('');
   inputDataPagamento = new FormControl('');
+  inputValorPago = new FormControl('');
 
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
@@ -74,17 +75,24 @@ export class ContaComponent implements OnInit {
       //inputVencimento: new FormControl('', Validators.required),
       inputParcela: '',
       inputTotalParcela: '',
-      formGroupInput: new FormControl('', Validators.required),
+      //formGroupInput: new FormControl('', Validators.required),
       inputObservacao: '',
       //inputDataPagamento: '',
       //comboFormaPagamento: '',
-      inputValorPago: ''
+      //inputValorPago: ''
+    });
+
+    this.defaultService.get('tipo-conta').subscribe(tipos =>{
+      this.tiposConta = tipos;      
+      this.defaultService.get('forma-pagamento').subscribe(formas =>{
+        this.formasPagamento = formas;
+        this.defaultService.get('fornecedor').subscribe(fornecedores =>{
+          this.fornecedores = fornecedores;
+          this.loading = false;
+        });
+      });
     });
     
-    this.defaultService.get('fornecedor').subscribe(fornecedores =>{
-      this.fornecedores = fornecedores;
-      this.loading = false;
-    });
 
 
   }

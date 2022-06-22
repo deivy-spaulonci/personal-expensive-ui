@@ -1,5 +1,5 @@
 <div [formGroup]="formGrp">
-    <p-dropdown [options]="valores"
+    <p-dropdown [options]="arrValues"
         optionLabel="{{optLabel}}"  
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"

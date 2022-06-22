@@ -44,31 +44,13 @@
                 <tr>
                     <th class="columnExpand"></th>
                     <th class="columnId">
-                        <p-columnFilter field="id"
-                                [showMenu]="false" 
-                                [showClearButton]="false">
-                                <ng-template pTemplate="filter" let-filter="filterCallback">
-                                    <p-inputNumber mode="decimal" inputId="withoutgrouping" 
-                                    (onInput)="filter($event.value)"
-                                    [useGrouping]="false">
-                                </p-inputNumber>
-                                </ng-template>
-                        </p-columnFilter>
+                        <column-filter-id></column-filter-id>
                     </th>
                     <th>
-                        <p-columnFilter field="tipoDespesa.id"
-                            [showMenu]="false" 
-                            [showClearButton]="false">
-                            <ng-template pTemplate="filter" let-filter="filterCallback">
-                                <p-dropdown [options]="tiposDespesa" 
-                                    optionLabel="nome"
-                                    placeholder="todos" 
-                                    (onChange)="$event.value ? filter($event.value.value) : filter($event.value)"
-                                    [showClear]="true"
-                                    [resetFilterOnHide]="true">
-                                </p-dropdown>
-                            </ng-template>
-                        </p-columnFilter>
+                        <column-filter-tipo [optLabel]="'nome'" 
+                            [tipoColumn]="'tipoDespesa'"
+                            [arrValues]="tiposDespesa">
+                        </column-filter-tipo>
                     </th>
                     <th class="columnDate">
                         <p-columnFilter field="periodo"
@@ -89,7 +71,11 @@
                         </p-columnFilter>
                     </th>
                     <th>
-                        <p-columnFilter field="fornecedor.id"
+                        <column-filter-tipo [optLabel]="'nome'" 
+                            [tipoColumn]="'fornecedor'"
+                            [arrValues]="fornecedores">
+                        </column-filter-tipo>
+                        <!-- <p-columnFilter field="fornecedor.id"
                         [showMenu]="false" 
                         [showClearButton]="false">
                             <ng-template pTemplate="filter" let-filter="filterCallback">
@@ -104,7 +90,7 @@
                                     optionLabel="nome">
                                 </p-dropdown>
                             </ng-template>
-                        </p-columnFilter>
+                        </p-columnFilter> -->
                     </th>
                     <th>
                         <p-columnFilter field="formaPagamento"

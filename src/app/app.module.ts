@@ -54,6 +54,9 @@ import { TelefonePipe } from './pipe/telefone.pipe';
 import { InputMoneyComponent } from './comp/view/input-money/input-money.component';
 import { ComboTipoComponent } from './comp/view/combo-tipo/combo-tipo.component';
 import { InputDataComponent } from './comp/view/input-data/input-data.component';
+import { ColumnFilterIdComponent } from './comp/view/column-filter-id/column-filter-id.component';
+import { ColumnFilterTipoComponent } from './comp/view/column-filter-tipo/column-filter-tipo.component';
+import { ColumnFilterRangeDatesComponent } from './comp/view/column-filter-range-dates/column-filter-range-dates.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +70,10 @@ import { InputDataComponent } from './comp/view/input-data/input-data.component'
     TelefonePipe,
     InputMoneyComponent,
     ComboTipoComponent,
-    InputDataComponent
+    InputDataComponent,
+    ColumnFilterIdComponent,
+    ColumnFilterTipoComponent,
+    ColumnFilterRangeDatesComponent
   ],
   imports: [
     BrowserModule,

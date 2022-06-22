@@ -1,0 +1,16 @@
+<p-columnFilter field="{{fieldColumn}}"
+[showMenu]="false" 
+[showClearButton]="false">
+<ng-template pTemplate="filter" let-filter="filterCallback">
+    <p-calendar selectionMode="range" [readonlyInput]="true" 
+        [showButtonBar]="true"
+        rangeSeparator="até"
+        appendTo="body"
+        inputId="range"
+        [panelStyle]="{'width':'788'}"
+        dateFormat="dd/mm/yy"                                    
+        #periodoVencimentos
+        (onClose)="filter(periodoVencimentos.value)">        
+    </p-calendar>
+</ng-template>
+</p-columnFilter>

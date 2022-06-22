@@ -9,9 +9,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 export class InputMoneyComponent{
 
   @Input() modelNg  : Number = 0;
-  @Output() inputValueChange: EventEmitter<Number> = new EventEmitter<Number>();  
   @Input() formGrp!: FormGroup;
   @Input() formCtr!: FormControl;
+  @Input() width: string = '100px';
+  
+  @Output() inputValueChange: EventEmitter<Number> = new EventEmitter<Number>();  
 
   constructor(private fb: FormBuilder) {
     this.formGrp = this.fb.group({

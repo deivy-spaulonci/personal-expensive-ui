@@ -1,0 +1,14 @@
+<p-columnFilter field="{{tipoColumn}}"
+        [showMenu]="false" 
+        [showClearButton]="false">
+    <ng-template pTemplate="filter" let-filter="filterCallback">
+        <p-dropdown [options]="arrValues" 
+            optionLabel="{{optLabel}}"
+            placeholder="todos"             
+            (onChange)="$event.value.value ? filter($event.value.value) : 
+                    ($event.id ? filter($event.id) : filter($event.value));"
+            [showClear]="true"
+            [resetFilterOnHide]="true">
+        </p-dropdown>
+    </ng-template>
+</p-columnFilter>

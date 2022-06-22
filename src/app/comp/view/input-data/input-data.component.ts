@@ -11,6 +11,7 @@ export class InputDataComponent implements OnInit {
   @Input() modelNg  : string = '';
   @Input() formGrp!: FormGroup;
   @Input() formCtr!: FormControl;
+  @Input() width: string = '100px';
   
   @Output() inputValueChange: EventEmitter<string> = new EventEmitter<string>();  
   
