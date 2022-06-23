@@ -1,8 +1,9 @@
-<div [formGroup]="formGrp">
-    <input type="text" pInputText 
+
+    <input type="text" 
+        pInputText 
+        [formGroup]="formGrp"
         (keyup)="formatEvent($event)" 
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
         [style]="{'width': width}"
         [formControl]="formCtr"/>
-</div>

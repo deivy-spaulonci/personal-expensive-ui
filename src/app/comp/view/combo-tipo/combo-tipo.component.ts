@@ -17,6 +17,7 @@ export class ComboTipoComponent implements OnInit {
   @Input() arrValues: any[]=[];
   @Input() api:string = '';
   @Output() inputValueChange: EventEmitter<any> = new EventEmitter<any>(); 
+  @Output() valueChange: EventEmitter<any> = new EventEmitter<any>();
 
   valores: []=[];
 
@@ -33,6 +34,10 @@ export class ComboTipoComponent implements OnInit {
         this.arrValues = itens;
       });
     }
+  }
+
+  setValueChange(){
+    this.valueChange.emit(null);
   }
 
 }

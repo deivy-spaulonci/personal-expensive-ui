@@ -13,7 +13,8 @@ export class InputDataComponent implements OnInit {
   @Input() formCtr!: FormControl;
   @Input() width: string = '100px';
   
-  @Output() inputValueChange: EventEmitter<string> = new EventEmitter<string>();  
+  @Output() inputValueChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() inputBlur: EventEmitter<any> = new EventEmitter<any>();
   
   constructor(private fb: FormBuilder) {
     this.formGrp = this.fb.group({
@@ -23,5 +24,10 @@ export class InputDataComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  setInputBlur(){
+    this.inputBlur.emit(null);
+  }
+
 
 }

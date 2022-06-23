@@ -1,3 +1,4 @@
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -14,6 +15,17 @@ export class ColumnFilterTipoComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ajusteFilter(event:any):any{
+    if(event.value && event.value.value){
+      return event.value.value;
+    }else if(event.value && event.value.id){
+      return event.value.id;
+    }else if(event.value){
+      return event.value;
+    }
+    return null;
   }
 
 }

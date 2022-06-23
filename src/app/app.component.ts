@@ -17,7 +17,7 @@ export class AppComponent implements OnInit{
     this.items = [{
       label: 'Payment',
       items:[
-        {label: 'Despesa', icon: 'pi pi-fw pi-home', routerLink: ['/despesa-list']},
+        {label: 'Despesa', icon: 'pi pi-fw pi-home', routerLink: ['/despesa']},
         {label: 'Contas', icon: 'pi pi-fw pi-money-bill', routerLink: ['/conta']},
         {label: 'Fornecedor', icon: 'pi pi-fw pi-box', routerLink: ['/fornecedor']},
         {label: 'Forma Pagamento', icon: 'pi pi-fw pi-credit-card'}

@@ -1,0 +1,16 @@
+<p class="title-bar-1">Despesas</p>
+<p-toast></p-toast>
+<p-tabView [activeIndex]="tabSelected" (onChange)="changeTab($event)">
+    <p-tabPanel header="Consulta">
+        <app-despesa-grid 
+            [teste]="testedespesagrid">
+        </app-despesa-grid>
+    </p-tabPanel>
+    <p-tabPanel header="Casdastro">
+        <app-despesa-form></app-despesa-form>
+    </p-tabPanel>
+    <p-tabPanel header="Gráficos">
+        Content 3
+        <p-chart type="line" [data]="data"></p-chart>
+    </p-tabPanel>
+</p-tabView>

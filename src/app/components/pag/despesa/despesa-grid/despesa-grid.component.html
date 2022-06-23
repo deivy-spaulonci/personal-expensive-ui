@@ -1,0 +1,119 @@
+<p-table [value]="despesas" 
+    [loading]="loading" 
+    [lazy]="true" 
+    (onLazyLoad)="loadData($event)"
+    [rowsPerPageOptions]="[10,15,20,25,30,40]" 
+    [alwaysShowPaginator]="true" 
+    [paginator]="true"
+    [showCurrentPageReport]="true" 
+    [totalRecords]="totalElements" 
+    [rows]="pageSize" 
+    [sortOrder]="-1"
+    sortField="data"
+    currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" 
+    dataKey="id" #dt
+    selectionMode="single"
+    styleClass="p-datatable-striped p-datatable-sm"
+    [(contextMenuSelection)]="despesaSelecionada">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="columnExpand"></th>
+            <th pSortableColumn="id" class="columnId">Id
+                <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="tipoDespesa">Tipo Despesa
+                <p-sortIcon field="tipoDespesa"></p-sortIcon>
+            </th>
+            <th pSortableColumn="data"class="columnDate">Data
+                <p-sortIcon field="data"></p-sortIcon>
+            </th>
+            <th pSortableColumn="fornecedor.nome">Fornecedor
+                <p-sortIcon field="fornecedor.nome"></p-sortIcon>
+            </th>
+            <th pSortableColumn="formaPagamento">Forma pagamento
+                <p-sortIcon field="formaPagamento"></p-sortIcon>
+            </th>
+            <th>Valor</th>
+            <th class="columnActionBt">Editar</th>
+            <th class="columnActionBt">Excluir</th>
+        </tr>
+        <tr>
+            <th class="columnExpand"></th>
+            <th class="columnId">
+                <column-filter-id></column-filter-id>
+            </th>
+            <th>
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'tipoDespesa'" [arrValues]="tiposDespesa">
+                </column-filter-tipo>
+            </th>
+            <th class="columnDate">
+                <column-filter-range-dates [fieldColumn]="'periodo'">
+                </column-filter-range-dates>
+            </th>
+            <th>
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'fornecedor.id'" [arrValues]="fornecedores">
+                </column-filter-tipo>
+            </th>
+            <th>
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'formaPagamento'" [arrValues]="formasPagamento">
+                </column-filter-tipo>
+            </th>
+            <th class="columnValor"></th>
+            <th class="columnActionBt"></th>
+            <th class="columnActionBt"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-despesa let-expanded="expanded" let-ri="rowIndex">
+        <tr>
+            <td class="columnExpand">
+                <button type="button" pButton pRipple [pRowToggler]="despesa" 
+                *ngIf="despesa.obs || despesa.informacaoExtra.length>0"
+                class="p-button-text p-button-rounded p-button-plain p-button-sm smallBt" 
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                </button>
+            </td>
+            <td class="columnId">{{despesa.id}}</td>
+            <td>{{despesa.tipoDespesa.nome}}</td>
+            <td class="columnDate">{{despesa.data | date:'dd/MM/yyyy'}}</td>
+            <td>{{despesa.fornecedor.nome}}</td>                    
+            <td>{{despesa.formaPagamento.nome}}</td>
+            <td class="columnValor">{{despesa.valor | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="columnActionBt">
+                <column-bt-action (action)="onEditSave(despesa)" [icon]="'pencil'"></column-bt-action>
+            </td>
+            <td class="columnActionBt">
+                <column-bt-action (action)="excluirDespesa(despesa)" [icon]="'trash'"></column-bt-action>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-despesa>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2">
+                <div class="table">
+                    <div class="row" *ngFor="let info of despesa.informacaoExtra">
+                        <div class="cell">{{info.tipoInformacaoExtra.nome}}: </div>
+                        <div class="cell">{{info.numero}}</div>
+                    </div>
+
+                </div>
+                <div *ngIf="despesa.obs">
+                    Observação: {{despesa.obs}}
+                </div>
+            </td>
+            <td colspan="5"></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <tr>
+            <td [attr.colspan]="6" style='text-align: right;'>Total:</td>
+            <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-confirmDialog header="Confirmar Exclusão" icon="pi pi-exclamation-triangle" message="Deseja excluir despesa?">
+</p-confirmDialog>
+<p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>

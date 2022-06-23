@@ -1,0 +1,135 @@
+<div class="table">
+    <div class="row">
+        <div class="cell">
+            <!-- (ngSubmit)="onSubmit(despesaForm.value, dt)" -->
+            <form [formGroup]="despesaForm">
+                <div class="table">
+                    <div class="row">
+                        <div class="cell">Tipo Despesa: </div>
+                        <div class="cell">
+                            <combo-tipo [formGrp]="despesaForm"
+                                [formCtr]="comboTipoDespesa"
+                                (inputValueChange)="despesaCadastro.tipoDespesa = $event"
+                                [modelNg]="despesaCadastro.tipoDespesa"
+                                [arrValues]="tiposDespesa"
+                                [optLabel]="'nome'"
+                                (valueChange)="consultaAjudaCusto()"
+                                #cbTipoDespesa>
+                            </combo-tipo>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Data: </div>
+                        <div class="cell">
+                            <input-data [formGroup]="despesaForm"
+                                [formCtr]="inputData"
+                                (inputValueChange)="despesaCadastro.data = $event"
+                                (inputBlur)="consultaAjudaCusto();showDayOfWeekend();"
+                                [modelNg]="despesaCadastro.data">
+                            </input-data>
+                            <p-message severity="info" *ngIf="dayOfWeekend" text="{{dayOfWeekend}}" styleClass="mr-2"></p-message>                                      
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="cell">Fornecedor: </div>
+                        <div class="cell">
+                            <p-dropdown [options]="fornecedores" optionLabel="nome"
+                            [style]="{'width':'300px'}" 
+                            [panelStyle]="{'width':'400px'}"
+                            [resetFilterOnHide]="true"
+                            [filter]="true" 
+                            filterBy="nome"
+                            scrollHeight="350px"
+                            [(ngModel)]="despesaCadastro.fornecedor"
+                            formControlName="comboFornecedor">
+                            <ng-template let-fornecedor pTemplate="item">
+                            <div class="table">
+                                <div class="row"><div class="cell">{{fornecedor.nome}}</div></div>
+                                <div class="row">
+                                    <div class="cell">{{fornecedor.cidade.nome}} -
+                                        <em>{{fornecedor.cidade.estado.nome}}</em>
+                                    </div>
+                                </div>
+                            </div>
+                            </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Forma Pagamento: </div>
+                        <div class="cell">
+                            <combo-tipo [formGrp]="despesaForm"
+                            [formCtr]="comboFormaPagamento"
+                            (inputValueChange)="despesaCadastro.formaPagamento = $event"
+                            [modelNg]="despesaCadastro.formaPagamento"
+                            [arrValues]="formasPagamento"
+                            [optLabel]="'nome'"
+                            #inputFormaPagamento>
+                        </combo-tipo>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Valor: </div>
+                        <div class="cell">
+                            <input-money [formGroup]="despesaForm"
+                                [formCtr]="inputValor"
+                                (inputValueChange)="despesaCadastro.valorPago = $event"
+                                [modelNg]="despesaCadastro.valorPago">
+                            </input-money>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="cell">Obs: </div>
+                        <div class="cell">
+                            <input type="text"
+                            style="width: 100%;"
+                            [(ngModel)]="despesaCadastro.obs"
+                            formControlName="inputObservacao"
+                            pInputText/>
+                        </div> 
+                    </div>
+                </div>
+                <div class="centerText">
+                    <button icon="pi pi-save" pButton type="button" label="Salvar"
+                        class="ui-button-raised ui-button-success"
+                        [disabled]="!despesaForm.valid" type="submit">
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="cell">
+            <p-divider layout="vertical">Informação Extra</p-divider>
+        </div>
+        <div class="cell">
+            <div class="table">
+                <div class="row">
+                    <div class="cell">Tipo: </div>
+                    <div class="cell">
+                        <combo-tipo [formGrp]="despesaForm"
+                            [formCtr]="comboFormaPagamento"
+                            (inputValueChange)="informacaoExtra.tipoInformacaoExtra = $event"
+                            [modelNg]="informacaoExtra.tipoInformacaoExtra"
+                            [arrValues]="tiposInformacaoExtra"
+                            [optLabel]="'nome'"
+                            #cbTipoInformacaoEextra>
+                        </combo-tipo>
+                    </div>
+                    <div class="cell">Numero: </div>
+                    <div class="cell">
+                        <input type="text" pInputText [(ngModel)]="informacaoExtra.numero"/>
+                    </div>
+                    <div class="cell">
+                        <p-button icon="pi pi-plus" [style]="{'margin-left':'.25em'}"
+                                (onClick)="addInformacaoExtra($event);">
+                        </p-button>
+                    </div>
+                </div>
+                <div class="row" *ngFor="let info of despesaCadastro.informacaoExtra">
+                    <div class="cell"></div>
+                    <div class="cell">{{info.tipoInformacaoExtra.nome}}</div>
+                    <div class="cell">{{info.numero}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

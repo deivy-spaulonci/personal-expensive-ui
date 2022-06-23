@@ -68,7 +68,7 @@ export class ContaComponent implements OnInit {
 
     this.contaForm = this.fb.group({
       inputNumero: new FormControl('', Validators.required),
-      inputValor: new FormControl('', Validators.required),
+      //inputValor: new FormControl('', Validators.required),
       inputCodigoBarra: '',
       //comboTipoConta: new FormControl('', Validators.required),
       //inputEmissao: new FormControl('', Validators.required),

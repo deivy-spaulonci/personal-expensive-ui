@@ -44,7 +44,6 @@ import {DividerModule} from 'primeng/divider';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {ChartModule} from 'primeng/chart';
 
-import {DespesaListComponent} from './comp/despesa/despesa-list/despesa-list.component';
 import {HomeComponent} from './comp/home/home.component';
 import { ContaComponent } from './comp/conta/conta.component';
 import { FornecedorComponent } from './comp/fornecedor/fornecedor.component';
@@ -57,11 +56,14 @@ import { InputDataComponent } from './comp/view/input-data/input-data.component'
 import { ColumnFilterIdComponent } from './comp/view/column-filter-id/column-filter-id.component';
 import { ColumnFilterTipoComponent } from './comp/view/column-filter-tipo/column-filter-tipo.component';
 import { ColumnFilterRangeDatesComponent } from './comp/view/column-filter-range-dates/column-filter-range-dates.component';
+import { DespesaComponent } from './components/pag/despesa/despesa.component';
+import { DespesaFormComponent } from './components/pag/despesa/despesa-form/despesa-form.component';
+import { DespesaGridComponent } from './components/pag/despesa/despesa-grid/despesa-grid.component';
+import { ColumnBtActionComponent } from './comp/view/column-bt-action/column-bt-action.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DespesaListComponent,
     HomeComponent,
     ContaComponent,
     FornecedorComponent,
@@ -73,7 +75,11 @@ import { ColumnFilterRangeDatesComponent } from './comp/view/column-filter-range
     InputDataComponent,
     ColumnFilterIdComponent,
     ColumnFilterTipoComponent,
-    ColumnFilterRangeDatesComponent
+    ColumnFilterRangeDatesComponent,
+    DespesaComponent,
+    DespesaGridComponent,
+    DespesaFormComponent,
+    ColumnBtActionComponent
   ],
   imports: [
     BrowserModule,

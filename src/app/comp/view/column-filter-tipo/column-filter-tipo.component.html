@@ -5,9 +5,9 @@
         <p-dropdown [options]="arrValues" 
             optionLabel="{{optLabel}}"
             placeholder="todos"             
-            (onChange)="$event.value.value ? filter($event.value.value) : 
-                    ($event.id ? filter($event.id) : filter($event.value));"
+            (onChange)="filter(ajusteFilter($event));"
             [showClear]="true"
+            [filter]="true"
             [resetFilterOnHide]="true">
         </p-dropdown>
     </ng-template>

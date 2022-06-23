@@ -6,5 +6,6 @@
         [size]="8"
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
+        (onBlur)="setInputBlur()"
         [formControl]="formCtr">
     </p-inputMask>

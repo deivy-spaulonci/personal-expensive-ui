@@ -3,6 +3,7 @@
         optionLabel="{{optLabel}}"  
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
+        (onChange)="setValueChange()"
         scrollHeight="350px"
         [filter]="true"
         [formControl]="formCtr"
