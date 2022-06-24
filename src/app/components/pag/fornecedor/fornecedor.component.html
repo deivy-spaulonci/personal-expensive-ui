@@ -1,0 +1,16 @@
+<p class="title-bar-1">Fornecedor</p>
+<p-toast></p-toast>
+<p-tabView (onChange)="setTabCadastro(null, tabFornecedor)" #tabFornecedor
+    [(activeIndex)]="selectedTabIndex">
+    <p-tabPanel header="Consulta">
+        <app-fornecedor-grid [loading]="loading">
+
+        </app-fornecedor-grid>
+    </p-tabPanel>
+    <p-tabPanel header="Casdastro">
+        <app-fornecedor-form [loading]="loading">
+
+        </app-fornecedor-form>
+    </p-tabPanel>
+    <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+</p-tabView>

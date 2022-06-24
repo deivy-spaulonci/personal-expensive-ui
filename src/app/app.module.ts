@@ -46,7 +46,6 @@ import {ChartModule} from 'primeng/chart';
 
 import {HomeComponent} from './comp/home/home.component';
 import { ContaComponent } from './comp/conta/conta.component';
-import { FornecedorComponent } from './comp/fornecedor/fornecedor.component';
 import { CnpjPipe } from './pipe/cnpj.pipe';
 import { CepPipe } from './pipe/cep.pipe';
 import { TelefonePipe } from './pipe/telefone.pipe';
@@ -60,13 +59,16 @@ import { DespesaComponent } from './components/pag/despesa/despesa.component';
 import { DespesaFormComponent } from './components/pag/despesa/despesa-form/despesa-form.component';
 import { DespesaGridComponent } from './components/pag/despesa/despesa-grid/despesa-grid.component';
 import { ColumnBtActionComponent } from './comp/view/column-bt-action/column-bt-action.component';
+import { DespesaChartComponent } from './components/pag/despesa/despesa-chart/despesa-chart.component';
+import { FornecedorFormComponent } from './components/pag/fornecedor/fornecedor-form/fornecedor-form.component';
+import { FornecedorGridComponent } from './components/pag/fornecedor/fornecedor-grid/fornecedor-grid.component';
+import { FornecedorComponent } from './components/pag/fornecedor/fornecedor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ContaComponent,
-    FornecedorComponent,
     CnpjPipe,
     CepPipe,
     TelefonePipe,
@@ -79,7 +81,11 @@ import { ColumnBtActionComponent } from './comp/view/column-bt-action/column-bt-
     DespesaComponent,
     DespesaGridComponent,
     DespesaFormComponent,
-    ColumnBtActionComponent
+    ColumnBtActionComponent,
+    DespesaChartComponent,
+    FornecedorComponent,
+    FornecedorFormComponent,
+    FornecedorGridComponent
   ],
   imports: [
     BrowserModule,

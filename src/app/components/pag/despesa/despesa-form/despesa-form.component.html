@@ -72,8 +72,8 @@
                         <div class="cell">
                             <input-money [formGroup]="despesaForm"
                                 [formCtr]="inputValor"
-                                (inputValueChange)="despesaCadastro.valorPago = $event"
-                                [modelNg]="despesaCadastro.valorPago">
+                                (inputValueChange)="despesaCadastro.valor = $event"
+                                [modelNg]="despesaCadastro.valor">
                             </input-money>
                         </div> 
                     </div>
@@ -132,3 +132,4 @@
         </div>
     </div>
 </div>
+{{despesaCadastro | json}}

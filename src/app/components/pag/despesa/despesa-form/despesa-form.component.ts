@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
+import { MessageService } from 'primeng/api';
 import { Despesa } from 'src/app/model/despesa';
 import { FormaPagamento } from 'src/app/model/forma-pagamento';
 import { Fornecedor } from 'src/app/model/fornecedor';
@@ -21,48 +20,47 @@ export class DespesaFormComponent implements OnInit {
   @Input() loading: boolean = false;
   util: Util = new Util();
 
-  despesaCadastro!: any;
+  @Input() despesaCadastro!: any;
   despesaForm!: FormGroup;
-  informacaoExtra!: InformacaoExtra;  
-  dayOfWeekend:string = '';
+  informacaoExtra!: InformacaoExtra;
+  dayOfWeekend: string = '';
 
   @Input() tiposDespesa: TipoDespesa[] = [];
   @Input() formasPagamento: FormaPagamento[] = [];
-  @Input() fornecedores: Fornecedor[] = [];  
-  tiposInformacaoExtra: TipoInformacaoExtra[] = [];
+  @Input() fornecedores: Fornecedor[] = [];
+  @Input() tiposInformacaoExtra: TipoInformacaoExtra[] = [];
 
   comboTipoDespesa = new FormControl('');
   comboFormaPagamento = new FormControl('');
   inputData = new FormControl('');
   inputValor = new FormControl('');
 
+  @Output() submitFormEmmit: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
     private fb: FormBuilder) {
-      this.despesaCadastro = {} as Despesa;
-      this.informacaoExtra = {} as InformacaoExtra;
-      this.informacaoExtra.tipoInformacaoExtra = {} as TipoInformacaoExtra;
-     }
+    this.despesaCadastro = {} as Despesa;
+    this.informacaoExtra = {} as InformacaoExtra;
+    this.informacaoExtra.tipoInformacaoExtra = {} as TipoInformacaoExtra;
+  }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.despesaForm = this.fb.group({
       inputObservacao: '',
-      comboFornecedor:''
+      comboFornecedor: ''
     });
   }
 
-  addInformacaoExtra(event: any){
-    
-    if (this.informacaoExtra.numero){
-
-      if (this.despesaCadastro.informacaoExtra == null){
+  addInformacaoExtra(event: any) {
+    if (this.informacaoExtra.numero) {
+      if (this.despesaCadastro.informacaoExtra == null) {
         this.despesaCadastro.informacaoExtra = [];
       }
       this.despesaCadastro.informacaoExtra.push(Object.assign({}, this.informacaoExtra));
       this.informacaoExtra.numero = '';
-
-    }else{
-      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Número da Informação Extra Inválido!'});
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Número da Informação Extra Inválido!' });
     }
   }
 
@@ -70,31 +68,30 @@ export class DespesaFormComponent implements OnInit {
     this.loading = true;
     this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
     this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
-   
-    this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado =>{    
-        this.loading = false;
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
-        if(this.despesaCadastro.id){
-          //this.tabSelected = 0;
-          //table.filter(null, '', '');
-        }
-        this.newDespesaCadastro();
-        this.dayOfWeekend = '';
-    });  
+    
+    this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado => {
+      this.loading = false;
+      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso' });
+      if (this.despesaCadastro.id) {
+        this.submitFormEmmit.emit(null);
+      }
+      this.newDespesaCadastro();
+      this.dayOfWeekend = '';
+    });
   }
 
-  newDespesaCadastro(){
+  newDespesaCadastro() {
     this.despesaCadastro.valor = 0;
     this.despesaCadastro.data = '';
     this.despesaCadastro.informacaoExtra = [];
-    this.informacaoExtra = {} as InformacaoExtra;         
-    this.dayOfWeekend = ''; 
+    this.informacaoExtra = {} as InformacaoExtra;
+    this.dayOfWeekend = '';
   }
 
-  showDayOfWeekend(){
-    let data:Date = new Date(this.util.transformDates(this.despesaCadastro.data));
+  showDayOfWeekend() {
+    let data: Date = new Date(this.util.transformDates(this.despesaCadastro.data));
     data.setDate(data.getDate() + 1);
-    switch(data.getDay()){
+    switch (data.getDay()) {
       case 0: this.dayOfWeekend = 'Domingo'; break;
       case 1: this.dayOfWeekend = 'Segunda-Feira'; break;
       case 2: this.dayOfWeekend = 'Terça-Feira'; break;
@@ -105,27 +102,24 @@ export class DespesaFormComponent implements OnInit {
     }
   }
 
-  consultaAjudaCusto(){
-    let data:Date = new Date(this.util.transformDates(this.despesaCadastro.data));
+  consultaAjudaCusto() {
+    let data: Date = new Date(this.util.transformDates(this.despesaCadastro.data));
     data.setDate(data.getDate() + 1);
-    if(data.getDay() > 0 && data.getDay() < 4){
+    if (data.getDay() > 0 && data.getDay() < 4) {
       let valorTipoDespesa = this.despesaCadastro.tipoDespesa.value;
       let valorFormaPagamento = this.despesaCadastro.formaPagamento.value;
-      if(valorTipoDespesa =="ALIMENTACAO"
-      || valorTipoDespesa =="COMBUSTIVEL"
-      || valorTipoDespesa =="HARDWARE_PC"
-      || valorTipoDespesa =="ESTACIONAMENTO"
-      || valorTipoDespesa =="PEDAGIO"
-      || valorTipoDespesa =="SUPERMERCADO"){
-        if(valorFormaPagamento=="DINHEIRO"
-        || valorFormaPagamento=="CARTAO_DEBITO_SANTANDER"){
-          this.messageService.add({severity: 'info', summary: 'Aviso', detail: 'Possível despesa para ajuda de custo'});
+      if (valorTipoDespesa == "ALIMENTACAO"
+        || valorTipoDespesa == "COMBUSTIVEL"
+        || valorTipoDespesa == "HARDWARE_PC"
+        || valorTipoDespesa == "ESTACIONAMENTO"
+        || valorTipoDespesa == "PEDAGIO"
+        || valorTipoDespesa == "SUPERMERCADO") {
+        if (valorFormaPagamento == "DINHEIRO"
+          || valorFormaPagamento == "CARTAO_DEBITO_SANTANDER") {
+          this.messageService.add({ severity: 'info', summary: 'Aviso', detail: 'Possível despesa para ajuda de custo' });
         }
       }
     }
-    // switch (data.getDay){
-    //   case
-    // }
   }
 
 

@@ -1,20 +1,26 @@
 <p class="title-bar-1">Despesas</p>
 <p-toast></p-toast>
-<p-tabView [activeIndex]="tabSelected" (onChange)="changeTab($event)">
+<p-tabView (onChange)="setTabCadastro(null, tabDespesa)" #tabDespesa
+    [(activeIndex)]="selectedTabIndex">
     <p-tabPanel header="Consulta">
         <app-despesa-grid [tiposDespesaFilter]="tiposDespesa"
             [formasPagamentoFilter]="formasPagamento"
             [fornecedoresFilter]="fornecedores"
-            [loading]="loading"></app-despesa-grid>
+            [loading]="loading"
+            (indexTabChange)="setTabCadastro($event, tabDespesa)">
+        </app-despesa-grid>
     </p-tabPanel>
     <p-tabPanel header="Casdastro">
         <app-despesa-form [tiposDespesa]="tiposDespesa"
         [formasPagamento]="formasPagamento"
         [fornecedores]="fornecedores"
-        [loading]="loading"></app-despesa-form>
+        [despesaCadastro]="despesaEdicao"
+        [tiposInformacaoExtra]="tiposInformacaoExtra"
+        [loading]="loading"
+        (submitFormEmmit)="setTabCadastro(null, tabDespesa)"></app-despesa-form>
     </p-tabPanel>
     <p-tabPanel header="Gráficos">
-        Content 3
-        <p-chart type="line" [data]="data"></p-chart>
+        <app-despesa-chart></app-despesa-chart>
     </p-tabPanel>
+    <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
 </p-tabView>

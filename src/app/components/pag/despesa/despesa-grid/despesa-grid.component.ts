@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Despesa } from 'src/app/model/despesa';
 import { FormaPagamento } from 'src/app/model/forma-pagamento';
@@ -15,7 +15,6 @@ import { Util } from 'src/app/util/util';
 export class DespesaGridComponent implements OnInit {
 
   @Input() loading: boolean = false;
-  @Input() tabSelected: number = 0;
 
   pageNumber = 0;
   pageSize = 10;
@@ -28,6 +27,8 @@ export class DespesaGridComponent implements OnInit {
   @Input() tiposDespesaFilter: TipoDespesa[] = [];
   @Input() formasPagamentoFilter: FormaPagamento[] = [];
   @Input() fornecedoresFilter: Fornecedor[] = [];
+
+  @Output() indexTabChange: EventEmitter<Despesa> = new EventEmitter<Despesa>();
 
   despesas: Despesa[] = [];
 
@@ -52,8 +53,8 @@ export class DespesaGridComponent implements OnInit {
     });
   }
 
-  onEditSave(despesa: any) {
-    this.tabSelected = 1;
+  onEditSave(despesa: Despesa) {
+    this.indexTabChange.emit(despesa);
     
     // this.despesaCadastro = Object.assign({}, despesa);
     // this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)

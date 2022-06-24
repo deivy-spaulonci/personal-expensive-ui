@@ -1,0 +1,120 @@
+<form [formGroup]="fornecedorForm" >
+    <!-- (ngSubmit)="onSubmit(fornecedorForm.value, dt)" -->
+    <div class="table">
+        <div class="row">
+            <div class="cell">CNPJ:</div>
+            <div class="cell">
+                <p-inputMask mask="99.999.999/9999-99" 
+                [(ngModel)]="fornecedorCadastro.cnpj"
+                 formControlName="inputCNPJ" 
+                 [style]="{'width': '200px'}">
+                </p-inputMask>
+                <p-button icon="pi pi-globe" [disabled]="fornecedorCadastro.cnpj==null"
+                        [style]="{'margin-left':'.25em'}"
+                        (onClick)="searchCNPJ($event)">
+                </p-button>
+            </div>
+            <div class="cell">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Nome:</div>
+            <div class="cell">
+                <input type="text" pInputText 
+                [(ngModel)]="fornecedorCadastro.nome" 
+                formControlName="inputNome"
+                [style]="{'width': '450px'}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Razão Social:</div>
+            <div class="cell">
+                <input type="text" pInputText 
+                [(ngModel)]="fornecedorCadastro.razaoSocial" 
+                formControlName="inputRazao"
+                [style]="{'width': '100%'}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Insc. Estadual:</div>
+            <div class="cell">
+                <input type="text" pInputText 
+                [(ngModel)]="fornecedorCadastro.inscricaoEstadual"
+                formControlName="inputInscEstadual" 
+                [style]="{'width': '50%'}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Endereço:</div>
+            <div class="cell">
+                <input type="text" pInputText 
+                [(ngModel)]="fornecedorCadastro.endereco" 
+                formControlName="inputEndereco"
+                [style]="{'width': '100%'}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Complemento:</div>
+            <div class="cell">
+                <input type="text" pInputText 
+                [(ngModel)]="fornecedorCadastro.complemento" 
+                formControlName="inputEndereco"
+                [style]="{'width': '100%'}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Cep:</div>
+            <div class="cell">
+                <p-inputMask mask="99999-999" 
+                [(ngModel)]="fornecedorCadastro.cep" 
+                formControlName="inputCep"
+                [style]="{'width': '30%'}">
+                </p-inputMask>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Telefone:</div>
+            <div class="cell">
+                <p-inputMask mask="99.99999-9999" 
+                [(ngModel)]="fornecedorCadastro.telefone"
+                formControlName="inputTelefone" 
+                [style]="{'width': '50%'}">
+                </p-inputMask>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">Cidade:</div>
+            <div class="cell">
+                <p-autoComplete
+                [suggestions]="cidades"
+                formControlName="comboCidade"
+                (completeMethod)="filterCidade($event)"
+                [(ngModel)]="fornecedorCadastro.cidade"
+                field="nome"
+                [inputStyle]="{'width': '100%'}"
+                [panelStyle]="{'width': '290px'}"
+                scrollHeight="400px"
+                [style]="{'width': '98%'}"
+                [minLength]="1">
+                  <ng-template let-value pTemplate="selectedItem">
+                    <span>>{{value}}</span>
+                  </ng-template>
+                  <ng-template let-cid pTemplate="item">
+                    <span  style="font-size:12px;" >{{cid.nome}}</span>
+                    <span style="float: right;">{{cid.estado.nome}}</span>
+                  </ng-template>
+                </p-autoComplete>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell"></div>
+            <div class="cell centerText">
+                <button icon="pi pi-save" pButton type="button" label="Salvar"
+                class="ui-button-raised ui-button-success"
+                [disabled]="!fornecedorForm.valid" type="submit">
+            </button>
+            </div>
+        </div>
+    </div>
+</form>
