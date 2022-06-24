@@ -2,12 +2,16 @@
 <p-toast></p-toast>
 <p-tabView [activeIndex]="tabSelected" (onChange)="changeTab($event)">
     <p-tabPanel header="Consulta">
-        <app-despesa-grid 
-            [teste]="testedespesagrid">
-        </app-despesa-grid>
+        <app-despesa-grid [tiposDespesaFilter]="tiposDespesa"
+            [formasPagamentoFilter]="formasPagamento"
+            [fornecedoresFilter]="fornecedores"
+            [loading]="loading"></app-despesa-grid>
     </p-tabPanel>
     <p-tabPanel header="Casdastro">
-        <app-despesa-form></app-despesa-form>
+        <app-despesa-form [tiposDespesa]="tiposDespesa"
+        [formasPagamento]="formasPagamento"
+        [fornecedores]="fornecedores"
+        [loading]="loading"></app-despesa-form>
     </p-tabPanel>
     <p-tabPanel header="Gráficos">
         Content 3

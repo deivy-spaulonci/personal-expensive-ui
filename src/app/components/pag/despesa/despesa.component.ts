@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { FormaPagamento } from 'src/app/model/forma-pagamento';
+import { Fornecedor } from 'src/app/model/fornecedor';
+import { TipoDespesa } from 'src/app/model/tipo-despesa';
 import { DefaultService } from 'src/app/service/default.service';
-import { DespesaGridComponent } from './despesa-grid/despesa-grid.component';
 
 @Component({
   selector: 'app-despesa',
@@ -11,19 +13,32 @@ import { DespesaGridComponent } from './despesa-grid/despesa-grid.component';
 })
 export class DespesaComponent implements OnInit {
 
+  loading: boolean = false;
+
   data: any;
-  tabSelected: any;
+  tabSelected: number = 0;
 
-  testedespesagrid!: DespesaGridComponent;
-
+  tiposDespesa: TipoDespesa[] = [];
+  formasPagamento: FormaPagamento[] = [];
+  fornecedores: Fornecedor[] = [];  
+  
   constructor(private defaultService: DefaultService) { }
 
   ngOnInit(): void {
 
-    this.defaultService.get('forma-pagamento').subscribe(formas => {
-      this.testedespesagrid.formasPagamento = formas;
-    });
+    this.loading = true;
     
+    this.defaultService.get('tipo-despesa').subscribe(tipos => {
+      this.tiposDespesa = tipos;
+      this.defaultService.get('fornecedor').subscribe(fornecedores => {
+        this.fornecedores = fornecedores;
+        this.defaultService.get('forma-pagamento').subscribe(formas => {
+          this.formasPagamento = formas;
+          this.loading = false;
+        });
+      });
+    });
+  
 
     this.data = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

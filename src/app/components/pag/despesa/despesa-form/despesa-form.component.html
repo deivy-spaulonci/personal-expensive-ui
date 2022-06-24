@@ -1,8 +1,7 @@
 <div class="table">
     <div class="row">
-        <div class="cell">
-            <!-- (ngSubmit)="onSubmit(despesaForm.value, dt)" -->
-            <form [formGroup]="despesaForm">
+        <div class="cell">            
+            <form [formGroup]="despesaForm" (ngSubmit)="onSubmit(despesaForm.value)">
                 <div class="table">
                     <div class="row">
                         <div class="cell">Tipo Despesa: </div>
@@ -59,13 +58,13 @@
                         <div class="cell">Forma Pagamento: </div>
                         <div class="cell">
                             <combo-tipo [formGrp]="despesaForm"
-                            [formCtr]="comboFormaPagamento"
-                            (inputValueChange)="despesaCadastro.formaPagamento = $event"
-                            [modelNg]="despesaCadastro.formaPagamento"
-                            [arrValues]="formasPagamento"
-                            [optLabel]="'nome'"
-                            #inputFormaPagamento>
-                        </combo-tipo>
+                                [formCtr]="comboFormaPagamento"
+                                (inputValueChange)="despesaCadastro.formaPagamento = $event"
+                                [modelNg]="despesaCadastro.formaPagamento"
+                                [arrValues]="formasPagamento"
+                                [optLabel]="'nome'"
+                                #inputFormaPagamento>
+                            </combo-tipo>
                         </div>
                     </div>
                     <div class="row">

@@ -43,7 +43,8 @@
                 <column-filter-id></column-filter-id>
             </th>
             <th>
-                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'tipoDespesa'" [arrValues]="tiposDespesa">
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'tipoDespesa'" 
+                [arrValues]="tiposDespesaFilter">
                 </column-filter-tipo>
             </th>
             <th class="columnDate">
@@ -51,11 +52,13 @@
                 </column-filter-range-dates>
             </th>
             <th>
-                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'fornecedor.id'" [arrValues]="fornecedores">
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'fornecedor.id'" 
+                [arrValues]="fornecedoresFilter">
                 </column-filter-tipo>
             </th>
             <th>
-                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'formaPagamento'" [arrValues]="formasPagamento">
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'formaPagamento'" 
+                [arrValues]="formasPagamentoFilter">
                 </column-filter-tipo>
             </th>
             <th class="columnValor"></th>

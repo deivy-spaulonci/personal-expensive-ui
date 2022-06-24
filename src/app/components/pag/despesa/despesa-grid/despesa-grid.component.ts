@@ -14,7 +14,9 @@ import { Util } from 'src/app/util/util';
 })
 export class DespesaGridComponent implements OnInit {
 
-  loading: boolean = false;
+  @Input() loading: boolean = false;
+  @Input() tabSelected: number = 0;
+
   pageNumber = 0;
   pageSize = 10;
   totalElements = 0;
@@ -23,51 +25,36 @@ export class DespesaGridComponent implements OnInit {
   totalValor!: number;
   despesaSelecionada!: Despesa;
 
-  tiposDespesa: TipoDespesa[] = [];
-  formasPagamento: FormaPagamento[] = [];
-  fornecedores: Fornecedor[] = [];
+  @Input() tiposDespesaFilter: TipoDespesa[] = [];
+  @Input() formasPagamentoFilter: FormaPagamento[] = [];
+  @Input() fornecedoresFilter: Fornecedor[] = [];
+
   despesas: Despesa[] = [];
 
-  @Input() teste!: DespesaGridComponent;
-  
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService) {
-    }
-    
-    ngOnInit(): void {
-      
-      //this.loading = true;
-      
-      // this.defaultService.get('tipo-despesa').subscribe(tipos => {
-      //   this.tiposDespesa = tipos;
-      //   this.defaultService.get('fornecedor').subscribe(fornecedores => {
-      //     this.fornecedores = fornecedores;
-      //     this.defaultService.get('forma-pagamento').subscribe(formas => {
-      //       this.formasPagamento = formas;
-      //       this.loading = false;
-      //     });
-      //   });
-      // });
-      this.teste = this;
-   
-    }
-    
-  excluirDespesa(despesa:any){
+  }
+
+  ngOnInit(): void {
+  }
+
+  excluirDespesa(despesa: any) {
     this.confirmationService.confirm({
       accept: () => {
         this.defaultService
           .delete('despesa', despesa.id)
-          .subscribe(resultado =>{
+          .subscribe(resultado => {
             this.despesas = this.despesas.filter(val => val.id !== despesa.id);
-            this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Despesa excluída'});
-        });
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Despesa excluída' });
+          });
       }
     });
   }
 
   onEditSave(despesa: any) {
-    // this.tabSelected = 1;
+    this.tabSelected = 1;
+    
     // this.despesaCadastro = Object.assign({}, despesa);
     // this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)
     // if(this.despesaCadastro.valor.toString().length==2){
@@ -82,7 +69,7 @@ export class DespesaGridComponent implements OnInit {
 
     if (event.filters) {
       let filtros = event.filters;
-      if (filtros?.['id'] && filtros?.['id'].value!=null) {
+      if (filtros?.['id'] && filtros?.['id'].value != null) {
         urlfiltros += '&id=' + filtros?.['id'].value;
       }
       if (filtros?.['tipoDespesa'] && filtros?.['tipoDespesa'].value) {
@@ -91,7 +78,7 @@ export class DespesaGridComponent implements OnInit {
       if (filtros?.['fornecedor.id'] && filtros?.['fornecedor.id'].value) {
         urlfiltros += '&fornecedor.id=' + filtros?.['fornecedor.id'].value;
       }
-      if(filtros?.['periodo']){
+      if (filtros?.['periodo']) {
         if (filtros?.['periodo'].value && filtros?.['periodo'].value[0]) {
           urlfiltros += '&dataInicial=' + filtros?.['periodo'].value[0].toISOString().split('T')[0];
         }
@@ -107,8 +94,8 @@ export class DespesaGridComponent implements OnInit {
     event.rows = (event.rows ? event.rows : this.pageSize);
     event.sortField = (event.sortField ? event.sortField : 'data');
 
-    if (event.first!=undefined)
-      this.pageNumber = (event.first + event.rows) / event.rows -1;
+    if (event.first != undefined)
+      this.pageNumber = (event.first + event.rows) / event.rows - 1;
 
     const url: string = 'despesa/page?page=' + this.pageNumber
       + '&size=' + event.rows

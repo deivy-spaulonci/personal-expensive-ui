@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -18,7 +18,7 @@ import { Util } from 'src/app/util/util';
 })
 export class DespesaFormComponent implements OnInit {
 
-  loading: boolean = false;
+  @Input() loading: boolean = false;
   util: Util = new Util();
 
   despesaCadastro!: any;
@@ -26,10 +26,9 @@ export class DespesaFormComponent implements OnInit {
   informacaoExtra!: InformacaoExtra;  
   dayOfWeekend:string = '';
 
-  tiposDespesa: TipoDespesa[] = [];
-  formasPagamento: FormaPagamento[] = [];
-  fornecedores: Fornecedor[] = [];
-  despesas: Despesa[] = [];
+  @Input() tiposDespesa: TipoDespesa[] = [];
+  @Input() formasPagamento: FormaPagamento[] = [];
+  @Input() fornecedores: Fornecedor[] = [];  
   tiposInformacaoExtra: TipoInformacaoExtra[] = [];
 
   comboTipoDespesa = new FormControl('');
@@ -39,16 +38,13 @@ export class DespesaFormComponent implements OnInit {
 
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
     private fb: FormBuilder) {
       this.despesaCadastro = {} as Despesa;
       this.informacaoExtra = {} as InformacaoExtra;
       this.informacaoExtra.tipoInformacaoExtra = {} as TipoInformacaoExtra;
      }
 
-  ngOnInit(): void {
-    this.loading = true;
-
+  ngOnInit(): void {    
     this.despesaForm = this.fb.group({
       inputObservacao: '',
       comboFornecedor:''
@@ -70,7 +66,7 @@ export class DespesaFormComponent implements OnInit {
     }
   }
 
-  onSubmit(value: string, table:Table) {
+  onSubmit(value: string) {
     this.loading = true;
     this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
     this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
@@ -80,7 +76,7 @@ export class DespesaFormComponent implements OnInit {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso'});
         if(this.despesaCadastro.id){
           //this.tabSelected = 0;
-          table.filter(null, '', '');
+          //table.filter(null, '', '');
         }
         this.newDespesaCadastro();
         this.dayOfWeekend = '';
