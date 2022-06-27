@@ -1,0 +1,18 @@
+<p class="title-bar-1">Contas</p>
+<p-toast></p-toast>
+<p-tabView #tabConta
+    [(activeIndex)]="selectedTabIndex">
+    <p-tabPanel header="Consulta">
+       <app-conta-grid [tiposContaFilter]="tiposConta"
+        [formasPagamentoFilter]="formasPagamento"
+        [loading]="loading"
+        (indexTabChange)="setTabCadastro($event, tabConta)">
+       </app-conta-grid>
+    </p-tabPanel>
+    <p-tabPanel header="Casdastro">
+       <app-conta-form>
+
+       </app-conta-form>
+    </p-tabPanel>
+    <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+</p-tabView>

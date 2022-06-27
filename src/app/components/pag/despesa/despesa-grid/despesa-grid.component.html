@@ -1,19 +1,8 @@
-<p-table [value]="despesas" 
-    [loading]="loading" 
-    [lazy]="true" 
-    (onLazyLoad)="loadData($event)"
-    [rowsPerPageOptions]="[10,15,20,25,30,40]" 
-    [alwaysShowPaginator]="true" 
-    [paginator]="true"
-    [showCurrentPageReport]="true" 
-    [totalRecords]="totalElements" 
-    [rows]="pageSize" 
-    [sortOrder]="-1"
-    sortField="data"
-    currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" 
-    dataKey="id" #dt
-    selectionMode="single"
-    styleClass="p-datatable-striped p-datatable-sm"
+<p-table [value]="despesas" [loading]="loading" [lazy]="true" (onLazyLoad)="loadData($event)"
+    [rowsPerPageOptions]="[10,15,20,25,30,40]" [alwaysShowPaginator]="true" [paginator]="true"
+    [showCurrentPageReport]="true" [totalRecords]="totalElements" [rows]="pageSize" [sortOrder]="-1" sortField="data"
+    currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" dataKey="id" #dt
+    selectionMode="single" styleClass="p-datatable-striped p-datatable-sm"
     [(contextMenuSelection)]="despesaSelecionada">
     <ng-template pTemplate="header">
         <tr>
@@ -24,7 +13,7 @@
             <th pSortableColumn="tipoDespesa">Tipo Despesa
                 <p-sortIcon field="tipoDespesa"></p-sortIcon>
             </th>
-            <th pSortableColumn="data"class="columnDate">Data
+            <th pSortableColumn="data" class="columnDate">Data
                 <p-sortIcon field="data"></p-sortIcon>
             </th>
             <th pSortableColumn="fornecedor.nome">Fornecedor
@@ -43,8 +32,7 @@
                 <column-filter-id></column-filter-id>
             </th>
             <th>
-                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'tipoDespesa'" 
-                [arrValues]="tiposDespesaFilter">
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'tipoDespesa'" [arrValues]="tiposDespesaFilter">
                 </column-filter-tipo>
             </th>
             <th class="columnDate">
@@ -52,13 +40,12 @@
                 </column-filter-range-dates>
             </th>
             <th>
-                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'fornecedor.id'" 
-                [arrValues]="fornecedoresFilter">
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'fornecedor.id'" [arrValues]="fornecedoresFilter">
                 </column-filter-tipo>
             </th>
             <th>
-                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'formaPagamento'" 
-                [arrValues]="formasPagamentoFilter">
+                <column-filter-tipo [optLabel]="'nome'" [tipoColumn]="'formaPagamento'"
+                    [arrValues]="formasPagamentoFilter">
                 </column-filter-tipo>
             </th>
             <th class="columnValor"></th>
@@ -69,16 +56,16 @@
     <ng-template pTemplate="body" let-despesa let-expanded="expanded" let-ri="rowIndex">
         <tr>
             <td class="columnExpand">
-                <button type="button" pButton pRipple [pRowToggler]="despesa" 
-                *ngIf="despesa.obs || despesa.informacaoExtra.length>0"
-                class="p-button-text p-button-rounded p-button-plain p-button-sm smallBt" 
-                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                <button type="button" pButton pRipple [pRowToggler]="despesa"
+                    *ngIf="despesa.obs || despesa.informacaoExtra.length>0"
+                    class="p-button-text p-button-rounded p-button-plain p-button-sm smallBt"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                 </button>
             </td>
             <td class="columnId">{{despesa.id}}</td>
             <td>{{despesa.tipoDespesa.nome}}</td>
             <td class="columnDate">{{despesa.data | date:'dd/MM/yyyy'}}</td>
-            <td>{{despesa.fornecedor.nome}}</td>                    
+            <td>{{despesa.fornecedor.nome}}</td>
             <td>{{despesa.formaPagamento.nome}}</td>
             <td class="columnValor">{{despesa.valor | currency:'BRL':true:'1.2-2'}}</td>
             <td class="columnActionBt">

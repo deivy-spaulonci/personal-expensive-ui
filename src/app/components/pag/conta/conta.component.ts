@@ -1,34 +1,51 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TabView } from 'primeng/tabview';
+import { FormaPagamento } from 'src/app/model/forma-pagamento';
 import { Fornecedor } from 'src/app/model/fornecedor';
+import { LancamentoContaCartao } from 'src/app/model/lancamento-conta-cartao';
+import { TipoConta } from 'src/app/model/tipo-conta';
 import { DefaultService } from 'src/app/service/default.service';
 
 @Component({
-  selector: 'app-fornecedor',
-  templateUrl: './fornecedor.component.html',
-  styleUrls: ['./fornecedor.component.css'],
+  selector: 'app-conta',
+  templateUrl: './conta.component.html',
+  styleUrls: ['./conta.component.css'],
   providers: [MessageService, ConfirmationService]
 })
-export class FornecedorComponent implements OnInit {
+export class ContaComponent implements OnInit {
 
   loading: boolean = false;
   selectedTabIndex = 0;
 
-  fornecedorEdicao!: any;
+  tiposConta: TipoConta[] = [];
+  formasPagamento: FormaPagamento[] = [];
+  lancamentosContaCartao: LancamentoContaCartao[] = [];
+  fornecedores: Fornecedor[] = [];
 
   constructor(private cdref: ChangeDetectorRef,
     private defaultService: DefaultService) { }
 
   ngOnInit(): void {
-    this.fornecedorEdicao = {} as Fornecedor;
+    this.loading = true;
+
+    this.defaultService.get('tipo-conta').subscribe(tipos => {
+      this.tiposConta = tipos;
+      this.defaultService.get('forma-pagamento').subscribe(formas => {
+        this.formasPagamento = formas;
+        this.defaultService.get('fornecedor').subscribe(fornecedores => {
+          this.fornecedores = fornecedores;
+          this.loading = false;
+        });
+      });
+    });
   }
 
-  ngAfterContentChecked() {
-    this.cdref.detectChanges();
-  }
+  // ngAfterContentChecked() {
+  //   this.cdref.detectChanges();
+  // }
 
-  setTabCadastro(fornecedor: any, tab: TabView) {
+  setTabCadastro(despesa: any, tab: TabView) {
     // if (despesa) {
     //   this.despesaEdicao = despesa;
     //   tab.activeIndex = 1;

@@ -45,7 +45,6 @@ import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {ChartModule} from 'primeng/chart';
 
 import {HomeComponent} from './comp/home/home.component';
-import { ContaComponent } from './comp/conta/conta.component';
 import { CnpjPipe } from './pipe/cnpj.pipe';
 import { CepPipe } from './pipe/cep.pipe';
 import { TelefonePipe } from './pipe/telefone.pipe';
@@ -63,12 +62,14 @@ import { DespesaChartComponent } from './components/pag/despesa/despesa-chart/de
 import { FornecedorFormComponent } from './components/pag/fornecedor/fornecedor-form/fornecedor-form.component';
 import { FornecedorGridComponent } from './components/pag/fornecedor/fornecedor-grid/fornecedor-grid.component';
 import { FornecedorComponent } from './components/pag/fornecedor/fornecedor.component';
+import { ContaGridComponent } from './components/pag/conta/conta-grid/conta-grid.component';
+import { ContaFormComponent } from './components/pag/conta/conta-form/conta-form.component';
+import { ContaComponent } from './components/pag/conta/conta.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    ContaComponent,
     CnpjPipe,
     CepPipe,
     TelefonePipe,
@@ -85,7 +86,10 @@ import { FornecedorComponent } from './components/pag/fornecedor/fornecedor.comp
     DespesaChartComponent,
     FornecedorComponent,
     FornecedorFormComponent,
-    FornecedorGridComponent
+    FornecedorGridComponent,
+    ContaComponent,
+    ContaGridComponent,
+    ContaFormComponent
   ],
   imports: [
     BrowserModule,

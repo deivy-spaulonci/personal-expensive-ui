@@ -1,0 +1,206 @@
+<div class="table">
+    <div class="row">
+        <div class="cell">
+            <form [formGroup]="contaForm" (ngSubmit)="onSubmit()">
+                <div class="table">
+                    <div class="row">
+                        <div class="cell">Código de Barras: </div>
+                        <div class="cell">
+                            <p-inputMask mask="99999999999999999999999999999999999999999999999"
+                            [(ngModel)]="contaCadastro.codigoBarra"
+                            formControlName="inputCodigoBarra"
+                            #inputCodigoBarra
+                            [maxlength]="48" [size]="55" [autoClear]="true" slotChar="*">
+                            </p-inputMask>
+                            <p-message severity="error" text="Código de Barras obrigatória"
+                                        *ngIf="!contaForm.controls['inputCodigoBarra'].valid
+                                        && contaForm.controls['inputCodigoBarra'].dirty">
+                            </p-message>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Número: </div>
+                        <div class="cell">
+                            <input type="text" pInputText [size]="30" 
+                            [(ngModel)]="contaCadastro.numero"
+                            formControlName="inputNumero"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Tipo Conta: </div>
+                        <div class="cell">
+                            <combo-tipo [formGrp]="contaForm"
+                                [formCtr]="comboTipoConta"
+                                (inputValueChange)="contaCadastro.tipoConta = $event"
+                                [modelNg]="contaCadastro.tipoConta"
+                                [arrValues]="tiposConta"
+                                [optLabel]="'nome'"
+                                #inputTipoConta>
+                            </combo-tipo>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Emissão: </div>
+                        <div class="cell">
+                            <input-data [formGroup]="contaForm"
+                                [formCtr]="inputEmissao"
+                                (inputValueChange)="contaCadastro.emissao = $event"
+                                [modelNg]="contaCadastro.emissao">
+                            </input-data>
+                            Vencimento: 
+                            <input-data [formGroup]="contaForm"
+                                [formCtr]="inputVencimento"
+                                (inputValueChange)="contaCadastro.vencimento = $event"
+                                [modelNg]="contaCadastro.vencimento">
+                            </input-data>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Parcelas: </div>
+                        <div class="cell">
+                            <p-inputMask mask="99" [autoClear]="false"
+                                            [style]="{'max-width': '60px'}"
+                                            [(ngModel)]="contaCadastro.parcela"
+                                            formControlName="inputParcela"
+                                            slotChar="">
+                            </p-inputMask> /
+                            <p-inputMask mask="99" [autoClear]="false"
+                                            [style]="{'max-width': '60px'}"
+                                            [(ngModel)]="contaCadastro.totalParcela"
+                                            formControlName="inputTotalParcela"
+                                            slotChar="">
+                            </p-inputMask>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Valor: </div>
+                        <div class="cell">
+                            <input-money [formGroup]="contaForm"
+                                [formCtr]="inputValor"
+                                (inputValueChange)="contaCadastro.valor = $event"
+                                [modelNg]="contaCadastro.valor">
+                            </input-money>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Obs: </div>
+                        <div class="cell">
+                            <input type="text" pInputText
+                            [(ngModel)]="contaCadastro.obs"
+                            formControlName="inputObservacao"
+                            size="48"/>
+                        </div>
+                    </div>
+                </div>
+                <p-divider>Pagamento</p-divider>
+                <div class="table">
+                    <div class="row">
+                        <div class="cell">Data Pagamento: </div>
+                        <div class="cell">
+                            <input-data [formGroup]="contaForm"
+                                [formCtr]="inputDataPagamento"
+                                (inputValueChange)="contaCadastro.dataPagamento = $event"
+                                [modelNg]="contaCadastro.dataPagamento">
+                            </input-data>
+                        </div>
+                        <div class="cell">Forma Pagamento: </div>
+                        <div class="cell">
+                            <combo-tipo [formGrp]="contaForm"
+                                [formCtr]="comboFormaPagamento"
+                                (inputValueChange)="contaCadastro.formaPagamento = $event"
+                                [modelNg]="contaCadastro.formaPagamento"
+                                [arrValues]="formasPagamento"
+                                [optLabel]="'nome'"
+                                #inputFormaPagamento>
+                            </combo-tipo>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Valor Pago: </div>
+                        <div class="cell">
+                            <input-money [formGroup]="contaForm"
+                                [formCtr]="inputValorPago"
+                                (inputValueChange)="contaCadastro.valorPago = $event"
+                                [modelNg]="contaCadastro.valorPago">
+                            </input-money>
+                        </div>
+                    </div>
+                </div> 
+                <div class="centerText">
+                    <button icon="pi pi-save" pButton type="button" label="Salvar"
+                        class="ui-button-raised ui-button-success"
+                        [disabled]="!contaForm.valid" type="submit" 
+                        (click)="inputCodigoBarra.focus()">
+                    </button>
+                </div>
+            </form> 
+        </div>
+        <div class="cell" 
+            *ngIf="contaCadastro.tipoConta && contaCadastro.tipoConta.contaCartao">
+            <p-divider layout="vertical"></p-divider>
+        </div>  
+        <div class="cell" 
+            *ngIf="contaCadastro.tipoConta && contaCadastro.tipoConta.contaCartao">
+
+            <div class="table">
+                <div class="row">
+                    <div class="cell">
+                        <p-divider>Lançamento conta cartão</p-divider>
+                    </div>
+                </div>                        
+
+                <div class="row">
+                    <div class="cell">
+                        
+                        Data:
+                        <input-data [width]="'70px'"
+                            (inputValueChange)="lancamentoContaCartaoCadastro.data = $event"
+                            [modelNg]="lancamentoContaCartaoCadastro.data">
+                        </input-data>
+                        Valor: 
+                        <input-money 
+                            (inputValueChange)="lancamentoContaCartaoCadastro.valor = $event"
+                            [modelNg]="lancamentoContaCartaoCadastro.valor">
+                        </input-money>
+                        Parcelas:
+                        <p-inputMask mask="99" [autoClear]="false"
+                            [style]="{'width':'50px'}"
+                            [(ngModel)]="lancamentoContaCartaoCadastro.parcela"
+                            slotChar="">
+                        </p-inputMask>
+                        /
+                        <p-inputMask mask="990" [autoClear]="false"
+                            [style]="{'width':'50px'}"
+                            [(ngModel)]="lancamentoContaCartaoCadastro.totalParcela"
+                            slotChar="">
+                        </p-inputMask>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="cell">
+                        Fornecedor:
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="cell">
+                        
+
+                        <combo-tipo
+                            (inputValueChange)="lancamentoContaCartaoCadastro.fornecedor = $event"
+                            [modelNg]="lancamentoContaCartaoCadastro.fornecedor"
+                            [arrValues]="formasPagamento"
+                            [optLabel]="'nome'">
+                        </combo-tipo>
+
+                        <button type="button" pButton pRipple>
+                            <i class="pi pi-plus"></i>
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+                    
+        </div>
+    </div>
+</div>   
