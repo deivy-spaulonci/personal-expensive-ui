@@ -1,7 +1,7 @@
 <div class="table">
     <div class="row">
         <div class="cell">
-            <form [formGroup]="contaForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="contaForm" (ngSubmit)="onSubmit(contaForm.value)">
                 <div class="table">
                     <div class="row">
                         <div class="cell">Código de Barras: </div>

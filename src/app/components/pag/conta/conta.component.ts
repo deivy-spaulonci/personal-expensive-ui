@@ -50,12 +50,12 @@ export class ContaComponent implements OnInit {
     });
   }
 
-  // ngAfterContentChecked() {
-  //   this.cdref.detectChanges();
-  // }
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
+
 
   setTabCadastro(conta: any, tab: TabView) {
-
     this.contaEdicao = {} as Conta;
     this.contaEdicao.id = conta ? conta.id : null;
     this.contaEdicao.codigoBarra = conta ? conta.codigoBarra : '';
@@ -79,7 +79,7 @@ export class ContaComponent implements OnInit {
     
     tab.activeIndex = conta ? 1 : 0;
     this.selectedTabIndex = conta ? 1 : 0;
-    tab.tabs[1].selected = conta ? true : false;
+    //tab.tabs[1].selected = conta ? true : false;
   }
 
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -41,16 +41,11 @@ export class ContaFormComponent implements OnInit {
 
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
-    private cdref: ChangeDetectorRef,
     private fb: FormBuilder) {
     this.contaCadastro ={} as Conta;
     this.contaCadastro.tipoCona = {} as TipoConta;
     this.lancamentoContaCartaoCadastro = {} as LancamentoContaCartao;
   }
-
-  ngAfterContentChecked() {
-    this.cdref.detectChanges();
-}
 
   ngOnInit(): void {
     this.contaForm = this.fb.group({
@@ -77,7 +72,7 @@ export class ContaFormComponent implements OnInit {
     return conta;
   }
   
-  onSubmit() {
+  onSubmit(value: string) {
     this.loading = true;
     
     this.contaCadastro = this.transformConta(this.contaCadastro);
