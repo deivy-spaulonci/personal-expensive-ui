@@ -22,6 +22,7 @@ export class InputMoneyComponent{
   }
 
   formatEvent($event: KeyboardEvent) {
+
     const element = ( $event.target as HTMLInputElement);
     var v = element.value.replace(/\D/g, '');
     v = (Number(v) / 100).toFixed(2) + '';
@@ -30,7 +31,12 @@ export class InputMoneyComponent{
     v = v.replace(/(\d)(\d{3}),/g, '$1.$2,');
     element.value =  v.toString();
     
-    // const money =  new Intl.NumberFormat('pt-BR',   { style:'currency', currency: 'R$ ' });
+    //this.modelNg = Number(element.value.replace('.', '').replace(',', '.'));
+
+    console.log(this.modelNg);
+    //const money =  new Intl.NumberFormat('pt-BR',   { style:'currency', currency: 'R$ ' });
+    //console.log();
+    
     // element.value = money.format(Number(v)).toString();
     //this.modelNg = Number(element.value.replace('.', '').replace(',', '.'));;
     //this.modelNg = new Number(v.toString());

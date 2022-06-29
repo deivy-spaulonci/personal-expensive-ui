@@ -7,7 +7,7 @@ import {catchError, Observable, retry, throwError} from "rxjs";
 })
 export class DefaultService {
 
-  urlbase = 'http://10.10.10.36:8080/api/v1/';
+  urlbase = 'http://10.10.10.37:8080/api/v1/';
   // Headers
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})

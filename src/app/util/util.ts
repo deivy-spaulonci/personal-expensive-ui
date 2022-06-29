@@ -12,6 +12,17 @@ export class Util {
         
       // }
 
+      ajustCurrencyForBase(valor:any){
+        if(valor.toString().indexOf(',') != -1){
+          valor = this.formatMoedaToFloat(valor);
+        }else if(valor.toString().indexOf('.') != -1){
+          valor = valor;
+        }else{
+          valor = valor/100;
+        }
+        return valor;
+      }
+
       transformDates(data:String){
         if(data){
           if(data.indexOf("-") == -1){//data br            
