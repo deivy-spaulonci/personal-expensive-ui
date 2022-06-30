@@ -19,6 +19,6 @@ export interface Conta {
     cancelado:boolean;
     idCancelamento:number;
     obs:string;
-    lancamentoContaCartao:LancamentoContaCartao;
+    lancamentoContaCartao:LancamentoContaCartao[];
     status:string;
 }

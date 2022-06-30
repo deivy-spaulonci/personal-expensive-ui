@@ -8,6 +8,7 @@ import { Fornecedor } from 'src/app/model/fornecedor';
 import { TipoDespesa } from 'src/app/model/tipo-despesa';
 import { TipoInformacaoExtra } from 'src/app/model/tipo-informacao-extra';
 import { DefaultService } from 'src/app/service/default.service';
+import { ContaComponent } from '../conta/conta.component';
 
 @Component({
   selector: 'app-despesa',
@@ -24,7 +25,7 @@ export class DespesaComponent implements OnInit {
   fornecedores: Fornecedor[] = [];
   tiposInformacaoExtra: TipoInformacaoExtra[] = [];
 
-  despesaEdicao!: any;
+  despesaEdtion!: any;
 
   constructor(private cdref: ChangeDetectorRef,
     private defaultService: DefaultService) { }
@@ -32,7 +33,7 @@ export class DespesaComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
-    this.despesaEdicao = {} as Despesa;
+    this.despesaEdtion = {} as Despesa;
 
     this.defaultService.get('tipo-despesa').subscribe(tipos => {
       this.tiposDespesa = tipos;
@@ -54,21 +55,18 @@ export class DespesaComponent implements OnInit {
   }
 
   setTabCadastro(despesa: any, tab: TabView) {
-    if (despesa) {
-      this.despesaEdicao = despesa;
-      tab.activeIndex = 1;
-      this.selectedTabIndex = 1;
-      tab.tabs[1].selected = true;
-    } else {
-      this.despesaEdicao = {};
-      this.despesaEdicao.tipoDespesa = this.tiposDespesa[0];
-      this.despesaEdicao.data = ''
-      this.despesaEdicao.fornecedor = this.fornecedores[0];
-      this.despesaEdicao.formaPagamento = this.formasPagamento[0];
-      this.despesaEdicao.valor = '0,00';
+    this.despesaEdtion = {} as Despesa;
+    this.despesaEdtion.id = despesa ? despesa.id : null ;
+    this.despesaEdtion.tipoDespesa = despesa ? despesa.tipoDespesa : this.tiposDespesa[0];
+    this.despesaEdtion.data = despesa ? despesa.data : '';
+    this.despesaEdtion.fornecedor = despesa ? despesa.fornecedor : this.fornecedores[0];
+    this.despesaEdtion.formaPagamento = despesa ? despesa.formaPagamento : this.formasPagamento[0];
+    this.despesaEdtion.valor = despesa ? despesa.valor : '0,00';
+    this.despesaEdtion.obs = despesa ? despesa.obs : '';
+    this.despesaEdtion.informacaoExtra = despesa ? despesa.informacaoExtra : [];
 
-      tab.activeIndex = 0;
-    }
+    tab.activeIndex = despesa ? 1 : 0;
+    this.selectedTabIndex = despesa ? 1 : 0;
   }
 
 }

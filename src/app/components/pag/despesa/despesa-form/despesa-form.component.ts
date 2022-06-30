@@ -9,6 +9,7 @@ import { TipoDespesa } from 'src/app/model/tipo-despesa';
 import { TipoInformacaoExtra } from 'src/app/model/tipo-informacao-extra';
 import { DefaultService } from 'src/app/service/default.service';
 import { Util } from 'src/app/util/util';
+import { Validation } from 'src/app/util/validation';
 
 @Component({
   selector: 'app-despesa-form',
@@ -19,8 +20,9 @@ export class DespesaFormComponent implements OnInit {
 
   @Input() loading: boolean = false;
   util: Util = new Util();
+  validation: Validation = new Validation();
 
-  @Input() despesaCadastro!: any;
+  @Input() despesaRegistration!: any;
   despesaForm!: FormGroup;
   informacaoExtra!: InformacaoExtra;
   dayOfWeekend: string = '';
@@ -40,7 +42,7 @@ export class DespesaFormComponent implements OnInit {
   constructor(private defaultService: DefaultService,
     private messageService: MessageService,
     private fb: FormBuilder) {
-    this.despesaCadastro = {} as Despesa;
+    this.despesaRegistration = {} as Despesa;
     this.informacaoExtra = {} as InformacaoExtra;
     this.informacaoExtra.tipoInformacaoExtra = {} as TipoInformacaoExtra;
   }
@@ -54,42 +56,46 @@ export class DespesaFormComponent implements OnInit {
 
   addInformacaoExtra(event: any) {
     if (this.informacaoExtra.numero) {
-      if (this.despesaCadastro.informacaoExtra == null) {
-        this.despesaCadastro.informacaoExtra = [];
+      if (this.despesaRegistration.informacaoExtra == null) {
+        this.despesaRegistration.informacaoExtra = [];
       }
-      this.despesaCadastro.informacaoExtra.push(Object.assign({}, this.informacaoExtra));
+      this.despesaRegistration.informacaoExtra.push(Object.assign({}, this.informacaoExtra));
       this.informacaoExtra.numero = '';
     } else {
       this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Número da Informação Extra Inválido!' });
     }
   }
 
-  onSubmit(value: string) {
+  onSubmitForm(value: string) {
     this.loading = true;
-    this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data);
-    this.despesaCadastro.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaCadastro.valor.toString()));
+    this.despesaRegistration.data = this.util.transformDates(this.despesaRegistration.data);
+    this.despesaRegistration.valor = this.util.formatMoedaToFloat(this.util.formatFloatToReal(this.despesaRegistration.valor.toString()));
     
-    this.defaultService.save('despesa', this.despesaCadastro).subscribe(resultado => {
-      this.loading = false;
-      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso' });
-      if (this.despesaCadastro.id) {
-        this.submitFormEmmit.emit(null);
-      }
-      this.newDespesaCadastro();
-      this.dayOfWeekend = '';
-    });
+    if(!this.validation.dateIsValid(this.despesaRegistration)){
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Data inválida!' });
+    }else{   
+      this.defaultService.save('despesa', this.despesaRegistration).subscribe(resultado => {
+        this.loading = false;
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Despesa salva com sucesso' });
+        if (this.despesaRegistration.id) {
+          this.submitFormEmmit.emit(null);
+        }
+        this.cleanDespesaRegistration();
+        this.dayOfWeekend = '';
+      });
+    }
   }
 
-  newDespesaCadastro() {
-    this.despesaCadastro.valor = 0;
-    this.despesaCadastro.data = '';
-    this.despesaCadastro.informacaoExtra = [];
+  cleanDespesaRegistration() {
+    this.despesaRegistration.valor = 0;
+    this.despesaRegistration.data = '';
+    this.despesaRegistration.informacaoExtra = [];
     this.informacaoExtra = {} as InformacaoExtra;
     this.dayOfWeekend = '';
   }
 
   showDayOfWeekend() {
-    let data: Date = new Date(this.util.transformDates(this.despesaCadastro.data));
+    let data: Date = new Date(this.util.transformDates(this.despesaRegistration.data));
     data.setDate(data.getDate() + 1);
     switch (data.getDay()) {
       case 0: this.dayOfWeekend = 'Domingo'; break;
@@ -102,12 +108,12 @@ export class DespesaFormComponent implements OnInit {
     }
   }
 
-  consultaAjudaCusto() {
-    let data: Date = new Date(this.util.transformDates(this.despesaCadastro.data));
+  checkHelpCusts() {
+    let data: Date = new Date(this.util.transformDates(this.despesaRegistration.data));
     data.setDate(data.getDate() + 1);
     if (data.getDay() > 0 && data.getDay() < 4) {
-      let valorTipoDespesa = this.despesaCadastro.tipoDespesa.value;
-      let valorFormaPagamento = this.despesaCadastro.formaPagamento.value;
+      let valorTipoDespesa = this.despesaRegistration.tipoDespesa.value;
+      let valorFormaPagamento = this.despesaRegistration.formaPagamento.value;
       if (valorTipoDespesa == "ALIMENTACAO"
         || valorTipoDespesa == "COMBUSTIVEL"
         || valorTipoDespesa == "HARDWARE_PC"

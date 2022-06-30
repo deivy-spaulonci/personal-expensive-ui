@@ -20,8 +20,8 @@ export class ContaGridComponent implements OnInit {
   totalElements = 0;
   util: Util = new Util();
 
-  totalValor!: number;
-  contaSelecionada!: Conta;
+  valorTotal!: number;
+  contaSelected!: Conta;
 
   @Input() tiposContaFilter: TipoConta[] = [];
   @Input() formasPagamentoFilter: FormaPagamento[] = [];
@@ -37,7 +37,7 @@ export class ContaGridComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  excluirConta(conta: any) {
+  confirmDeleteConta(conta: any) {
     this.confirmationService.confirm({
       accept: () => {
         this.defaultService
@@ -52,51 +52,36 @@ export class ContaGridComponent implements OnInit {
 
   onEditSave(conta: Conta) {
     this.indexTabChange.emit(conta);
-    
-    // this.despesaCadastro = Object.assign({}, despesa);
-    // this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)
-    // if(this.despesaCadastro.valor.toString().length==2){
-    //   this.despesaCadastro.valor = this.util.formatFloatToReal(this.despesaCadastro.valor.toString()+'00');
-    // }
   }
-
-  // onEditSave(conta: any) {
-  //   this.tabSelected = 1;
-  //   this.contaCadastro = Object.assign({}, conta);
-  //   conta = this.transformConta(conta);
-  //   if(conta.valor.toString().length==2){
-  //     conta.valor = this.util.formatFloatToReal(conta.valor.toString()+'00');
-  //   }
-  // }
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
 
-    let urlfiltros: string = '';
+    let apiFilters: string = '';
 
     if (event.filters) {
-      let filtros = event.filters;
-      if (filtros?.['id'] && filtros?.['id'].value!=null) {
-        urlfiltros += '&id=' + filtros?.['id'].value;
+      let filters = event.filters;
+      if (filters?.['id'] && filters?.['id'].value!=null) {
+        apiFilters += '&id=' + filters?.['id'].value;
       }
 
-      if (filtros?.['tipoConta'] && filtros?.['tipoConta'].value) {
-        urlfiltros += '&tipoConta.id=' + filtros?.['tipoConta'].value;
+      if (filters?.['tipoConta'] && filters?.['tipoConta'].value) {
+        apiFilters += '&tipoConta.id=' + filters?.['tipoConta'].value;
       }
-      if(filtros?.['periodoVencimento']){
-        if (filtros?.['periodoVencimento'].value && filtros?.['periodoVencimento'].value[0]) {
-          urlfiltros += '&vencimentoInicial=' + filtros?.['periodoVencimento'].value[0].toISOString().split('T')[0];
+      if(filters?.['periodoVencimento']){
+        if (filters?.['periodoVencimento'].value && filters?.['periodoVencimento'].value[0]) {
+          apiFilters += '&vencimentoInicial=' + filters?.['periodoVencimento'].value[0].toISOString().split('T')[0];
         }
-        if (filtros?.['periodoVencimento'].value && filtros?.['periodoVencimento'].value[1]) {
-          urlfiltros += '&vencimentoFinal=' + filtros?.['periodoVencimento'].value[1].toISOString().split('T')[0];
+        if (filters?.['periodoVencimento'].value && filters?.['periodoVencimento'].value[1]) {
+          apiFilters += '&vencimentoFinal=' + filters?.['periodoVencimento'].value[1].toISOString().split('T')[0];
         }
       }
-      if(filtros?.['periodoEmissao']){
-        if (filtros?.['periodoEmissao'].value && filtros?.['periodoEmissao'].value[0]) {
-          urlfiltros += '&emissaoInicial=' + filtros?.['periodoEmissao'].value[0].toISOString().split('T')[0];
+      if(filters?.['periodoEmissao']){
+        if (filters?.['periodoEmissao'].value && filters?.['periodoEmissao'].value[0]) {
+          apiFilters += '&emissaoInicial=' + filters?.['periodoEmissao'].value[0].toISOString().split('T')[0];
         }
-        if (filtros?.['periodoEmissao'].value && filtros?.['periodoEmissao'].value[1]) {
-          urlfiltros += '&emissaoFinal=' + filtros?.['periodoEmissao'].value[1].toISOString().split('T')[0];
+        if (filters?.['periodoEmissao'].value && filters?.['periodoEmissao'].value[1]) {
+          apiFilters += '&emissaoFinal=' + filters?.['periodoEmissao'].value[1].toISOString().split('T')[0];
         }
       }
     }
@@ -110,20 +95,20 @@ export class ContaGridComponent implements OnInit {
     const url: string = 'conta/page?page=' + this.pageNumber
       + '&size=' + event.rows
       + '&sort=' + event.sortField + ',' + (event.sortOrder == 1 ? 'asc' : 'desc')
-      + urlfiltros;
+      + apiFilters;
 
     this.defaultService.get(url).subscribe(resultado => {
       this.contas = resultado.content;
       this.totalElements = resultado.totalElements;
 
       this.loading = false;
-      this.defaultService.get('conta/valorTotal?' + urlfiltros).subscribe(somatotal => {
-        this.totalValor = somatotal;
+      this.defaultService.get('conta/valorTotal?' + apiFilters).subscribe(somatotal => {
+        this.valorTotal = somatotal;
       });
     });
   }
 
-  getBackgroundColorStatus(status:number):string{
+  getBackgroundColorContaStatus(status:number):string{
     switch(status){
       case -1: return '#FFCDD2';//atrasado
       case 0: return '#FFECB3';//vencimento hj

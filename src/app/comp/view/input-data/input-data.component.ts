@@ -12,6 +12,8 @@ export class InputDataComponent implements OnInit {
   @Input() formGrp!: FormGroup;
   @Input() formCtr!: FormControl;
   @Input() width: string = '100px';
+  @Input() placeHolder!: string;
+  @Input() formField: boolean = true;
   
   @Output() inputValueChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() inputBlur: EventEmitter<any> = new EventEmitter<any>();

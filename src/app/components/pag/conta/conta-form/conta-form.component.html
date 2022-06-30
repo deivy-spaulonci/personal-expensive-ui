@@ -1,13 +1,13 @@
 <div class="table">
     <div class="row">
         <div class="cell">
-            <form [formGroup]="contaForm" (ngSubmit)="onSubmit(contaForm.value)">
+            <form [formGroup]="contaForm" (ngSubmit)="onSubmitForm(contaForm.value)">
                 <div class="table">
                     <div class="row">
                         <div class="cell">Código de Barras: </div>
                         <div class="cell">
                             <p-inputMask mask="99999999999999999999999999999999999999999999999"
-                            [(ngModel)]="contaCadastro.codigoBarra"
+                            [(ngModel)]="contaRegistration.codigoBarra"
                             formControlName="inputCodigoBarra"
                             #inputCodigoBarra
                             [maxlength]="48" [size]="55" [autoClear]="true" slotChar="*">
@@ -22,7 +22,7 @@
                         <div class="cell">Número: </div>
                         <div class="cell">
                             <input type="text" pInputText [size]="30" 
-                            [(ngModel)]="contaCadastro.numero"
+                            [(ngModel)]="contaRegistration.numero"
                             formControlName="inputNumero"/>
                         </div>
                     </div>
@@ -31,8 +31,8 @@
                         <div class="cell">
                             <combo-tipo [formGrp]="contaForm"
                                 [formCtr]="comboTipoConta"
-                                (inputValueChange)="contaCadastro.tipoConta = $event"
-                                [modelNg]="contaCadastro.tipoConta"
+                                (inputValueChange)="contaRegistration.tipoConta = $event"
+                                [modelNg]="contaRegistration.tipoConta"
                                 [arrValues]="tiposConta"
                                 [optLabel]="'nome'"
                                 #inputTipoConta>
@@ -44,14 +44,14 @@
                         <div class="cell">
                             <input-data [formGroup]="contaForm"
                                 [formCtr]="inputEmissao"
-                                (inputValueChange)="contaCadastro.emissao = $event"
-                                [modelNg]="contaCadastro.emissao">
+                                (inputValueChange)="contaRegistration.emissao = $event"
+                                [modelNg]="contaRegistration.emissao">
                             </input-data>
                             Vencimento: 
                             <input-data [formGroup]="contaForm"
                                 [formCtr]="inputVencimento"
-                                (inputValueChange)="contaCadastro.vencimento = $event"
-                                [modelNg]="contaCadastro.vencimento">
+                                (inputValueChange)="contaRegistration.vencimento = $event"
+                                [modelNg]="contaRegistration.vencimento">
                             </input-data>
                         </div>
                     </div>
@@ -60,13 +60,13 @@
                         <div class="cell">
                             <p-inputMask mask="99" [autoClear]="false"
                                             [style]="{'max-width': '60px'}"
-                                            [(ngModel)]="contaCadastro.parcela"
+                                            [(ngModel)]="contaRegistration.parcela"
                                             formControlName="inputParcela"
                                             slotChar="">
                             </p-inputMask> /
                             <p-inputMask mask="99" [autoClear]="false"
                                             [style]="{'max-width': '60px'}"
-                                            [(ngModel)]="contaCadastro.totalParcela"
+                                            [(ngModel)]="contaRegistration.totalParcela"
                                             formControlName="inputTotalParcela"
                                             slotChar="">
                             </p-inputMask>
@@ -77,8 +77,8 @@
                         <div class="cell">
                             <input-money [formGroup]="contaForm"
                                 [formCtr]="inputValor"
-                                (inputValueChange)="contaCadastro.valor = $event"
-                                [modelNg]="contaCadastro.valor">
+                                (inputValueChange)="contaRegistration.valor = $event"
+                                [modelNg]="contaRegistration.valor">
                             </input-money>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                         <div class="cell">Obs: </div>
                         <div class="cell">
                             <input type="text" pInputText
-                            [(ngModel)]="contaCadastro.obs"
+                            [(ngModel)]="contaRegistration.obs"
                             formControlName="inputObservacao"
                             size="48"/>
                         </div>
@@ -99,16 +99,16 @@
                         <div class="cell">
                             <input-data [formGroup]="contaForm"
                                 [formCtr]="inputDataPagamento"
-                                (inputValueChange)="contaCadastro.dataPagamento = $event"
-                                [modelNg]="contaCadastro.dataPagamento">
+                                (inputValueChange)="contaRegistration.dataPagamento = $event"
+                                [modelNg]="contaRegistration.dataPagamento">
                             </input-data>
                         </div>
                         <div class="cell">Forma Pagamento: </div>
                         <div class="cell">
                             <combo-tipo [formGrp]="contaForm"
                                 [formCtr]="comboFormaPagamento"
-                                (inputValueChange)="contaCadastro.formaPagamento = $event"
-                                [modelNg]="contaCadastro.formaPagamento"
+                                (inputValueChange)="contaRegistration.formaPagamento = $event"
+                                [modelNg]="contaRegistration.formaPagamento"
                                 [arrValues]="formasPagamento"
                                 [optLabel]="'nome'"
                                 #inputFormaPagamento>
@@ -120,8 +120,8 @@
                         <div class="cell">
                             <input-money [formGroup]="contaForm"
                                 [formCtr]="inputValorPago"
-                                (inputValueChange)="contaCadastro.valorPago = $event"
-                                [modelNg]="contaCadastro.valorPago">
+                                (inputValueChange)="contaRegistration.valorPago = $event"
+                                [modelNg]="contaRegistration.valorPago">
                             </input-money>
                         </div>
                     </div>
@@ -136,11 +136,11 @@
             </form> 
         </div>
         <div class="cell" 
-            *ngIf="contaCadastro.tipoConta && contaCadastro.tipoConta.contaCartao">
+            *ngIf="contaRegistration.tipoConta && contaRegistration.tipoConta.contaCartao">
             <p-divider layout="vertical"></p-divider>
         </div>  
-        <div class="cell" 
-            *ngIf="contaCadastro.tipoConta && contaCadastro.tipoConta.contaCartao">
+        <div class="cell" style="vertical-align: top;" 
+            *ngIf="contaRegistration.tipoConta && contaRegistration.tipoConta.contaCartao">
 
             <div class="table">
                 <div class="row">
@@ -152,57 +152,71 @@
                 <div class="row">
                     <div class="cell">
                         
-                        Data:
-                        <input-data [width]="'70px'"
-                            (inputValueChange)="lancamentoContaCartaoCadastro.data = $event"
-                            [modelNg]="lancamentoContaCartaoCadastro.data">
+                        <input-data [width]="'90px'" [placeHolder]="'Data'" 
+                            style="margin-right: 5px;"
+                            [formField]="false"
+                            [placeHolder]="'data'"
+                            (inputValueChange)="lancamentoContaCartaoRegistration.data = $event"
+                            [modelNg]="lancamentoContaCartaoRegistration.data">
                         </input-data>
-                        Valor: 
-                        <input-money 
-                            (inputValueChange)="lancamentoContaCartaoCadastro.valor = $event"
-                            [modelNg]="lancamentoContaCartaoCadastro.valor">
+                        
+                        <input-money [placeHolder]="'Valor'"
+                            [formField]="false"
+                            (inputValueChange)="lancamentoContaCartaoRegistration.valor = $event"
+                            [modelNg]="lancamentoContaCartaoRegistration.valor">
                         </input-money>
+
                         Parcelas:
                         <p-inputMask mask="99" [autoClear]="false"
-                            [style]="{'width':'50px'}"
-                            [(ngModel)]="lancamentoContaCartaoCadastro.parcela"
+                            [style]="{'width':'40px'}"
+                            placeholder="00"
+                            [(ngModel)]="lancamentoContaCartaoRegistration.parcela"
                             slotChar="">
                         </p-inputMask>
                         /
-                        <p-inputMask mask="990" [autoClear]="false"
-                            [style]="{'width':'50px'}"
-                            [(ngModel)]="lancamentoContaCartaoCadastro.totalParcela"
+                        <p-inputMask mask="99" [autoClear]="false"
+                            [style]="{'width':'40px'}"
+                            placeholder="00"
+                            [(ngModel)]="lancamentoContaCartaoRegistration.totalParcela"
                             slotChar="">
                         </p-inputMask>
-                        
+                    </div>
+                    <div class="cell">
                     </div>
                 </div>
                 <div class="row">
                     <div class="cell">
-                        Fornecedor:
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="cell">
-                        
-
                         <combo-tipo
-                            (inputValueChange)="lancamentoContaCartaoCadastro.fornecedor = $event"
-                            [modelNg]="lancamentoContaCartaoCadastro.fornecedor"
-                            [arrValues]="formasPagamento"
+                            (inputValueChange)="lancamentoContaCartaoRegistration.fornecedor = $event"
+                            [modelNg]="lancamentoContaCartaoRegistration.fornecedor"
+                            [arrValues]="fornecedores"
+                            [width]="'100%'"
                             [optLabel]="'nome'">
                         </combo-tipo>
-
-                        <button type="button" pButton pRipple>
+                    </div>
+                    <div class="cell">
+                        <button type="button" pButton pRipple
+                            (click)="addLancamentoContaCartao()">
                             <i class="pi pi-plus"></i>
                         </button>
-                        
                     </div>
+                </div>
+            </div>
+            <div class="table">
+                <div class="row">
+                    <div class="cell">Fornecedor</div>
+                    <div class="cell textCenter">Data</div>
+                    <div class="cell textCenter">Valor</div>
+                    <div class="cell textCenter">Parcelas</div>
+                </div>
+                <div class="row" *ngFor="let lcc of contaRegistration.lancamentoContaCartao">
+                    <div class="cell">{{lcc.fornecedor.nome}}</div>
+                    <div class="cell textCenter">{{lcc.data | date: 'dd/MM/yyyy'}}</div>
+                    <div class="cell rightText" >{{lcc.valor | currency:'BRL':true:'1.2-2'}}</div>
+                    <div class="cell textCenter">{{lcc.parcela}}/{{lcc.totalParcela}}</div>
                 </div>
             </div>
                     
         </div>
     </div>
-</div>   
-
-{{contaCadastro | json}}
+</div> 

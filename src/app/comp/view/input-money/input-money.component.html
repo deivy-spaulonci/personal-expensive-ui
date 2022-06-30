@@ -5,5 +5,16 @@
         (blur)="formatEvent($event)" 
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
-        [style]="{'width': width}"
-        [formControl]="formCtr"/>
+        [style]="{'width': width, 'text-align': 'right'}"
+        [formControl]="formCtr"
+        [placeholder]="placeHolder"
+        *ngIf="formField"/>
+
+    <input type="text" 
+        pInputText 
+        (blur)="formatEvent($event)" 
+        [(ngModel)]="modelNg"
+        (ngModelChange)="inputValueChange.emit(modelNg)"
+        [style]="{'width': width, 'text-align': 'right'}"
+        [placeholder]="placeHolder"
+        *ngIf="!formField"/>

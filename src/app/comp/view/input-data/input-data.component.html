@@ -7,5 +7,18 @@
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
         (onBlur)="setInputBlur()"
-        [formControl]="formCtr">
+        [formControl]="formCtr"
+        [placeholder]="placeHolder"
+        *ngIf="formField">
+    </p-inputMask>
+
+    <p-inputMask
+        mask="99/99/9999" 
+        characterPattern="[0-9]"
+        [style]="{'text-align':'center','width': width}"
+        [size]="8"
+        [(ngModel)]="modelNg"
+        (ngModelChange)="inputValueChange.emit(modelNg)"
+        (onBlur)="setInputBlur()"
+        *ngIf="!formField">
     </p-inputMask>

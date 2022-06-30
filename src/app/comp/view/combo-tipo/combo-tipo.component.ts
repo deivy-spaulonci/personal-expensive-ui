@@ -16,6 +16,7 @@ export class ComboTipoComponent implements OnInit {
   @Input() formCtr: FormControl = new FormControl('');
   @Input() arrValues: any[]=[];
   @Input() api:string = '';
+  @Input() width: string = '200px';
   @Output() inputValueChange: EventEmitter<any> = new EventEmitter<any>(); 
   @Output() valueChange: EventEmitter<any> = new EventEmitter<any>();
 

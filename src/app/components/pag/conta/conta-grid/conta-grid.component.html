@@ -3,7 +3,7 @@
     [showCurrentPageReport]="true" [totalRecords]="totalElements" [rows]="pageSize" [sortOrder]="-1"
     sortField="vencimento" currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas"
     dataKey="id" #dt selectionMode="single" styleClass="p-datatable-striped p-datatable-sm"
-    [(contextMenuSelection)]="contaSelecionada">
+    [(contextMenuSelection)]="contaSelected">
     <ng-template pTemplate="header">
         <tr>
             <th class="columnExpand"></th>
@@ -68,7 +68,7 @@
             <td class="centerText">{{conta.parcela}}/{{conta.totalParcela}}</td>
             <td class="columnValor">{{conta.valor | currency:'BRL':true:'1.2-2'}}</td>
             <td class="columnStatus" [ngSwitch]="conta.intStatus"
-                [ngStyle]="{'background-color': getBackgroundColorStatus(conta.intStatus)}">
+                [ngStyle]="{'background-color': getBackgroundColorContaStatus(conta.intStatus)}">
                 <p-message severity="info" text="{{conta.status}}" *ngSwitchCase="1"></p-message>
                 <p-message severity="warn" text="{{conta.status}}" *ngSwitchCase="0"></p-message>
                 <p-message severity="error" text="{{conta.status}}" *ngSwitchCase="-1"></p-message>
@@ -81,7 +81,7 @@
                 </button>
             </td>
             <td class="columnActionBt">
-                <button pButton pRipple type="button" icon="pi pi-trash" (click)="excluirConta(conta)"
+                <button pButton pRipple type="button" icon="pi pi-trash" (click)="confirmDeleteConta(conta)"
                     class="p-button-rounded p-button-text p-button-sm p-button-danger smallBt">
                 </button>
             </td>
@@ -134,7 +134,7 @@
     <ng-template pTemplate="footer">
         <tr>
             <td [attr.colspan]="6" style='text-align: right;'>Total:</td>
-            <td style="text-align: right;">{{totalValor | number : '1.2-2' }}</td>
+            <td style="text-align: right;">{{valorTotal | number : '1.2-2' }}</td>
             <td></td>
             <td></td>
         </tr>

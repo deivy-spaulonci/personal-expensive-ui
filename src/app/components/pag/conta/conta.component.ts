@@ -21,7 +21,7 @@ export class ContaComponent implements OnInit {
   selectedTabIndex = 0;
   util: Util = new Util();
 
-  contaEdicao!: any;
+  contaEdtion!: any;
 
   tiposConta: TipoConta[] = [];
   formasPagamento: FormaPagamento[] = [];
@@ -36,7 +36,7 @@ export class ContaComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
-    this.contaEdicao = {} as Conta;
+    this.contaEdtion = {} as Conta;
 
     this.defaultService.get('tipo-conta').subscribe(tipos => {
       this.tiposConta = tipos;
@@ -54,32 +54,30 @@ export class ContaComponent implements OnInit {
     this.cdref.detectChanges();
   }
 
-
-  setTabCadastro(conta: any, tab: TabView) {
-    this.contaEdicao = {} as Conta;
-    this.contaEdicao.id = conta ? conta.id : null;
-    this.contaEdicao.codigoBarra = conta ? conta.codigoBarra : '';
-    this.contaEdicao.numero = conta ? conta.numero : '';
-    this.contaEdicao.tipoConta = conta ? conta.tipoConta : this.tiposConta[0];
-    this.contaEdicao.emissao = conta ? this.util.transformDates(conta.emissao) : '';
-    this.contaEdicao.vencimento = conta ? this.util.transformDates(conta.vencimento) : '';
-    this.contaEdicao.parcela = conta ? conta.parcela : 0;
-    this.contaEdicao.totalParcela = conta ? conta.totalParcela : 0;
-    this.contaEdicao.valor = conta ? this.util.formatFloatToReal(conta.valor.toString()) : '0,00';
-    this.contaEdicao.dataPagamento = (conta && conta.dataPagamento) ?
+  setTabCadastroAction(conta: any, tab: TabView) {
+    this.contaEdtion = {} as Conta;
+    this.contaEdtion.id = conta ? conta.id : null;
+    this.contaEdtion.codigoBarra = conta ? conta.codigoBarra : '';
+    this.contaEdtion.numero = conta ? conta.numero : '';
+    this.contaEdtion.tipoConta = conta ? conta.tipoConta : this.tiposConta[0];
+    this.contaEdtion.emissao = conta ? this.util.transformDates(conta.emissao) : '';
+    this.contaEdtion.vencimento = conta ? this.util.transformDates(conta.vencimento) : '';
+    this.contaEdtion.parcela = conta ? conta.parcela : 0;
+    this.contaEdtion.totalParcela = conta ? conta.totalParcela : 0;
+    this.contaEdtion.valor = conta ? this.util.formatFloatToReal(conta.valor.toString()) : '0,00';
+    this.contaEdtion.dataPagamento = (conta && conta.dataPagamento) ?
       this.util.transformDates(conta.dataPagamento) : '';
-    this.contaEdicao.formaPagamento = (conta && conta.formaPagamento) ?
+    this.contaEdtion.formaPagamento = (conta && conta.formaPagamento) ?
       conta.formaPagamento : this.formasPagamento[0];
-    this.contaEdicao.valorPago = (conta && conta.valorPago) ?
+    this.contaEdtion.valorPago = (conta && conta.valorPago) ?
       conta.valorPago : '0,00';
-    this.contaEdicao.cancelado = conta ? conta.cancelado : false;
-    this.contaEdicao.obs = conta ? conta.obs : '';
-    this.contaEdicao.idCancelamento = conta ? conta.idCancelamento : null;
-    this.contaEdicao.lancamentoContaCartao = [];
+    this.contaEdtion.cancelado = conta ? conta.cancelado : false;
+    this.contaEdtion.obs = conta ? conta.obs : '';
+    this.contaEdtion.idCancelamento = conta ? conta.idCancelamento : null;
+    this.contaEdtion.lancamentoContaCartao = [];
     
     tab.activeIndex = conta ? 1 : 0;
     this.selectedTabIndex = conta ? 1 : 0;
-    //tab.tabs[1].selected = conta ? true : false;
   }
 
 }

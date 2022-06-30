@@ -1,22 +1,22 @@
 <p class="title-bar-1">Contas</p>
 <p-toast></p-toast>
 <p-tabView #tabConta 
-   (onChange)="setTabCadastro(null, tabConta)" 
+   (onChange)="setTabCadastroAction(null, tabConta)" 
    [(activeIndex)]="selectedTabIndex">
    <p-tabPanel header="Consulta">
       <app-conta-grid [tiposContaFilter]="tiposConta" 
          [formasPagamentoFilter]="formasPagamento" 
          [loading]="loading"
-         (indexTabChange)="setTabCadastro($event, tabConta)">
+         (indexTabChange)="setTabCadastroAction($event, tabConta)">
       </app-conta-grid>
    </p-tabPanel>
    <p-tabPanel header="Casdastro">
       <app-conta-form [tiposConta]="tiposConta" 
          [formasPagamento]="formasPagamento" 
          [fornecedores]="fornecedores"
-         [contaCadastro]="contaEdicao" 
+         [contaRegistration]="contaEdtion" 
          [loading]="loading" 
-         (submitFormEmmit)="setTabCadastro($event, tabConta)">
+         (submitFormEmmit)="setTabCadastroAction($event, tabConta)">
       </app-conta-form>
    </p-tabPanel>
 </p-tabView>

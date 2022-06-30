@@ -1,16 +1,4 @@
-import { identifierName } from "@angular/compiler";
-
 export class Util {
-      // dataBRtoDataIso(data: String){
-      //   const dataarr  = data.toString().split('/');
-      //   return dataarr[2] + '-' + dataarr[1] + '-' + dataarr[0]
-      // }
-    
-      // dateToDataBR(data: String){
-      //   const dataarr  = data.toString().split('-');
-        
-        
-      // }
 
       ajustCurrencyForBase(valor:any){
         if(valor.toString().indexOf(',') != -1){
@@ -23,14 +11,22 @@ export class Util {
         return valor;
       }
 
+      transformDataBrToUs(data:string):string{
+        const dataarr  = data.toString().split('/');
+        return dataarr[2] + '-' + dataarr[1] + '-' + dataarr[0];
+      }
+
+      transformDateToDataBr(data:string):string{
+        const dataarr  = data.toString().split('-');
+        return dataarr[2] + '/' + dataarr[1] + '/' + dataarr[0];
+      }
+
       transformDates(data:String){
         if(data){
           if(data.indexOf("-") == -1){//data br            
-            const dataarr  = data.toString().split('/');
-            return dataarr[2] + '-' + dataarr[1] + '-' + dataarr[0]
+            return this.transformDataBrToUs(data.toString());
           }else{
-            const dataarr  = data.toString().split('-');
-            return dataarr[2] + '/' + dataarr[1] + '/' + dataarr[0]
+            return this.transformDateToDataBr(data.toString());
           }
         }
         return '';

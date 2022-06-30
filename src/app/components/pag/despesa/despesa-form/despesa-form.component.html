@@ -1,18 +1,18 @@
 <div class="table">
     <div class="row">
         <div class="cell">            
-            <form [formGroup]="despesaForm" (ngSubmit)="onSubmit(despesaForm.value)">
+            <form [formGroup]="despesaForm" (ngSubmit)="onSubmitForm(despesaForm.value)">
                 <div class="table">
                     <div class="row">
                         <div class="cell">Tipo Despesa: </div>
                         <div class="cell">
                             <combo-tipo [formGrp]="despesaForm"
                                 [formCtr]="comboTipoDespesa"
-                                (inputValueChange)="despesaCadastro.tipoDespesa = $event"
-                                [modelNg]="despesaCadastro.tipoDespesa"
+                                (inputValueChange)="despesaRegistration.tipoDespesa = $event"
+                                [modelNg]="despesaRegistration.tipoDespesa"
                                 [arrValues]="tiposDespesa"
                                 [optLabel]="'nome'"
-                                (valueChange)="consultaAjudaCusto()"
+                                (valueChange)="checkHelpCusts()"
                                 #cbTipoDespesa>
                             </combo-tipo>
                         </div>
@@ -22,9 +22,9 @@
                         <div class="cell">
                             <input-data [formGroup]="despesaForm"
                                 [formCtr]="inputData"
-                                (inputValueChange)="despesaCadastro.data = $event"
-                                (inputBlur)="consultaAjudaCusto();showDayOfWeekend();"
-                                [modelNg]="despesaCadastro.data">
+                                (inputValueChange)="despesaRegistration.data = $event"
+                                (inputBlur)="checkHelpCusts();showDayOfWeekend();"
+                                [modelNg]="despesaRegistration.data">
                             </input-data>
                             <p-message severity="info" *ngIf="dayOfWeekend" text="{{dayOfWeekend}}" styleClass="mr-2"></p-message>                                      
                         </div> 
@@ -39,7 +39,7 @@
                             [filter]="true" 
                             filterBy="nome"
                             scrollHeight="350px"
-                            [(ngModel)]="despesaCadastro.fornecedor"
+                            [(ngModel)]="despesaRegistration.fornecedor"
                             formControlName="comboFornecedor">
                             <ng-template let-fornecedor pTemplate="item">
                             <div class="table">
@@ -59,8 +59,8 @@
                         <div class="cell">
                             <combo-tipo [formGrp]="despesaForm"
                                 [formCtr]="comboFormaPagamento"
-                                (inputValueChange)="despesaCadastro.formaPagamento = $event"
-                                [modelNg]="despesaCadastro.formaPagamento"
+                                (inputValueChange)="despesaRegistration.formaPagamento = $event"
+                                [modelNg]="despesaRegistration.formaPagamento"
                                 [arrValues]="formasPagamento"
                                 [optLabel]="'nome'"
                                 #inputFormaPagamento>
@@ -72,8 +72,8 @@
                         <div class="cell">
                             <input-money [formGroup]="despesaForm"
                                 [formCtr]="inputValor"
-                                (inputValueChange)="despesaCadastro.valor = $event"
-                                [modelNg]="despesaCadastro.valor">
+                                (inputValueChange)="despesaRegistration.valor = $event"
+                                [modelNg]="despesaRegistration.valor">
                             </input-money>
                         </div> 
                     </div>
@@ -82,7 +82,7 @@
                         <div class="cell">
                             <input type="text"
                             style="width: 100%;"
-                            [(ngModel)]="despesaCadastro.obs"
+                            [(ngModel)]="despesaRegistration.obs"
                             formControlName="inputObservacao"
                             pInputText/>
                         </div> 
@@ -123,7 +123,7 @@
                         </p-button>
                     </div>
                 </div>
-                <div class="row" *ngFor="let info of despesaCadastro.informacaoExtra">
+                <div class="row" *ngFor="let info of despesaRegistration.informacaoExtra">
                     <div class="cell"></div>
                     <div class="cell">{{info.tipoInformacaoExtra.nome}}</div>
                     <div class="cell">{{info.numero}}</div>
@@ -132,4 +132,3 @@
         </div>
     </div>
 </div>
-{{despesaCadastro | json}}
