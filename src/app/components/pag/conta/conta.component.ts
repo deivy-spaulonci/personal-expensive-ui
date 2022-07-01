@@ -56,28 +56,24 @@ export class ContaComponent implements OnInit {
 
   setTabCadastroAction(conta: any, tab: TabView) {
     this.contaEdtion = {} as Conta;
-    this.contaEdtion.id = conta ? conta.id : null;
-    this.contaEdtion.codigoBarra = conta ? conta.codigoBarra : '';
-    this.contaEdtion.numero = conta ? conta.numero : '';
-    this.contaEdtion.tipoConta = conta ? conta.tipoConta : this.tiposConta[0];
-    this.contaEdtion.emissao = conta ? this.util.transformDates(conta.emissao) : '';
-    this.contaEdtion.vencimento = conta ? this.util.transformDates(conta.vencimento) : '';
-    this.contaEdtion.parcela = conta ? conta.parcela : 0;
-    this.contaEdtion.totalParcela = conta ? conta.totalParcela : 0;
-    this.contaEdtion.valor = conta ? this.util.formatFloatToReal(conta.valor.toString()) : '0,00';
-    this.contaEdtion.dataPagamento = (conta && conta.dataPagamento) ?
-      this.util.transformDates(conta.dataPagamento) : '';
-    this.contaEdtion.formaPagamento = (conta && conta.formaPagamento) ?
-      conta.formaPagamento : this.formasPagamento[0];
-    this.contaEdtion.valorPago = (conta && conta.valorPago) ?
-      conta.valorPago : '0,00';
-    this.contaEdtion.cancelado = conta ? conta.cancelado : false;
-    this.contaEdtion.obs = conta ? conta.obs : '';
-    this.contaEdtion.idCancelamento = conta ? conta.idCancelamento : null;
-    this.contaEdtion.lancamentoContaCartao = conta ? conta.lancamentoContaCartao : [];
-    
-    tab.activeIndex = conta ? 1 : 0;
-    this.selectedTabIndex = conta ? 1 : 0;
+    if(conta){
+      this.contaEdtion = conta;
+      this.contaEdtion.emissao = conta ? this.util.transformDates(conta.emissao) : '';
+      this.contaEdtion.vencimento = conta ? this.util.transformDates(conta.vencimento) : '';
+      this.contaEdtion.valor = conta ? this.util.formatFloatToReal(conta.valor.toString()) : '0';
+      if(conta.valorPago && conta.dataPagamento){
+        this.contaEdtion.dataPagamento = this.util.transformDates(conta.dataPagamento);
+      }
+      tab.activeIndex = 1;
+      this.selectedTabIndex = 1;
+    }else{
+      this.contaEdtion.tipoCona = this.tiposConta[0];
+      this.contaEdtion.FormaPagamento = this.formasPagamento[0];
+      this.contaEdtion.cancelado = false;
+      this.contaEdtion.lancamentoContaCartao = [];
+      tab.activeIndex = 0;
+      this.selectedTabIndex = 0;
+    }
   }
 
 }

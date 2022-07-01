@@ -12,7 +12,7 @@ export class InputMoneyComponent{
   @Input() formGrp!: FormGroup;
   @Input() formCtr!: FormControl;
   @Input() width: string = '100px';
-  @Input() placeHolder!: string;
+  @Input() placeHolder: string = '$';
   @Input() formField: boolean = true;
   
   @Output() inputValueChange: EventEmitter<Number> = new EventEmitter<Number>();  
@@ -27,7 +27,8 @@ export class InputMoneyComponent{
 
     const element = ( $event.target as HTMLInputElement);
     var v = element.value.replace(/\D/g, '');
-    v = (Number(v) / 100).toFixed(2) + '';
+    v = (Number(v) / 100).toFixed(2) + '';  
+    this.modelNg = Number(v);
     v = v.replace('.', ',');
     v = v.replace(/(\d)(\d{3})(\d{3}),/g, '$1.$2.$3,');
     v = v.replace(/(\d)(\d{3}),/g, '$1.$2,');

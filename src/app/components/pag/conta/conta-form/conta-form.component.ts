@@ -62,7 +62,9 @@ export class ContaFormComponent implements OnInit {
   ajustContaForSave(conta:Conta):Conta{
     conta.vencimento = this.util.transformDates(conta.vencimento);
     conta.emissao = this.util.transformDates(conta.emissao);
-    conta.valor = this.util.ajustCurrencyForBase(conta.valor);
+    conta.parcela = conta.parcela ? conta.parcela : 0;
+    conta.totalParcela = conta.totalParcela ? conta.totalParcela : 0;
+    
     if(conta.dataPagamento && conta.valorPago){
       conta.valorPago = this.util.ajustCurrencyForBase(conta.valorPago);
       conta.dataPagamento = this.util.transformDates(conta.dataPagamento);
@@ -79,13 +81,15 @@ export class ContaFormComponent implements OnInit {
   onSubmitForm(value: string) {
     this.loading = true;
     this.contaRegistration = this.ajustContaForSave(this.contaRegistration);
-    this.defaultService.save('conta', this.contaRegistration).subscribe(resultado =>{    
-        this.loading = false;
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Conta salva com sucesso'});
-        if(this.contaRegistration.id){
-          this.submitFormEmmit.emit(null);
-        }
-    });  
+
+
+    // this.defaultService.save('conta', this.contaRegistration).subscribe(resultado =>{    
+    //     this.loading = false;
+    //     this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Conta salva com sucesso'});
+    //     if(this.contaRegistration.id){
+    //       this.submitFormEmmit.emit(null);
+    //     }
+    // });  
   }
 
   addLancamentoContaCartao(){
@@ -99,8 +103,12 @@ export class ContaFormComponent implements OnInit {
       if(this.contaRegistration.lancamentoContaCartao == null){
         this.contaRegistration.lancamentoContaCartao = [];
       }
+
+      this.lancamentoContaCartaoRegistration.parcela = this.lancamentoContaCartaoRegistration.parcela ? this.lancamentoContaCartaoRegistration.parcela : 0;
+      this.lancamentoContaCartaoRegistration.totalParcela = this.lancamentoContaCartaoRegistration.totalParcela ? this.lancamentoContaCartaoRegistration.totalParcela : 0;
+
       this.lancamentoContaCartaoRegistration.data = this.util.transformDates(this.lancamentoContaCartaoRegistration.data);
-      this.lancamentoContaCartaoRegistration.valor = this.util.ajustCurrencyForBase(this.lancamentoContaCartaoRegistration.valor);
+      //this.lancamentoContaCartaoRegistration.valor = this.util.ajustCurrencyForBase(this.lancamentoContaCartaoRegistration.valor);
       this.contaRegistration.lancamentoContaCartao.push(Object.assign({}, this.lancamentoContaCartaoRegistration));
       this.lancamentoContaCartaoRegistration = {} as LancamentoContaCartao;
     }

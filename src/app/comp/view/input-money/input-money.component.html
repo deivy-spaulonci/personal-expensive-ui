@@ -2,7 +2,7 @@
     <input type="text" 
         pInputText 
         [formGroup]="formGrp"
-        (blur)="formatEvent($event)" 
+        (keyup)="formatEvent($event)" 
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
         [style]="{'width': width, 'text-align': 'right'}"
@@ -12,7 +12,7 @@
 
     <input type="text" 
         pInputText 
-        (blur)="formatEvent($event)" 
+        (keyup)="formatEvent($event)"
         [(ngModel)]="modelNg"
         (ngModelChange)="inputValueChange.emit(modelNg)"
         [style]="{'width': width, 'text-align': 'right'}"
