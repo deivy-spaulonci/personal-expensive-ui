@@ -111,10 +111,14 @@
                         <div class="cell">Valor Pago:</div>
                         <div class="cell">{{conta.valorPago | number : '1.2-2'}}</div>
                     </div>
+                    <div class="row">
+                        <div class="cell">Observação:</div>
+                        <div class="cell">{{conta.obs}}</div>
+                    </div>
                 </div>
             </td>
-            <td [attr.colspan]="5">
-                <div class="table" *ngIf="conta.tipoConta.contaCartao && conta.lancamentoContaCartao>0">
+            <td [attr.colspan]="5">                
+                <div class="table" *ngIf="conta.tipoConta.contaCartao && conta.lancamentoContaCartao.length>0">
                     <div class="row">
                         <div class="cell centerText">Data</div>
                         <div class="cell">Fornecedor</div>

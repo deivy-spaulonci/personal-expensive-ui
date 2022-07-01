@@ -16,7 +16,7 @@ export class FornecedorFormComponent implements OnInit {
   @Input() loading: boolean = false;
   util: Util = new Util();
 
-  fornecedorCadastro!: any;
+  fornecedorRegistration!: any;
   fornecedorForm!:FormGroup;
 
   cidades: Cidade[]=[];
@@ -24,7 +24,7 @@ export class FornecedorFormComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private messageService: MessageService,
     private defaultService: DefaultService) {
-    this.fornecedorCadastro = {} as Fornecedor;
+    this.fornecedorRegistration = {} as Fornecedor;
    }
 
   ngOnInit(): void {
@@ -44,20 +44,20 @@ export class FornecedorFormComponent implements OnInit {
 
   searchCNPJ(event: any){
     this.loading = true;
-    const cnpj = this.fornecedorCadastro.cnpj.replace(/[^0-9]+/g, '');
+    const cnpj = this.fornecedorRegistration.cnpj.replace(/[^0-9]+/g, '');
     this.defaultService.get('fornecedor/consultacnpj/?cnpj=' + cnpj).subscribe(resultado => {      
       this.loading = false;
       if(resultado || resultado.status != 'ERROR'){        
-        this.fornecedorCadastro.nome = this.util.capitalize((resultado.fantasia ? resultado.fantasia : resultado.nome));
-        this.fornecedorCadastro.razaoSocial = this.util.capitalize(resultado.nome);
+        this.fornecedorRegistration.nome = this.util.capitalize((resultado.fantasia ? resultado.fantasia : resultado.nome));
+        this.fornecedorRegistration.razaoSocial = this.util.capitalize(resultado.nome);
         //this.fornecedorCadastro.inscricaoEstadual = 
-        this.fornecedorCadastro.endereco = this.util.capitalize(resultado.logradouro) + ' ' + resultado.numero;
-        this.fornecedorCadastro.bairro = this.util.capitalize(resultado.bairro);
-        this.fornecedorCadastro.complemento = this.util.capitalize(resultado.complemento);
-        this.fornecedorCadastro.cep = resultado.cep;
-        this.fornecedorCadastro.telefone = resultado.telefone;
-        this.fornecedorCadastro.cidade = {} as Cidade;
-        this.fornecedorCadastro.cidade.nome = this.util.capitalize(resultado.municipio);
+        this.fornecedorRegistration.endereco = this.util.capitalize(resultado.logradouro) + ' ' + resultado.numero;
+        this.fornecedorRegistration.bairro = this.util.capitalize(resultado.bairro);
+        this.fornecedorRegistration.complemento = this.util.capitalize(resultado.complemento);
+        this.fornecedorRegistration.cep = resultado.cep;
+        this.fornecedorRegistration.telefone = resultado.telefone;
+        this.fornecedorRegistration.cidade = {} as Cidade;
+        this.fornecedorRegistration.cidade.nome = this.util.capitalize(resultado.municipio);
         // let cidadeNome:string = resultado.municipio;
         // let estadoSigla:string = resultado.uf;
         // let url = 'cidade?nome=' + cidadeNome + '&estado=' + estadoSigla;
@@ -73,19 +73,18 @@ export class FornecedorFormComponent implements OnInit {
     });
   }
 
-  // onSubmit(value: string, table:Table) {
-  //   this.loading = true;
-   
-  //   this.defaultService.save('fornecedor', this.fornecedorCadastro).subscribe(resultado =>{    
-  //       this.loading = false;
-  //       this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Fornecedor salva com sucesso'});
-  //       this.fornecedorCadastro = {} as Fornecedor;
-  //       if(this.fornecedorCadastro.id){
-  //         this.tabSelected = 0;
-  //         table.filter(null, '', '');
-  //       }
-  //   });  
-  // }
+  onSubmitForm(value: string) {
+    this.loading = true;   
+    this.defaultService.save('fornecedor', this.fornecedorRegistration).subscribe(resultado =>{    
+        this.loading = false;
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Fornecedor salva com sucesso'});
+        this.fornecedorRegistration = {} as Fornecedor;
+        if(this.fornecedorRegistration.id){
+          //this.tabSelected = 0;
+          //table.filter(null, '', '');
+        }
+    });  
+  }
 
   filterCidade(event: any){
     const filtered: any[] = [];

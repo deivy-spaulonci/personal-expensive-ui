@@ -15,7 +15,7 @@
     dataKey="id" #dt
     selectionMode="single"
     styleClass="p-datatable-striped p-datatable-sm"
-    [(contextMenuSelection)]="fornecedorSelecionado">
+    [(contextMenuSelection)]="fornecedorSelected">
     <ng-template pTemplate="header">
         <tr>
             <th class="columnExpand"></th>
@@ -75,8 +75,7 @@
             <td>{{fornecedor.cnpj | cnpj}}</td>
             <td>{{fornecedor.cidade.nome}}</td>
             <td class="columnActionBt">
-                <button pButton pRipple type="button" icon="pi pi-pencil" 
-                    
+                <button pButton pRipple type="button" icon="pi pi-pencil"                     
                     class="p-button-rounded p-button-text p-button-sm smallBt">
                 </button>
             </td>

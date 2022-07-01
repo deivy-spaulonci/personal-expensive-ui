@@ -15,35 +15,23 @@ export class FornecedorComponent implements OnInit {
   loading: boolean = false;
   selectedTabIndex = 0;
 
-  fornecedorEdicao!: any;
+  fornecedorEdition!: any;
 
   constructor(private cdref: ChangeDetectorRef,
     private defaultService: DefaultService) { }
 
   ngOnInit(): void {
-    this.fornecedorEdicao = {} as Fornecedor;
+    this.fornecedorEdition = {} as Fornecedor;
   }
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
 
-  setTabCadastro(fornecedor: any, tab: TabView) {
-    // if (despesa) {
-    //   this.despesaEdicao = despesa;
-    //   tab.activeIndex = 1;
-    //   this.selectedTabIndex = 1;
-    //   tab.tabs[1].selected = true;
-    // } else {
-    //   this.despesaEdicao = {};
-    //   this.despesaEdicao.tipoDespesa = this.tiposDespesa[0];
-    //   this.despesaEdicao.data = ''
-    //   this.despesaEdicao.fornecedor = this.fornecedores[0];
-    //   this.despesaEdicao.formaPagamento = this.formasPagamento[0];
-    //   this.despesaEdicao.valor = '0,00';
-
-    //   tab.activeIndex = 0;
-    // }
+  setTabCadastro(fornecedor: any, tab: TabView) {    
+    this.fornecedorEdition = fornecedor ? fornecedor.id : {} as Fornecedor;
+    tab.activeIndex = fornecedor ? 1 : 0;
+    this.selectedTabIndex = fornecedor ? 1 : 0;
   }
 
 }

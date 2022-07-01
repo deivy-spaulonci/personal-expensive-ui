@@ -1,15 +1,15 @@
 <form [formGroup]="fornecedorForm" >
-    <!-- (ngSubmit)="onSubmit(fornecedorForm.value, dt)" -->
+    (ngSubmit)="onSubmitForm(fornecedorForm.value)"
     <div class="table">
         <div class="row">
             <div class="cell">CNPJ:</div>
             <div class="cell">
                 <p-inputMask mask="99.999.999/9999-99" 
-                [(ngModel)]="fornecedorCadastro.cnpj"
+                [(ngModel)]="fornecedorRegistration.cnpj"
                  formControlName="inputCNPJ" 
                  [style]="{'width': '200px'}">
                 </p-inputMask>
-                <p-button icon="pi pi-globe" [disabled]="fornecedorCadastro.cnpj==null"
+                <p-button icon="pi pi-globe" [disabled]="fornecedorRegistration.cnpj==null"
                         [style]="{'margin-left':'.25em'}"
                         (onClick)="searchCNPJ($event)">
                 </p-button>
@@ -22,7 +22,7 @@
             <div class="cell">Nome:</div>
             <div class="cell">
                 <input type="text" pInputText 
-                [(ngModel)]="fornecedorCadastro.nome" 
+                [(ngModel)]="fornecedorRegistration.nome" 
                 formControlName="inputNome"
                 [style]="{'width': '450px'}"/>
             </div>
@@ -31,7 +31,7 @@
             <div class="cell">Razão Social:</div>
             <div class="cell">
                 <input type="text" pInputText 
-                [(ngModel)]="fornecedorCadastro.razaoSocial" 
+                [(ngModel)]="fornecedorRegistration.razaoSocial" 
                 formControlName="inputRazao"
                 [style]="{'width': '100%'}"/>
             </div>
@@ -40,7 +40,7 @@
             <div class="cell">Insc. Estadual:</div>
             <div class="cell">
                 <input type="text" pInputText 
-                [(ngModel)]="fornecedorCadastro.inscricaoEstadual"
+                [(ngModel)]="fornecedorRegistration.inscricaoEstadual"
                 formControlName="inputInscEstadual" 
                 [style]="{'width': '50%'}"/>
             </div>
@@ -49,7 +49,7 @@
             <div class="cell">Endereço:</div>
             <div class="cell">
                 <input type="text" pInputText 
-                [(ngModel)]="fornecedorCadastro.endereco" 
+                [(ngModel)]="fornecedorRegistration.endereco" 
                 formControlName="inputEndereco"
                 [style]="{'width': '100%'}"/>
             </div>
@@ -58,7 +58,7 @@
             <div class="cell">Complemento:</div>
             <div class="cell">
                 <input type="text" pInputText 
-                [(ngModel)]="fornecedorCadastro.complemento" 
+                [(ngModel)]="fornecedorRegistration.complemento" 
                 formControlName="inputEndereco"
                 [style]="{'width': '100%'}"/>
             </div>
@@ -67,7 +67,7 @@
             <div class="cell">Cep:</div>
             <div class="cell">
                 <p-inputMask mask="99999-999" 
-                [(ngModel)]="fornecedorCadastro.cep" 
+                [(ngModel)]="fornecedorRegistration.cep" 
                 formControlName="inputCep"
                 [style]="{'width': '30%'}">
                 </p-inputMask>
@@ -77,7 +77,7 @@
             <div class="cell">Telefone:</div>
             <div class="cell">
                 <p-inputMask mask="99.99999-9999" 
-                [(ngModel)]="fornecedorCadastro.telefone"
+                [(ngModel)]="fornecedorRegistration.telefone"
                 formControlName="inputTelefone" 
                 [style]="{'width': '50%'}">
                 </p-inputMask>
@@ -90,7 +90,7 @@
                 [suggestions]="cidades"
                 formControlName="comboCidade"
                 (completeMethod)="filterCidade($event)"
-                [(ngModel)]="fornecedorCadastro.cidade"
+                [(ngModel)]="fornecedorRegistration.cidade"
                 field="nome"
                 [inputStyle]="{'width': '100%'}"
                 [panelStyle]="{'width': '290px'}"

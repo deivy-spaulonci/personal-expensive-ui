@@ -74,7 +74,7 @@ export class ContaComponent implements OnInit {
     this.contaEdtion.cancelado = conta ? conta.cancelado : false;
     this.contaEdtion.obs = conta ? conta.obs : '';
     this.contaEdtion.idCancelamento = conta ? conta.idCancelamento : null;
-    this.contaEdtion.lancamentoContaCartao = [];
+    this.contaEdtion.lancamentoContaCartao = conta ? conta.lancamentoContaCartao : [];
     
     tab.activeIndex = conta ? 1 : 0;
     this.selectedTabIndex = conta ? 1 : 0;

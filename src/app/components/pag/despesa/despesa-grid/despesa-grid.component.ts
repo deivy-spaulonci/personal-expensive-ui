@@ -22,7 +22,7 @@ export class DespesaGridComponent implements OnInit {
   util: Util = new Util();
 
   totalValor!: number;
-  despesaSelecionada!: Despesa;
+  despesaSelected!: Despesa;
 
   @Input() tiposDespesaFilter: TipoDespesa[] = [];
   @Input() formasPagamentoFilter: FormaPagamento[] = [];
@@ -40,7 +40,7 @@ export class DespesaGridComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  excluirDespesa(despesa: any) {
+  confirmDeleteDespesa(despesa: any) {
     this.confirmationService.confirm({
       accept: () => {
         this.defaultService
@@ -55,40 +55,34 @@ export class DespesaGridComponent implements OnInit {
 
   onEditSave(despesa: Despesa) {
     this.indexTabChange.emit(despesa);
-    
-    // this.despesaCadastro = Object.assign({}, despesa);
-    // this.despesaCadastro.data = this.util.transformDates(this.despesaCadastro.data)
-    // if(this.despesaCadastro.valor.toString().length==2){
-    //   this.despesaCadastro.valor = this.util.formatFloatToReal(this.despesaCadastro.valor.toString()+'00');
-    // }
   }
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
 
-    let urlfiltros: string = '';
+    let apiFilters: string = '';
 
     if (event.filters) {
-      let filtros = event.filters;
-      if (filtros?.['id'] && filtros?.['id'].value != null) {
-        urlfiltros += '&id=' + filtros?.['id'].value;
+      let filters = event.filters;
+      if (filters?.['id'] && filters?.['id'].value != null) {
+        apiFilters += '&id=' + filters?.['id'].value;
       }
-      if (filtros?.['tipoDespesa'] && filtros?.['tipoDespesa'].value) {
-        urlfiltros += '&tipoDespesa=' + filtros?.['tipoDespesa'].value;
+      if (filters?.['tipoDespesa'] && filters?.['tipoDespesa'].value) {
+        apiFilters += '&tipoDespesa=' + filters?.['tipoDespesa'].value;
       }
-      if (filtros?.['fornecedor.id'] && filtros?.['fornecedor.id'].value) {
-        urlfiltros += '&fornecedor.id=' + filtros?.['fornecedor.id'].value;
+      if (filters?.['fornecedor.id'] && filters?.['fornecedor.id'].value) {
+        apiFilters += '&fornecedor.id=' + filters?.['fornecedor.id'].value;
       }
-      if (filtros?.['periodo']) {
-        if (filtros?.['periodo'].value && filtros?.['periodo'].value[0]) {
-          urlfiltros += '&dataInicial=' + filtros?.['periodo'].value[0].toISOString().split('T')[0];
+      if (filters?.['periodo']) {
+        if (filters?.['periodo'].value && filters?.['periodo'].value[0]) {
+          apiFilters += '&dataInicial=' + filters?.['periodo'].value[0].toISOString().split('T')[0];
         }
-        if (filtros?.['periodo'].value && filtros?.['periodo'].value[1]) {
-          urlfiltros += '&dataFinal=' + filtros?.['periodo'].value[1].toISOString().split('T')[0];
+        if (filters?.['periodo'].value && filters?.['periodo'].value[1]) {
+          apiFilters += '&dataFinal=' + filters?.['periodo'].value[1].toISOString().split('T')[0];
         }
       }
-      if (filtros?.['formaPagamento'] && filtros?.['formaPagamento'].value) {
-        urlfiltros += '&formaPagamento=' + filtros?.['formaPagamento'].value;
+      if (filters?.['formaPagamento'] && filters?.['formaPagamento'].value) {
+        apiFilters += '&formaPagamento=' + filters?.['formaPagamento'].value;
       }
     }
 
@@ -101,13 +95,13 @@ export class DespesaGridComponent implements OnInit {
     const url: string = 'despesa/page?page=' + this.pageNumber
       + '&size=' + event.rows
       + '&sort=' + event.sortField + ',' + (event.sortOrder == 1 ? 'asc' : 'desc')
-      + urlfiltros;
+      + apiFilters;
 
     this.defaultService.get(url).subscribe(resultado => {
       this.despesas = resultado.content;
       this.totalElements = resultado.totalElements;
 
-      this.defaultService.get('despesa/valorTotal?' + urlfiltros).subscribe(somatotal => {
+      this.defaultService.get('despesa/valorTotal?' + apiFilters).subscribe(somatotal => {
         this.totalValor = somatotal;
         this.loading = false;
       });

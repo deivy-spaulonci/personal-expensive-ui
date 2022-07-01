@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { LazyLoadEvent } from 'primeng/api';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Cidade } from 'src/app/model/cidade';
 import { Fornecedor } from 'src/app/model/fornecedor';
 import { DefaultService } from 'src/app/service/default.service';
@@ -18,37 +18,42 @@ export class FornecedorGridComponent implements OnInit {
   pageSize = 10;
   totalElements = 0;
   util: Util = new Util();
-
+  
+  fornecedorSelected!: Fornecedor;
+  
+  @Output() indexTabChange: EventEmitter<Fornecedor> = new EventEmitter<Fornecedor>();
+  
   fornecedores: Fornecedor[] = [];
   cidades: Cidade[]=[];
-
-  fornecedorSelecionado!: Fornecedor;
-
-  //@Output() indexTabChange: EventEmitter<Despesa> = new EventEmitter<Despesa>();
   
-  constructor(private defaultService: DefaultService) { }
+  constructor(private defaultService: DefaultService,
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
+  }
+
+  onEditSave(fornecedor: Fornecedor) {
+    this.indexTabChange.emit(fornecedor);
   }
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
 
-    let urlfiltros: string = '';
+    let apiFilters: string = '';
 
     if (event.filters) {
-      let filtros = event.filters;
-      if (filtros?.['id'] && filtros?.['id'].value!=null) {
-        urlfiltros += '&id=' + filtros?.['id'].value;
+      let filters = event.filters;
+      if (filters?.['id'] && filters?.['id'].value!=null) {
+        apiFilters += '&id=' + filters?.['id'].value;
       }
-      if (filtros?.['nome'] && filtros?.['nome'].value) {
-        urlfiltros += '&nome=' + filtros?.['nome'].value;
+      if (filters?.['nome'] && filters?.['nome'].value) {
+        apiFilters += '&nome=' + filters?.['nome'].value;
       }
-      if (filtros?.['cnpj'] && filtros?.['cnpj'].value) {
-        urlfiltros += '&cnpj=' + filtros?.['cnpj'].value;
+      if (filters?.['cnpj'] && filters?.['cnpj'].value) {
+        apiFilters += '&cnpj=' + filters?.['cnpj'].value;
       }
-      if (filtros?.['cidade.nome'] && filtros?.['cidade.nome'].value) {
-        urlfiltros += '&cidade.nome=' + filtros?.['cidade.nome'].value;
+      if (filters?.['cidade.nome'] && filters?.['cidade.nome'].value) {
+        apiFilters += '&cidade.nome=' + filters?.['cidade.nome'].value;
       }
     }
 
@@ -61,7 +66,7 @@ export class FornecedorGridComponent implements OnInit {
     const url: string = 'fornecedor/page?page=' + this.pageNumber
       + '&size=' + event.rows
       + '&sort=' + event.sortField + ',' + (event.sortOrder == 1 ? 'asc' : 'desc')
-      + urlfiltros;
+      + apiFilters;
 
     this.defaultService.get(url).subscribe(resultado => {
       this.fornecedores = resultado.content;

@@ -14,6 +14,7 @@ export class InputDataComponent implements OnInit {
   @Input() width: string = '100px';
   @Input() placeHolder!: string;
   @Input() formField: boolean = true;
+  @Input() id!: string;
   
   @Output() inputValueChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() inputBlur: EventEmitter<any> = new EventEmitter<any>();

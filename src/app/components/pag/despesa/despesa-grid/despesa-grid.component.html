@@ -3,7 +3,7 @@
     [showCurrentPageReport]="true" [totalRecords]="totalElements" [rows]="pageSize" [sortOrder]="-1" sortField="data"
     currentPageReportTemplate="Mostrando {first} a {last} de {{totalElements}} despesas" dataKey="id" #dt
     selectionMode="single" styleClass="p-datatable-striped p-datatable-sm"
-    [(contextMenuSelection)]="despesaSelecionada">
+    [(contextMenuSelection)]="despesaSelected">
     <ng-template pTemplate="header">
         <tr>
             <th class="columnExpand"></th>
@@ -72,7 +72,7 @@
                 <column-bt-action (action)="onEditSave(despesa)" [icon]="'pencil'"></column-bt-action>
             </td>
             <td class="columnActionBt">
-                <column-bt-action (action)="excluirDespesa(despesa)" [icon]="'trash'"></column-bt-action>
+                <column-bt-action (action)="confirmDeleteDespesa(despesa)" [icon]="'trash'"></column-bt-action>
             </td>
         </tr>
     </ng-template>
